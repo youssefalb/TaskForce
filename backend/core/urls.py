@@ -17,9 +17,12 @@ from django.contrib import admin
 from django.urls import path
 
 from user_auth.views import LoginView, UserRegistrationView
+from projects.views import ProjectView, ProjectDetailView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', LoginView.as_view()),
     path('register/', UserRegistrationView.as_view(), name='user-registration'),
+    path('projects/', ProjectView.as_view()),
+    path('projects/<int:project_id>/', ProjectDetailView.as_view()),
 ]
