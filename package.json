@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "create-next-app": "^13.4.12"
+  },
+  "scripts": {
+        "lint": "next lint"
+  }
+}
