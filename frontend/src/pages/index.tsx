@@ -1,10 +1,12 @@
 import React from 'react';
-import { Typography, Container } from '@mui/material';
+import WelcomePage from './WelcomePage'; // Adjust the import path
 
-export default function Home() {
+function Home() {
   return (
-      <Typography variant="h4" align="center" color="primary" sx={{ fontWeight: 'bold', my: 4 }}>
-        Hello there!
-      </Typography>
+    <div>
+        <WelcomePage />
+    </div>
   );
 }
+
+export default Home;
