@@ -1,4 +1,7 @@
 import React from 'react';
+import AuthPage from './AuthPage'; 
+import Link from 'next/link';
+
 
 const WelcomePage = () => {
   return (
@@ -13,12 +16,9 @@ const WelcomePage = () => {
           Streamline task assignment and tracking, track time, facilitate communication, and analyze productivity.
         </p>
         <div className="mt-5 max-w-md mx-auto flex justify-center">
-          <a
-            // href="/auth/login"
-            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full text-blue-700 bg-white hover:bg-blue-50"
-          >
+        <Link href="./auth/login" className='inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full text-blue-700 bg-white hover:bg-blue-50'>
             Log In & Start Managing
-          </a>
+        </Link>
       </div>
     </div>
     </div>
