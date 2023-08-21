@@ -1,10 +1,11 @@
 import React from 'react';
-import WelcomePage from './WelcomePage'; // Adjust the import path
+
+import About from './about'; // Adjust the import path
 
 function Home() {
   return (
     <div>
-        <WelcomePage />
+        <About />
     </div>
   );
 }

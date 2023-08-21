@@ -1,9 +1,8 @@
 import React from 'react';
-import AuthPage from './AuthPage'; 
 import Link from 'next/link';
 
 
-const WelcomePage = () => {
+const About = () => {
   return (
  <div>
     <div className="bg-gray-900 text-white">
@@ -50,4 +49,4 @@ const WelcomePage = () => {
   );
 };
 
-export default WelcomePage;
+export default About;
