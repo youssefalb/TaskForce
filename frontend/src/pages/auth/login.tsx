@@ -1,10 +1,31 @@
 import CustomTextInput from '@/components/CustomTextInput';
+import axios from 'axios';
+import { log } from 'console';
 import Link from 'next/link';
 import React, { useState } from 'react';
 
 const Login = () => {
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
+
+
+  
+  const handleLogin = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    console.log(loginEmail);
+    console.log(loginPassword);
+    try {
+      const response = await axios.post('http://localhost:8000/login/', {
+        email: loginEmail,
+        password: loginPassword,
+      });
+      console.log(response);
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -14,11 +35,11 @@ const Login = () => {
           Login with ease.
         </p>
         <div className="bg-gray-50 flex glass min-h-screen p-10 mr-72 ml-50">
-          <form method="post" action="/api/auth/callback/credentials" className="max-h-96 shadow-md rainbow-mesh align-middle bg-white p-2 m-2 flex min-h-96 min-w-96 flex-grow flex-col rounded-xl">
+          <form onSubmit={handleLogin} className="max-h-96 shadow-md rainbow-mesh align-middle bg-white p-2 m-2 flex min-h-96 min-w-96 flex-grow flex-col rounded-xl">
             <p className="font-bold text-black text-2xl pt-8 pb-1 px-4">Email + Pass</p>
             <p className="font-normal text-black text-md pt-1 pb-8 px-4">Enter using your email & password</p>
-            <CustomTextInput type="email" name="email" placeholder="Email" />
-            <CustomTextInput type="password" name="password" placeholder="Password" />
+            <CustomTextInput type="email" name="email" placeholder="Email" onChange={(e) => setLoginEmail(e.target.value)} />
+            <CustomTextInput type="password" name="password" placeholder="Password" onChange={(e) => setLoginPassword(e.target.value)} />
             <button type="submit" className="p-2 m-2 text-white font-bold rounded-2xl bg-gray-900">
               Login
             </button>
