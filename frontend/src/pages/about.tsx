@@ -37,11 +37,92 @@ const About = () => {
                 time tracking, communication tools, and productivity analytics. Streamline your remote work management and boost
                 team collaboration.
             </div>
+
           </div>
         </div>
-        {/* More content about TaskForce */}
-        {/* ... */}
+
+               <div className="bg-white overflow-hidden shadow rounded-lg">
+          <div className="px-4 py-5 sm:p-6">
+            <h3 className="text-lg leading-6 font-medium text-gray-900">
+              Remote Team Management
+            </h3>
+            <div className="mt-2 max-w-xl text-sm text-gray-500">
+                TaskForce empowers organizations to manage remote teams efficiently, with features such as task assignment,
+                time tracking, communication tools, and productivity analytics. Streamline your remote work management and boost
+                team collaboration.
+            </div>
+
+          </div>
+        </div>
+               <div className="bg-white overflow-hidden shadow rounded-lg">
+          <div className="px-4 py-5 sm:p-6">
+            <h3 className="text-lg leading-6 font-medium text-gray-900">
+              Remote Team Management
+            </h3>
+            <div className="mt-2 max-w-xl text-sm text-gray-500">
+                TaskForce empowers organizations to manage remote teams efficiently, with features such as task assignment,
+                time tracking, communication tools, and productivity analytics. Streamline your remote work management and boost
+                team collaboration.
+            </div>
+
+          </div>
+        </div>
+               <div className="bg-white overflow-hidden shadow rounded-lg">
+          <div className="px-4 py-5 sm:p-6">
+            <h3 className="text-lg leading-6 font-medium text-gray-900">
+              Remote Team Management
+            </h3>
+            <div className="mt-2 max-w-xl text-sm text-gray-500">
+                TaskForce empowers organizations to manage remote teams efficiently, with features such as task assignment,
+                time tracking, communication tools, and productivity analytics. Streamline your remote work management and boost
+                team collaboration.
+            </div>
+
+          </div>
+        </div>
+               <div className="bg-white overflow-hidden shadow rounded-lg">
+          <div className="px-4 py-5 sm:p-6">
+            <h3 className="text-lg leading-6 font-medium text-gray-900">
+              Remote Team Management
+            </h3>
+            <div className="mt-2 max-w-xl text-sm text-gray-500">
+                TaskForce empowers organizations to manage remote teams efficiently, with features such as task assignment,
+                time tracking, communication tools, and productivity analytics. Streamline your remote work management and boost
+                team collaboration.
+            </div>
+
+          </div>
+        </div>
+
+               <div className="bg-white overflow-hidden shadow rounded-lg">
+          <div className="px-4 py-5 sm:p-6">
+            <h3 className="text-lg leading-6 font-medium text-gray-900">
+              Remote Team Management
+            </h3>
+            <div className="mt-2 max-w-xl text-sm text-gray-500">
+                TaskForce empowers organizations to manage remote teams efficiently, with features such as task assignment,
+                time tracking, communication tools, and productivity analytics. Streamline your remote work management and boost
+                team collaboration.
+            </div>
+
+          </div>
+        </div>
+               <div className="bg-white overflow-hidden shadow rounded-lg">
+          <div className="px-4 py-5 sm:p-6">
+            <h3 className="text-lg leading-6 font-medium text-gray-900">
+              Remote Team Management
+            </h3>
+            <div className="mt-2 max-w-xl text-sm text-gray-500">
+                TaskForce empowers organizations to manage remote teams efficiently, with features such as task assignment,
+                time tracking, communication tools, and productivity analytics. Streamline your remote work management and boost
+                team collaboration.
+            </div>
+
+          </div>
+        </div>
       </div>
+
+      
     </div>
   </div>
 </div>

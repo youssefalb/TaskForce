@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import CustomTextInput from '../../components/CustomTextInput';
 import React from 'react';
+import axios from 'axios';
 
 
 export default function Register() {
@@ -11,6 +12,28 @@ export default function Register() {
     const [lastName, setLname] = useState('');
 
     
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const userData = {
+            email,
+            password,
+            first_name: firstName,
+            last_name: lastName,
+        };
+
+        try {
+            const response = await axios.post('http://localhost:8000/register/', userData);
+            if (response.status === 201) {
+                console.log('User registered successfully!');
+            } else {
+                console.error('Failed to register user.');
+            }
+        } catch (error) {
+            console.error('An error occurred:', error);
+        }
+    };
+
 
     return (
         <div className="bg-gray-50 min-h-screen">
@@ -30,6 +53,7 @@ export default function Register() {
                         <button
                             type='submit'
                             className='p-2 mt-5 m-2 text-white font-bold bg-gray-900 rounded-2xl'
+                            onClick={handleSubmit}
                         >
                             Register
                         </button>

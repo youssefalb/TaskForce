@@ -7,7 +7,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser 
         fields = ['id', 'email', 'password', 'role'] 
-        extra_kwargs = {'password': {'write_only': True}}
+        extra_kwargs = {'password': {'write_only': True},
+                        'role': {'required': False}}
 
     def create(self, validated_data):
         role = validated_data.pop('role', 'Guest')
