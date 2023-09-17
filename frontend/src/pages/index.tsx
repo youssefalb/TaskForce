@@ -1,11 +1,22 @@
 import React from 'react';
-
-import About from './about'; // Adjust the import path
+import { useSession } from 'next-auth/react';
 
 function Home() {
+  const { data: session } = useSession();
+
   return (
     <div>
-        <About />
+      {session ? (
+        // User is logged in, display content for logged-in users
+        <div>
+          <h1>Welcome, {session.user?.email}!</h1>
+        </div>
+      ) : (
+        <div>
+          <h1>Welcome to our website!</h1>
+          <p>Please log in to access more features.</p>
+        </div>
+      )}
     </div>
   );
 }

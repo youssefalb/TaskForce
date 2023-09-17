@@ -1,6 +1,6 @@
 import CustomTextInput from '@/components/CustomTextInput';
-import axios from 'axios';
-import { log } from 'console';
+import { signIn } from 'next-auth/react';
+
 import Link from 'next/link';
 import React, { useState } from 'react';
 
@@ -10,21 +10,20 @@ const Login = () => {
 
 
   
-  const handleLogin = async (e: { preventDefault: () => void; }) => {
-    e.preventDefault();
-    console.log(loginEmail);
-    console.log(loginPassword);
-    try {
-      const response = await axios.post('http://localhost:8000/login/', {
-        email: loginEmail,
-        password: loginPassword,
-      });
-      console.log(response);
-
-    } catch (error) {
-      console.log(error);
-    }
-  };
+const handleLogin = async (e) => {
+  e.preventDefault();
+  
+  try {
+    const result = await signIn('credentials', {
+      email: loginEmail,
+      password: loginPassword,
+      redirect: false,
+    });
+    console.log(result);
+  } catch (error) {
+    console.error('An error occurred:', error);
+  }
+};
 
 
   return (
@@ -45,7 +44,7 @@ const Login = () => {
             </button>
 
         <p className="text-gray-700">
-            Don't have an account?{' '}
+            Don`t have an account?{''}
             <Link href="/auth/register" className="text-blue-500 underline">
             Register here
             </Link>
