@@ -44,6 +44,5 @@ class LoginSerializer(serializers.Serializer):
         else:
             msg = 'Both "email" and "password" are required.'
             raise serializers.ValidationError(msg, code='authorization')
-
         attrs['user'] = user
         return attrs
