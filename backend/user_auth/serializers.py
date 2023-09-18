@@ -3,6 +3,14 @@ from django.contrib.auth import authenticate
 from rest_framework import serializers
 from .models import CustomUser
 
+
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ('id', 'email', 'is_staff', 'is_active', 'date_joined', 'role')
+        extra_kwargs = {'password': {'write_only': True}}
+
+
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser 
@@ -26,6 +34,11 @@ class LoginSerializer(serializers.Serializer):
         style={'input_type': 'password'},
         trim_whitespace=False,
         write_only=True
+    )
+
+    role = serializers.CharField(
+        source='user.role', 
+        read_only=True 
     )
 
     def validate(self, attrs):

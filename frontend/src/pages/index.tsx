@@ -10,6 +10,7 @@ function Home() {
         // User is logged in, display content for logged-in users
         <div>
           <h1>Welcome, {session.user?.email}!</h1>
+          <p>{session.user?.role}</p>
         </div>
       ) : (
         <div>

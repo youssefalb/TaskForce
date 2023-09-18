@@ -9,6 +9,7 @@ declare module "next-auth" {
 
   interface User {
     email?: string
+    role?: Role
   }
 
   interface Profile {

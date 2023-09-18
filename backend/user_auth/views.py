@@ -2,7 +2,7 @@ from rest_framework import permissions
 from rest_framework import views
 from rest_framework.response import Response
 from rest_framework import generics
-from .serializers import CustomUser, UserRegistrationSerializer, LoginSerializer
+from .serializers import CustomUser, CustomUserSerializer, UserRegistrationSerializer, LoginSerializer
 from django.contrib.auth import login
 from rest_framework import status
 
@@ -15,7 +15,8 @@ class LoginView(views.APIView):
         user = serializer.validated_data['user']
         login(request, user)
         print(user)
-        return Response(None, status=status.HTTP_200_OK)
+        user_serializer = CustomUserSerializer(user)
+        return Response(user_serializer.data, status=status.HTTP_200_OK)
 
 
 class UserRegistrationView(generics.CreateAPIView):

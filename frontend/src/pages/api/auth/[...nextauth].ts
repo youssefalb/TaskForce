@@ -30,19 +30,17 @@ export default NextAuth({
                             'Content-Type': 'application/json',
                         },
                     });
-                    console.log(response.statusText);
-                    console.log(response.status);
-                    //why I can see the pass here?
-                    const userData = JSON.parse(response.config.data);
+                    console.log(response.data);
+                    const userData = response.data;
                     console.log(userData);
 
 
                     if (response.status === 200 && userData) {
-                        console.log('Authentication successful:', userData);
+                         console.log('Authentication successful:', userData);
                         return userData;
                     }
                 } catch (error) {
-                    console.error('Authentication error:', error);
+                        console.error('Authentication error:', error);
                     return null;
                 }
             },
@@ -53,13 +51,7 @@ export default NextAuth({
         jwt: async ({ profile, account, user, token, trigger, session }) => {
             if (account) {
                 token.accessToken = account.access_token;
-                console.log("***************************************");
-                console.log("Token", token);
-                console.log("User", user);
-                console.log("Trigger", trigger);
-                console.log("Session", session);
-                console.log("***************************************");
-
+                token.role = user.role;
             }
             return token;
 
@@ -67,6 +59,8 @@ export default NextAuth({
         session: async ({ session, token }) => {
             //add the id and role and all the other stuff to the session
             session.user.email = token.email!;
+            session.user.role = token.role!;
+
             return session;
         }
 
