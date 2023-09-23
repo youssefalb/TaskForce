@@ -44,7 +44,7 @@ const handleLogin = async (e) => {
             </button>
 
         <p className="text-gray-700">
-            Don`t have an account?{''}
+            Don`t have an account? {''}
             <Link href="/auth/register" className="text-blue-500 underline">
             Register here
             </Link>

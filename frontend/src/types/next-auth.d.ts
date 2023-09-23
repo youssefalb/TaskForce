@@ -7,10 +7,18 @@ declare module "next-auth" {
     user: User
   }
 
-  interface User {
-    email?: string
-    role?: Role
-  }
+interface User {
+  email?: string;
+  role?: string;
+  user_id?: string;
+  first_name?: string;
+  last_name?: string;
+  image?: string;
+  sex?: string;
+  is_staff?: boolean;
+  is_active?: boolean;
+  date_joined?: string; 
+}
 
   interface Profile {
     family_name?: string
@@ -25,5 +33,12 @@ declare module "next-auth/jwt" {
     id?: string
     accessToken?: string
     role?: Role
+    email?: string
+    user_id?: string
+    first_name?: string
+    last_name?: string
+    image?: string
+    is_active?: boolean
+
   }
 }

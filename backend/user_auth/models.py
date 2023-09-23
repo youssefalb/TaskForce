@@ -14,6 +14,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
     role = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=32, blank=True)
+    last_name = models.CharField(max_length=32, blank=True)
+    image = models.CharField(max_length=255, default='https://www.gravatar.com/avatar/?d=mp', blank=True)
+    sex = models.CharField(max_length=32, blank=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []

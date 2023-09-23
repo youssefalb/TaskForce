@@ -7,14 +7,14 @@ from .models import CustomUser
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ('id', 'email', 'is_staff', 'is_active', 'date_joined', 'role')
+        fields = ('user_id', 'email', 'is_staff', 'is_active', 'date_joined', 'role', 'first_name', 'last_name','image', 'sex')
         extra_kwargs = {'password': {'write_only': True}}
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser 
-        fields = ['id', 'email', 'password', 'role'] 
+        fields = ['user_id', 'email', 'password', 'role', 'first_name', 'last_name', 'image', 'sex'] 
         extra_kwargs = {'password': {'write_only': True},
                         'role': {'required': False}}
 
