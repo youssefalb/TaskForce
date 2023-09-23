@@ -1,3 +1,4 @@
+import uuid
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils import timezone
@@ -7,6 +8,7 @@ from .managers import CustomUserManager
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
+    user_id = models.CharField(_("User ID"), max_length=36, unique=True)
     email = models.EmailField(_("email address"), unique=True, default='example@example.com')
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -20,3 +22,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+    def save(self, *args, **kwargs):
+        if not self.user_id:
+            self.user_id = uuid.uuid4().hex  
+        super().save(*args, **kwargs)
