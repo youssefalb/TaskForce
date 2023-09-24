@@ -33,11 +33,11 @@ export default NextAuth({
                     const userData = response.data;
 
                     if (response.status === 200 && userData) {
-                         console.log('Authentication successful:', userData);
+                         //console.log('Authentication successful:', userData);
                         return userData;
                     }
                 } catch (error) {
-                        console.error('Authentication error:', error);
+                        //console.error('Authentication error:', error);
                     return null;
                 }
             },
@@ -55,8 +55,6 @@ export default NextAuth({
                 token.last_name = user.last_name;
                 token.image = user.image;
                 token.is_active = user.is_active;
-                console.log('this is user data from jwt function', user);
-                console.log('this is token data from jwt function', token);
             }
             return token;
 
@@ -70,7 +68,6 @@ export default NextAuth({
             session.user.last_name = token.last_name!;
             session.user.image = token.image!;
             session.user.is_active = token.is_active!;
-            console.log('this is session data from session function', session);
             return session;
         }
 

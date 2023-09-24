@@ -1,5 +1,7 @@
 import CustomTextInput from '@/components/CustomTextInput';
 import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import AuthGuard from '../../components/AuthGuard';
 
 import Link from 'next/link';
 import React, { useState } from 'react';
@@ -7,10 +9,10 @@ import React, { useState } from 'react';
 const Login = () => {
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
+  const router = useRouter();
 
 
-  
-const handleLogin = async (e) => {
+const handleLogin = async (e: any) => {
   e.preventDefault();
   
   try {
@@ -19,7 +21,11 @@ const handleLogin = async (e) => {
       password: loginPassword,
       redirect: false,
     });
-    console.log(result);
+    if (result?.ok) {
+        console.log('Login successful:', result);
+        router.push('/');
+      }
+
   } catch (error) {
     console.error('An error occurred:', error);
   }
@@ -27,6 +33,8 @@ const handleLogin = async (e) => {
 
 
   return (
+    <AuthGuard>
+
     <div className="bg-gray-50 min-h-screen">
       <div className="container mx-auto py-8 shadow-lg">
         <h1 className="text-4xl font-bold text-center mb-4 mt-1">We're happy to see you</h1>
@@ -64,6 +72,7 @@ const handleLogin = async (e) => {
       
       </div>
     </div>
+    </AuthGuard>
   );
 };
 
