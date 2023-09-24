@@ -12,11 +12,7 @@ export default function sideBar() {
         {
             href: "/contact",
             title: "Contact",
-        },
-        {
-            href: "/locations",
-            title: "Find Us",
-        },
+        }
     ]
 
     return (

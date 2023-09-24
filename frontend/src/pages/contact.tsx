@@ -16,7 +16,7 @@ function Contact() {
           <div className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center p-10">
             <img src="/images/youssef.png" alt="Youssef Al Bali" className="w-32 h-32 rounded-full mb-4 object-cover" />
             <h2 className="text-lg font-bold mb-2">Youssef Al Bali</h2>
-            <p className="text-gray-500 mb-4">Software Engineer Developer</p>
+            <p className="text-gray-500 mb-4">Software Engineer</p>
             <button className="px-8 py-1 text-gray-900 bg-zinc-300 rounded-2xl mr-2 my-3 font-bold" onClick={handleGitHubButtonClick}>
               View on GitHub
             </button>
