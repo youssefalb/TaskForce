@@ -9,6 +9,7 @@ from .managers import CustomUserManager
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     user_id = models.CharField(_("User ID"), max_length=36, unique=True)
+    username = models.CharField(_("username"), max_length=150, unique=True)
     email = models.EmailField(_("email address"), unique=True, default='example@example.com')
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -19,8 +20,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     image = models.CharField(max_length=255, default='https://www.gravatar.com/avatar/?d=mp', blank=True)
     sex = models.CharField(max_length=32, blank=True)
 
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = []
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ["email"]
 
     objects = CustomUserManager()
 

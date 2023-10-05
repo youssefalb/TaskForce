@@ -9,6 +9,7 @@ declare module "next-auth" {
 
 interface User {
   email?: string;
+  username?: string;
   role?: string;
   user_id?: string;
   first_name?: string;
@@ -18,6 +19,7 @@ interface User {
   is_staff?: boolean;
   is_active?: boolean;
   date_joined?: string; 
+  accessToken?: string;
 }
 
   interface Profile {
@@ -31,6 +33,7 @@ interface User {
 declare module "next-auth/jwt" {
   interface JWT {
     id?: string
+    username?: string
     accessToken?: string
     role?: Role
     email?: string

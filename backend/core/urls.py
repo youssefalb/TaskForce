@@ -14,9 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 
-from user_auth.views import LoginView, UserRegistrationView
+from user_auth.views import GetUserDataView, LoginView, UserRegistrationView, GoogleLoginView
 from projects.views import ProjectView, ProjectDetailView
 
 urlpatterns = [
@@ -25,4 +25,10 @@ urlpatterns = [
     path('register/', UserRegistrationView.as_view(), name='user-registration'),
     path('projects/', ProjectView.as_view()),
     path('projects/<int:project_id>/', ProjectDetailView.as_view()),
+    path('api/auth/', include('dj_rest_auth.urls')),
+    # path('api/social/login/', include('dj_rest_auth.registration.urls')),
+    path('api/social/login/google/', GoogleLoginView.as_view(), name='google'),
+    path('api/user-data/', GetUserDataView.as_view(), name='get_user_data'),
+
+
 ]
