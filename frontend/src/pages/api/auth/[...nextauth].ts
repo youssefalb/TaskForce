@@ -53,10 +53,10 @@ export default NextAuth({
             return baseUrl;
         },
         signIn: async ({ user, account, profile }) => {
-            console.log("from sign in user first", user);
-            console.log("from sign in accoutn first", account);
+            // console.log("from sign in user first", user);
+            // console.log("from sign in accoutn first", account);
             if (account?.provider === 'google') {
-                const { id_token} = account;
+                const { id_token } = account;
 
                 try {
                     const response = await axios.post('http://127.0.0.1:8000/api/social/login/google/',
@@ -77,18 +77,28 @@ export default NextAuth({
                         },
                     });
 
-
-                        user.user_id = userDataResponse.data.user_id;
-                        user.email = userDataResponse.data.email;
-                        user.username = userDataResponse.data.username;
-                        user.role = userDataResponse.data.role;
-                        user.first_name = userDataResponse.data.first_name;
-                        user.last_name = userDataResponse.data.last_name;
-                        user.image = userDataResponse.data.image;
-                        user.is_active = userDataResponse.data.is_active;
-                        user.date_joined = userDataResponse.data.date_joined;
-                        user.accessToken = access_token;
-                        console.log("Response from django", userDataResponse.data);
+                    axios.get('http://127.0.0.1:8000/api/projects/1/', {
+                        headers: {
+                            Authorization: `Token ${access_token}`,
+                        },
+                    })
+                        .then(response => {
+                            console.log(response.data);
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                    user.user_id = userDataResponse.data.user_id;
+                    user.email = userDataResponse.data.email;
+                    user.username = userDataResponse.data.username;
+                    user.role = userDataResponse.data.role;
+                    user.first_name = userDataResponse.data.first_name;
+                    user.last_name = userDataResponse.data.last_name;
+                    user.image = userDataResponse.data.image;
+                    user.is_active = userDataResponse.data.is_active;
+                    user.date_joined = userDataResponse.data.date_joined;
+                    user.accessToken = access_token;
+                    // console.log("Response from django", userDataResponse.data);
 
                     return true;
                 }
@@ -103,10 +113,10 @@ export default NextAuth({
 
         jwt: async ({ profile, account, user, token, trigger, session }) => {
             if (account) {
-                console.log("ACCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCOUNT");
-                console.log(account);
-                console.log("USEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEER");
-                console.log(user);
+                // console.log("ACCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCOUNT");
+                // console.log(account);
+                // console.log("USEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEER");
+                // console.log(user);
                 token.accessToken = account.access_token;
                 token.role = user.role;
                 token.email = user.email;
@@ -124,8 +134,8 @@ export default NextAuth({
 
         },
         session: async ({ session, token }) => {
-            console.log("ssssssssssssssssssssssssssssession");
-            console.log(session);
+            // console.log("ssssssssssssssssssssssssssssession");
+            // console.log(session);
             //add the id and role and all the other stuff to the session
             session.user.user_id = token.user_id!;
             session.user.email = token.email!;
