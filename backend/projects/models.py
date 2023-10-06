@@ -9,11 +9,9 @@ class Project(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     status = models.CharField(max_length=100)
+    tasks = models.ManyToManyField('Task', blank=True, related_name='projects')
 
-    # I don't have a Task model yet, so I'm commenting this out for now
-    # milestones = models.ManyToManyField('Task', blank=True)
-
-    users = models.ManyToManyField(CustomUser, blank=True)
+    users = models.ManyToManyField(CustomUser, blank=True, related_name='projects')
 
     def __str__(self):
         return self.title
@@ -25,8 +23,9 @@ class Task(models.Model):
     description = models.TextField()
     deadline = models.DateField()
     status = models.CharField(max_length=100)
-    users = models.ManyToManyField(CustomUser, blank=True)
+    users = models.ManyToManyField(CustomUser, blank=True, related_name='assigned_tasks')
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title

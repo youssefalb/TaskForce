@@ -17,18 +17,18 @@ from django.contrib import admin
 from django.urls import include, path
 
 from user_auth.views import GetUserDataView, LoginView, UserRegistrationView, GoogleLoginView
-from projects.views import ProjectView, ProjectDetailView
+from projects.views import  ProjectDetailView, ProjectListCreateView, TaskDetailView, TaskListCreateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', LoginView.as_view()),
     path('register/', UserRegistrationView.as_view(), name='user-registration'),
-    path('projects/', ProjectView.as_view()),
-    path('projects/<int:project_id>/', ProjectDetailView.as_view()),
     path('api/auth/', include('dj_rest_auth.urls')),
-    # path('api/social/login/', include('dj_rest_auth.registration.urls')),
     path('api/social/login/google/', GoogleLoginView.as_view(), name='google'),
     path('api/user-data/', GetUserDataView.as_view(), name='get_user_data'),
-
+    path('api/tasks/', TaskListCreateView.as_view(), name='task-list-create'),
+    path('api/tasks/<int:pk>/', TaskDetailView.as_view(), name='task-detail'),
+    path('api/projects/', ProjectListCreateView.as_view(), name='project-list-create'),
+    path('api/projects/<int:pk>/', ProjectDetailView.as_view(), name='project-detail'),
 
 ]
