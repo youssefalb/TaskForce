@@ -13,6 +13,7 @@ class Project(models.Model):
 
     users = models.ManyToManyField(CustomUser, blank=True, related_name='projects')
 
+
     def __str__(self):
         return self.title
     
