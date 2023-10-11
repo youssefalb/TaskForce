@@ -77,17 +77,7 @@ export default NextAuth({
                         },
                     });
 
-                    axios.get('http://127.0.0.1:8000/api/projects/1/', {
-                        headers: {
-                            Authorization: `Token ${access_token}`,
-                        },
-                    })
-                        .then(response => {
-                            console.log(response.data);
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        });
+            
                     user.user_id = userDataResponse.data.user_id;
                     user.email = userDataResponse.data.email;
                     user.username = userDataResponse.data.username;
