@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import CustomButton from "../components/CustomButton";
+import { useSession } from "next-auth/react";
+import { data } from "autoprefixer";
 
 const UserSettings = () => {
     const [firstName, setFirstName] = useState('');
@@ -8,6 +10,7 @@ const UserSettings = () => {
     const [email, setEmail] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [oldPassword, setOldPassword] = useState('');
+    const { data: session } = useSession();
 
     const handlePictureChange = (e) => {
         // Placeholder for handling picture change
@@ -15,7 +18,9 @@ const UserSettings = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Placeholder for form submission
+        console.log("Submitted");
+        console.log(session);
+
     };
 
     return (

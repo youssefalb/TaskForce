@@ -19,6 +19,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=32, blank=True)
     image = models.CharField(max_length=255, default='https://www.gravatar.com/avatar/?d=mp', blank=True)
     sex = models.CharField(max_length=32, blank=True)
+    email_verified = models.BooleanField(default=False)
 
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["email"]

@@ -69,7 +69,7 @@ export default NextAuth({
 
 
                     const access_token = response.data.key;
-                    console.log("Response from django (token)", response.data.key);
+                    //console.log("Response from django (token)", response.data.key);
 
                     const userDataResponse = await axios.get('http://127.0.0.1:8000/api/user-data/', {
                         headers: {
@@ -77,7 +77,6 @@ export default NextAuth({
                         },
                     });
 
-            
                     user.user_id = userDataResponse.data.user_id;
                     user.email = userDataResponse.data.email;
                     user.username = userDataResponse.data.username;
@@ -88,7 +87,10 @@ export default NextAuth({
                     user.is_active = userDataResponse.data.is_active;
                     user.date_joined = userDataResponse.data.date_joined;
                     user.accessToken = access_token;
-                    // console.log("Response from django", userDataResponse.data);
+                    user.emailVerified = userDataResponse.data.email_verified;
+                    console.log("Response from django", userDataResponse.data);
+
+                    console.log("from sign in user", user);
 
                     return true;
                 }
@@ -116,6 +118,7 @@ export default NextAuth({
                 token.image = user.image;
                 token.is_active = user.is_active;
                 token.username = user.username;
+                token.emailVerified = user.emailVerified;
                 console.log("ToooooooooKEN");
                 console.log(token);
 
@@ -136,6 +139,7 @@ export default NextAuth({
             session.user.image = token.image!;
             session.user.is_active = token.is_active!;
             session.user.accessToken = token.accessToken!;
+            session.user.emailVerified = token.emailVerified!;
             return session;
         }
 

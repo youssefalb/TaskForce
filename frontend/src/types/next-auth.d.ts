@@ -20,7 +20,10 @@ interface User {
   is_active?: boolean;
   date_joined?: string; 
   accessToken?: string;
+  emailVerified?: boolean;
 }
+
+
 
   interface Profile {
     family_name?: string
@@ -42,6 +45,6 @@ declare module "next-auth/jwt" {
     last_name?: string
     image?: string
     is_active?: boolean
-
+    emailVerified?: boolean
   }
 }
