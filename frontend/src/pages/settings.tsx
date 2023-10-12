@@ -12,6 +12,7 @@ const UserSettings = () => {
     const [email, setEmail] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [oldPassword, setOldPassword] = useState('');
+    const [image, setImage] = useState('');
 
     const handlePictureChange = (e) => {
         // Placeholder for handling picture change
@@ -26,10 +27,10 @@ const UserSettings = () => {
 
     const fetchData = async () => {
         console.log("Fetching data");
-
-        const userData = await getUserData(session?.user?.accessToken);
-        setFirstName(userData?.firstName);
-        setLastName(userData?.lastName);
+        const userData = await getUserData(session?.user?.accessToken as string);
+        setImage(userData?.image);
+        setFirstName(userData?.first_name);
+        setLastName(userData?.last_name);
         setEmail(userData?.email);
     }
 
@@ -51,8 +52,8 @@ const UserSettings = () => {
             <div className="relative mx-auto -mt-16 w-32 h-32 rounded-full overflow-hidden border-4 border-white hover:cursor-pointer">
                 <label htmlFor="profileImageInput" className="w-full h-full">
                     <img
-                        src="https://via.placeholder.com/150"
-                        alt="Profile"
+                        src={image}
+                        alt={session?.user?.username}
                         className="w-full h-full object-cover"
                     />
                     <input
