@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import CustomButton from "../components/CustomButton";
 import { useSession } from "next-auth/react";
-import { data } from "autoprefixer";
+import {getUserData} from "@/lib/userData";
+
 
 const UserSettings = () => {
+    const { data: session } = useSession();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [oldPassword, setOldPassword] = useState('');
-    const { data: session } = useSession();
 
     const handlePictureChange = (e) => {
         // Placeholder for handling picture change
@@ -22,6 +23,20 @@ const UserSettings = () => {
         console.log(session);
 
     };
+
+    const fetchData = async () => {
+        console.log("Fetching data");
+
+        const userData = await getUserData(session?.user?.accessToken);
+        setFirstName(userData?.firstName);
+        setLastName(userData?.lastName);
+        setEmail(userData?.email);
+    }
+
+
+    useEffect(() => {
+        fetchData()
+    }, [session])
 
     return (
         <div>

@@ -88,6 +88,7 @@ export default NextAuth({
                     user.date_joined = userDataResponse.data.date_joined;
                     user.accessToken = access_token;
                     user.emailVerified = userDataResponse.data.email_verified;
+                    user.accessToken = access_token;
                     console.log("Response from django", userDataResponse.data);
 
                     console.log("from sign in user", user);
@@ -109,7 +110,7 @@ export default NextAuth({
                 // console.log(account);
                 // console.log("USEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEER");
                 // console.log(user);
-                token.accessToken = account.access_token;
+                token.accessToken = user.accessToken;
                 token.role = user.role;
                 token.email = user.email;
                 token.user_id = user.user_id;
