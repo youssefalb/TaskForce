@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import CustomButton from "../components/CustomButton";
 import { useSession } from "next-auth/react";
-import {getUserData} from "@/lib/userData";
+import {getUserData, updateUserData} from "@/lib/userData";
 
 
 const UserSettings = () => {
@@ -24,22 +24,21 @@ const UserSettings = () => {
 
     };
 
-    const updateUserNameAndSurname = async () => {
+    const updateData = async (e) => {
+        e.preventDefault();
         const userData = {
-            firstName,
-            lastName,
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            image: image,
         }
-        // const res = updateUserInfo(userData)
-        // if ((await res).ok) {
-        //     toast.success('Insurance data updated successfully');
-        // }
-        // else {
-        //     toast.error('Failed to update insurance data');
-        // }
+        const response = await updateUserData(session?.user?.accessToken as string, userData);
+        console.log(response);
     }
 
     const fetchData = async () => {
         console.log("Fetching data");
+        console.log(session);
         const userData = await getUserData(session?.user?.accessToken as string);
         setImage(userData?.image);
         setFirstName(userData?.first_name);
@@ -80,7 +79,7 @@ const UserSettings = () => {
             </div>
             <div className="mx-auto max-w-screen-lg my-8 px-4">
                 <div className="text-center"> 
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={updateData}>
                         <div className="my-6">
                             <TextField
                                 fullWidth
@@ -105,7 +104,7 @@ const UserSettings = () => {
                     </form>
                 </div>
                 <div className="text-center"> 
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={updateData}>
                         <div className="my-10">
                             <TextField
                                 fullWidth

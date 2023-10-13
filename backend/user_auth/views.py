@@ -50,3 +50,12 @@ class GetUserDataView(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+    
+
+class UpdateUserDataView(generics.UpdateAPIView):
+    serializer_class = CustomUserSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
