@@ -31,8 +31,10 @@ export default NextAuth({
                             'Content-Type': 'application/json',
                         },
                     });
-                    const userData = response.data;
-
+                    const userData = response.data.user;
+                    userData.accessToken = response.data.token;
+                    console.log("Response from django", userData);
+                    
                     if (response.status === 200 && userData) {
                         console.log('Authentication successful:', userData);
                         return userData;
@@ -53,8 +55,7 @@ export default NextAuth({
             return baseUrl;
         },
         signIn: async ({ user, account, profile }) => {
-            // console.log("from sign in user first", user);
-            // console.log("from sign in accoutn first", account);
+            console.log("User", user);
             if (account?.provider === 'google') {
                 const { id_token } = account;
 
@@ -67,10 +68,9 @@ export default NextAuth({
                     }
                     );
 
+                    console.log("Response from django", response.data);
 
                     const access_token = response.data.key;
-                    //console.log("Response from django (token)", response.data.key);
-
                     const userDataResponse = await axios.get('http://127.0.0.1:8000/api/user-data/', {
                         headers: {
                             Authorization: `Token ${access_token}`,

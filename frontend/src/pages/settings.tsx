@@ -15,7 +15,6 @@ const UserSettings = () => {
     const [image, setImage] = useState('');
 
     const handlePictureChange = (e) => {
-        // Placeholder for handling picture change
     };
 
     const handleSubmit = (e) => {
@@ -24,6 +23,20 @@ const UserSettings = () => {
         console.log(session);
 
     };
+
+    const updateUserNameAndSurname = async () => {
+        const userData = {
+            firstName,
+            lastName,
+        }
+        // const res = updateUserInfo(userData)
+        // if ((await res).ok) {
+        //     toast.success('Insurance data updated successfully');
+        // }
+        // else {
+        //     toast.error('Failed to update insurance data');
+        // }
+    }
 
     const fetchData = async () => {
         console.log("Fetching data");

@@ -11,6 +11,8 @@ from rest_framework import status
 from dj_rest_auth.registration.views import SocialLoginView
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+from rest_framework.authtoken.models import Token  
+
 
 
 class LoginView(views.APIView):
@@ -22,9 +24,10 @@ class LoginView(views.APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         login(request, user)
+        token, created = Token.objects.get_or_create(user=user)
         user_serializer = CustomUserSerializer(user)
         print("user ser data",user_serializer.data)
-        return Response(user_serializer.data, status=status.HTTP_200_OK)
+        return Response({'user': user_serializer.data, 'token': token.key}, status=status.HTTP_200_OK)
 
 
 class UserRegistrationView(generics.CreateAPIView):
