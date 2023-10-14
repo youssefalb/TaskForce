@@ -4,6 +4,8 @@ from user_auth.models import CustomUser
 from django.db import models
 from django.contrib.auth.models import Permission
 from django.db.models.signals import post_save
+from django.core.exceptions import PermissionDenied
+from django.contrib.auth import get_user
 
 
 class Project(models.Model):
@@ -26,10 +28,8 @@ class Project(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default='not_started')    
-    tasks = models.ManyToManyField('Task', blank=True, related_name='projects')
     roles = models.ManyToManyField('Role', blank=True, related_name='projects')
-
-    users = models.ManyToManyField(CustomUser, blank=True, related_name='projects')
+    users = models.ManyToManyField(CustomUser,through='ProjectUserRole', blank=True, related_name='projects')
 
     
     def __str__(self):
@@ -51,7 +51,6 @@ class Role(models.Model):
 
     def __str__(self):
         return self.name
-    
 
 
 class ProjectUserRole(models.Model):
@@ -91,3 +90,44 @@ class Task(models.Model):
     def __str__(self):
         return self.title
     
+    
+    def delete_check(self, user):
+        return ( user in self.project.users.all() and user.has_perm("delete_task", self.project))
+    
+    def delete(self, using=None, keep_parents=False, user=None):
+        if not self.delete_check(user):
+            raise PermissionDenied("You do not have permission to delete this task.")
+        super().delete(using=using, keep_parents=keep_parents)
+    
+
+
+class Ticket(models.Model):
+
+    STATUS_CHOICES = [
+        ('open', 'Open'),
+        ('in_progress', 'In Progress'),
+        ('resolved', 'Resolved'),
+        ('closed', 'Closed'),
+    ]
+
+
+    PRIORITY_CHOICES = [
+        ('low', 'Low'),
+        ('medium', 'Medium'),
+        ('high', 'High'),
+        ('urgent', 'Urgent'),
+    ]
+
+    id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='tickets')
+    assigned_to = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_tickets')
+    created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='created_tickets')
+    priority = models.CharField(max_length=100, choices=PRIORITY_CHOICES, default='medium')
+    status = models.CharField(max_length=100, choices=STATUS_CHOICES, default='open')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title

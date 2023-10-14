@@ -1,11 +1,14 @@
 from django.contrib import admin
-from .models import Project, Task, Role, ProjectUserRole
+from .models import Project, Task, Role, ProjectUserRole, Ticket
 
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'description', 'start_date', 'end_date', 'status', )
 
 class TaskAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'description', 'deadline', 'status')
+
+class TicketAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title', 'description', 'status')
 
 class RoleAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')  
@@ -17,3 +20,4 @@ admin.site.register(Project, ProjectAdmin)
 admin.site.register(Task, TaskAdmin)
 admin.site.register(Role, RoleAdmin)
 admin.site.register(ProjectUserRole, UserRoleAdmin)
+admin.site.register(Ticket, TicketAdmin)

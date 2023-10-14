@@ -8,7 +8,7 @@ from .managers import CustomUserManager
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    user_id = models.CharField(_("User ID"), max_length=36, unique=True)
+    user_id = models.CharField(_("User ID"), max_length=36, unique=True) # Later on I will use this id instead of the default id
     username = models.CharField(_("username"), max_length=150, unique=True)
     email = models.EmailField(_("email address"), unique=True, default='example@example.com')
     is_staff = models.BooleanField(default=False)
