@@ -39,16 +39,23 @@ class Project(models.Model):
         permissions = [
             ("add_task", "Can add task"),
             ("delete_task", "Can delete task"),
+            ("delete_members", "Can delete members from project"),
             ("add_members", "Can add members to project"),
             ("can_delete_project", "Can delete project"),
+            ("can_add_role", "Can add role to project"),
         ]
+
+
     
 
 
 class Role(models.Model):
     name = models.CharField(max_length=100)
-    permissions = models.ManyToManyField(Permission, blank=True)
-
+    permissions = models.ManyToManyField(
+        Permission,
+        blank=True,
+        limit_choices_to={'content_type__app_label': 'projects'}, 
+    )
     def __str__(self):
         return self.name
 
@@ -70,7 +77,6 @@ def create_default_roles(sender, instance, created, **kwargs):
 
         owner_permissions = Permission.objects.all()  
         admin_permissions = Permission.objects.filter(codename__in=['add_task', 'add_members', 'delete_task'])
-
         admin_role.permissions.set(admin_permissions)
         owner_role.permissions.set(owner_permissions)
 
