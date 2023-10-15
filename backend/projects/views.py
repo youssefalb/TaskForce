@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import generics
@@ -80,10 +81,14 @@ class ProjectUsersView(generics.ListAPIView):
         project_id = self.kwargs['project_id']
         return ProjectUserRole.objects.filter(project_id=project_id)
 
-class UpdateUserRoleView(generics.UpdateAPIView):
+class UpdateUserRoleView(generics.RetrieveUpdateAPIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     queryset = ProjectUserRole.objects.all()
     serializer_class = ProjectUserRoleSerializer
-    lookup_url_kwarg = 'user_id'    
+
+    def get_object(self):
+        project_id = self.kwargs.get('project_id')
+        user_id = self.kwargs.get('user_id')
+        return get_object_or_404(self.queryset, project_id=project_id, user_id=user_id)
     
