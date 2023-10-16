@@ -12,6 +12,7 @@ from .serializers import ProjectUserRoleSerializer, RoleSerializer, TaskSerializ
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.core.exceptions import PermissionDenied
+from django.contrib.auth.models import Permission
 class TaskListCreateView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,) 
     authentication_classes = (TokenAuthentication,) 
@@ -130,3 +131,21 @@ class CreateRoleView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         raise PermissionDenied("You do not have permission to add roles to this project.")
+    
+
+
+class ListPermissionsView(APIView):
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
+    def get(self, request, *args, **kwargs):
+        permissions = Permission.objects.all().filter(content_type__app_label='projects')
+
+        permission_data = [
+            {
+                'id': permission.id,
+                'codename': permission.codename,
+                'name': permission.name,
+            }
+            for permission in permissions
+        ]
+        return Response(data=permission_data, status=status.HTTP_200_OK)
