@@ -21,6 +21,7 @@ interface User {
   date_joined?: string; 
   accessToken?: string;
   emailVerified?: boolean;
+  provider?: string;
 }
 
 
@@ -46,5 +47,6 @@ declare module "next-auth/jwt" {
     image?: string
     is_active?: boolean
     emailVerified?: boolean
+    provider?: string
   }
 }

@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import CustomButton from "../components/CustomButton";
 import { useSession } from "next-auth/react";
-import {getUserData, updateUserData} from "@/lib/userData";
+import { getUserData, updateUserData } from "@/lib/userData";
 
 
 const UserSettings = () => {
-    const { data: session } = useSession();
+    const { data: session, update } = useSession();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -32,8 +32,26 @@ const UserSettings = () => {
             email: email,
             image: image,
         }
-        const response = await updateUserData(session?.user?.accessToken as string, userData);
-        console.log(response);
+        try {
+            const response = await updateUserData(session?.user?.accessToken as string, userData);
+        }
+        catch (e) {
+            console.log(e);
+        }
+        if (session?.user) {
+            // Create a copy of the session.user object
+            const updatedUser = { ...session.user };
+            updatedUser.first_name = firstName;
+            updatedUser.last_name = lastName;
+            updatedUser.email = email;
+            updatedUser.image = image;
+
+            const updatedSession = { ...session, user: updatedUser };
+            session.user = updatedSession.user;
+            update(updatedSession);
+
+            console.log("After session Update", session);
+        }
     }
 
     const fetchData = async () => {
@@ -78,7 +96,7 @@ const UserSettings = () => {
                 </label>
             </div>
             <div className="mx-auto max-w-screen-lg my-8 px-4">
-                <div className="text-center"> 
+                <div className="text-center">
                     <form onSubmit={updateData}>
                         <div className="my-6">
                             <TextField
@@ -103,7 +121,7 @@ const UserSettings = () => {
                         <CustomButton buttonText={"Save Changes"} color="gray" />
                     </form>
                 </div>
-                <div className="text-center"> 
+                <div className="text-center">
                     <form onSubmit={updateData}>
                         <div className="my-10">
                             <TextField
@@ -121,7 +139,10 @@ const UserSettings = () => {
                         </div>
                     </form>
                 </div>
-                <div className="text-center"> 
+
+
+                {session?.user?.provider == "credentials" ? (
+                               <div className="text-center">
                     <form onSubmit={handleSubmit}>
                         <div className="mt-10 mb-4">
                             <TextField
@@ -142,9 +163,12 @@ const UserSettings = () => {
                                 onChange={(e) => setNewPassword(e.target.value)}
                             />
                         </div>
-                        <CustomButton buttonText={"Save Password"} color="gray"/>
+                        <CustomButton buttonText={"Save Password"} color="gray" />
                     </form>
                 </div>
+
+                ) : null}
+     
             </div>
         </div>
     );

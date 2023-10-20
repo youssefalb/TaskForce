@@ -105,6 +105,21 @@ export default NextAuth({
         },
 
         jwt: async ({ profile, account, user, token, trigger, session }) => {
+
+
+            if (trigger === 'update') {
+                token.accessToken = session.user.accessToken;
+                token.role = session.user.role;
+                token.email = session.user.email;
+                token.user_id = session.user.user_id;
+                token.first_name = session.user.first_name;
+                token.last_name = session.user.last_name;
+                token.image = session.user.image;
+                token.is_active = session.user.is_active;
+                token.username = session.user.username;
+                token.emailVerified = session.user.emailVerified;
+                console.log("ToooooooooKEN");
+            }
             if (account) {
                 // console.log("ACCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCOUNT");
                 // console.log(account);
@@ -120,6 +135,8 @@ export default NextAuth({
                 token.is_active = user.is_active;
                 token.username = user.username;
                 token.emailVerified = user.emailVerified;
+                token.provider = account.provider;
+
                 console.log("ToooooooooKEN");
                 console.log(token);
 
@@ -141,6 +158,7 @@ export default NextAuth({
             session.user.is_active = token.is_active!;
             session.user.accessToken = token.accessToken!;
             session.user.emailVerified = token.emailVerified!;
+            session.user.provider = token.provider!;
             return session;
         }
 

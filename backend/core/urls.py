@@ -35,5 +35,4 @@ urlpatterns = [
     path('api/project/<project_id>/user/<user_id>/', UpdateUserRoleView.as_view(), name='update-user-role'),
     path('api/projects/<project_id>/create_role/', CreateRoleView.as_view(), name='create-role'),
     path('list_permissions/', ListPermissionsView.as_view(), name='list_permissions'),
-
 ]
