@@ -14,17 +14,17 @@ const UserSettings = () => {
     const [oldPassword, setOldPassword] = useState('');
     const [image, setImage] = useState('');
 
-    const handlePictureChange = (e) => {
+    const handlePictureChange = (e:any) => {
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: any) => {
         e.preventDefault();
         console.log("Submitted");
         console.log(session);
 
     };
 
-    const updateData = async (e) => {
+    const updateData = async (e: any) => {
         e.preventDefault();
         const userData = {
             first_name: firstName,
