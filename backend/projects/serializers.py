@@ -1,5 +1,5 @@
 from user_auth.models import CustomUser
-from .models import Project, ProjectUserRole, Role, Task
+from .models import Project, ProjectUserRole, Record, Role, Task
 from rest_framework import serializers
 
 # For now include all fields
@@ -50,3 +50,7 @@ class RoleSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class RecordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Record
+        fields = '__all__'

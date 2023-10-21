@@ -6,7 +6,8 @@ from django.contrib.auth.models import Permission
 from django.db.models.signals import post_save
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth import get_user
-
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 class Project(models.Model):
 
@@ -82,7 +83,6 @@ def create_default_roles(sender, instance, created, **kwargs):
 
         instance.roles.add(admin_role, owner_role)
 
-
 class Task(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
@@ -92,7 +92,7 @@ class Task(models.Model):
     users = models.ManyToManyField(CustomUser, blank=True, related_name='assigned_tasks')
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-
+    
     def __str__(self):
         return self.title
     
@@ -137,3 +137,21 @@ class Ticket(models.Model):
 
     def __str__(self):
         return self.title
+
+
+
+class Record(models.Model):
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    hours_worked = models.DurationField(null=True, default=None)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    # GenericForeignKey to allow a relation with either Task or Ticket
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+
+    def save(self, *args, **kwargs):
+        time_diff = self.end_date - self.start_date
+
+        self.hours_worked = time_diff
+        super().save(*args, **kwargs)

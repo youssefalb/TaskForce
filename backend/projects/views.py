@@ -6,8 +6,8 @@ from rest_framework import generics
 from user_auth.models import CustomUser
 from rest_framework.views import APIView
 
-from .models import ProjectUserRole, Role, Task, Project
-from .serializers import ProjectUserRoleSerializer, RoleSerializer, TaskSerializer, ProjectSerializer
+from .models import ProjectUserRole, Record, Role, Task, Project
+from .serializers import ProjectUserRoleSerializer, RecordSerializer, RoleSerializer, TaskSerializer, ProjectSerializer
 
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -149,3 +149,10 @@ class ListPermissionsView(APIView):
             for permission in permissions
         ]
         return Response(data=permission_data, status=status.HTTP_200_OK)
+
+
+class RecordCreateView(generics.CreateAPIView):
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
+    queryset = Record.objects.all()
+    serializer_class = RecordSerializer
