@@ -25,6 +25,7 @@ class Project(models.Model):
 
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
+    image = models.CharField(max_length=255, default='https://gravatar.com/avatar/6872fb051ac964dcea46abef7e75dd58?s=400&d=robohash&r=x', blank=True)
     description = models.TextField()
     start_date = models.DateField()
     end_date = models.DateField()
