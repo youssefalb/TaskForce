@@ -20,6 +20,10 @@ export default function sideBar() {
         {
             href: "/contact",
             title: "Contact",
+        },
+        {
+            href: "/projects",
+            title: "Projects",
         }
     ]
 

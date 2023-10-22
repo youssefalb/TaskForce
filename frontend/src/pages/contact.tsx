@@ -10,7 +10,7 @@ function Contact() {
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="container mx-auto py-8">
-        <h1 className="text-4xl font-bold text-center mb-2 mt-1">Our Development Team</h1>
+        <h1 className="text-4xl font-bold text-center mb-2 mt-1">Development Team</h1>
         <p className="text-lg text-center mb-12">Best of the best.</p>
         <div className="grid grid-cols-3 gap-4 m-10">
           <div className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center p-10">

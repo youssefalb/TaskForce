@@ -77,7 +77,7 @@ export default NextAuth({
                         },
                     });
 
-                    user.user_id = userDataResponse.data.user_id;
+                    user.id = userDataResponse.data.id;
                     user.email = userDataResponse.data.email;
                     user.username = userDataResponse.data.username;
                     user.role = userDataResponse.data.role;
@@ -111,7 +111,7 @@ export default NextAuth({
                 token.accessToken = session.user.accessToken;
                 token.role = session.user.role;
                 token.email = session.user.email;
-                token.user_id = session.user.user_id;
+                token.id = session.user.id;
                 token.first_name = session.user.first_name;
                 token.last_name = session.user.last_name;
                 token.image = session.user.image;
@@ -128,7 +128,7 @@ export default NextAuth({
                 token.accessToken = user.accessToken;
                 token.role = user.role;
                 token.email = user.email;
-                token.user_id = user.user_id;
+                token.id = user.id;
                 token.first_name = user.first_name;
                 token.last_name = user.last_name;
                 token.image = user.image;
@@ -148,7 +148,7 @@ export default NextAuth({
             // console.log("ssssssssssssssssssssssssssssession");
             // console.log(session);
             //add the id and role and all the other stuff to the session
-            session.user.user_id = token.user_id!;
+            session.user.id = token.id!;
             session.user.email = token.email!;
             session.user.username = token.username!;
             session.user.role = token.role!;

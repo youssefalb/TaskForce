@@ -11,7 +11,7 @@ interface User {
   email?: string;
   username?: string;
   role?: string;
-  user_id?: string;
+  id?: string;
   first_name?: string;
   last_name?: string;
   image?: string;
@@ -41,7 +41,6 @@ declare module "next-auth/jwt" {
     accessToken?: string
     role?: Role
     email?: string
-    user_id?: string
     first_name?: string
     last_name?: string
     image?: string
