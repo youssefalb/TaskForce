@@ -57,13 +57,27 @@ class ProjectDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def put(self, request, *args, **kwargs):
         instance = self.get_object()
+        print ("Test 1")
         user_role = ProjectUserRole.objects.filter(user=request.user, project=instance).first()
+        print ("Test 2")
 
         user_ids_to_add = request.data.get('users_to_add', [])
         user_ids_to_remove = request.data.get('users_to_remove', [])
+        role_name = request.data.get('role_name', 'Guest')
+        print ("Test 3")
+        print(user_ids_to_add)
+        if user_ids_to_add:
+            if  user_role and user_role.role.permissions.filter(codename="add_members").first():
+                for user_id in user_ids_to_add:
+                    print("user Id: ",user_id)
+                    user = CustomUser.objects.get(id=user_id)
+                    try:
+                        role = Role.objects.get(name=role_name)
+                    except Role.DoesNotExist:
+                        raise ValueError("Role does not exist.")
+                    ProjectUserRole.objects.create(user=user, project=instance, role=role)
+                instance.users.add(*user_ids_to_add)
 
-        if user_ids_to_add and user_role and user_role.role.permissions.filter(codename="add_members").first():
-            instance.users.add(*user_ids_to_add)
         elif user_ids_to_add:
             raise PermissionDenied("You do not have permission to add members to this project.")
 
@@ -92,7 +106,14 @@ class ProjectDetailView(generics.RetrieveUpdateDestroyAPIView):
 
         raise PermissionDenied("You do not have permission to delete this project.")
     
+class UserProjectsListView(generics.ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
+    serializer_class = ProjectSerializer
 
+    def get_queryset(self):
+        user = self.request.user
+        return Project.objects.filter(users=user)
 
 class ProjectUsersView(generics.ListAPIView):
     serializer_class = ProjectUserRoleSerializer

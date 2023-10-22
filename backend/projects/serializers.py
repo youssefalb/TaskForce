@@ -8,14 +8,9 @@ from rest_framework import serializers
 class ProjectUserRoleSerializer(serializers.ModelSerializer):
     user_username = serializers.CharField(source='user.username', read_only=True)
     role_name = serializers.CharField(source='role.name')
-    role_id = serializers.PrimaryKeyRelatedField(
-        queryset=Role.objects.all(),  
-        write_only=True,
-        source='role'
-    )
     class Meta:
         model = ProjectUserRole
-        fields = ('id', 'user','project',  'user_username', 'role_name', 'role_id')
+        fields = ('id', 'user','project',  'user_username', 'role_name')
 
 
 

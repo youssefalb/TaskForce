@@ -75,13 +75,13 @@ def create_default_roles(sender, instance, created, **kwargs):
         # Create ADMIN and OWNER roles as default for each project
         admin_role, created = Role.objects.get_or_create(name="Admin")
         owner_role, created = Role.objects.get_or_create(name="Owner")
-
+        guest_role, created = Role.objects.get_or_create(name="Guest")  
         owner_permissions = Permission.objects.all()  
         admin_permissions = Permission.objects.filter(codename__in=['add_task', 'add_members', 'delete_task'])
         admin_role.permissions.set(admin_permissions)
         owner_role.permissions.set(owner_permissions)
 
-        instance.roles.add(admin_role, owner_role)
+        instance.roles.add(admin_role, owner_role, guest_role)
 
 class Task(models.Model):
     id = models.AutoField(primary_key=True)
@@ -145,7 +145,8 @@ class Record(models.Model):
     end_date = models.DateTimeField()
     hours_worked = models.DurationField(null=True, default=None)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    # GenericForeignKey to allow a relation with either Task or Ticket
+
+    
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')

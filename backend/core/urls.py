@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 from user_auth.views import UpdateUserDataView, GetUserDataView, LoginView, UserRegistrationView, GoogleLoginView
-from projects.views import  ListPermissionsView, ProjectDetailView, ProjectListCreateView, ProjectUsersView, RecordCreateView, TaskDetailView, TaskListCreateView, UpdateUserRoleView, CreateRoleView
+from projects.views import  ListPermissionsView, ProjectDetailView, ProjectListCreateView, ProjectUsersView, RecordCreateView, TaskDetailView, TaskListCreateView, UpdateUserRoleView, CreateRoleView, UserProjectsListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,5 +36,6 @@ urlpatterns = [
     path('api/projects/<project_id>/create_role/', CreateRoleView.as_view(), name='create-role'),
     path('list_permissions/', ListPermissionsView.as_view(), name='list_permissions'),
     path('api/records/create/', RecordCreateView.as_view(), name='create-record'),
+    path('api/user/<int:user_id>/projects/', UserProjectsListView.as_view(), name='user-projects-list'),
 
 ]
