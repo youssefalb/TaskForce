@@ -35,12 +35,17 @@ class ProjectSerializer(serializers.ModelSerializer):
     
 
 # For now include all fields (Same as ProjectSerializer)
+
+class TaskUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ('id', 'username', 'image')
 class TaskSerializer(serializers.ModelSerializer):
+    users = TaskUserSerializer(many=True, read_only=True)  
+
     class Meta:
         model = Task
         fields = '__all__'
-
-
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role

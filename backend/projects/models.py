@@ -85,11 +85,20 @@ def create_default_roles(sender, instance, created, **kwargs):
         instance.roles.add(admin_role, owner_role, guest_role)
 
 class Task(models.Model):
+    STATUS_CHOICES = [
+        ('backlog', 'Backlog'),
+        ('todo', 'Todo'),
+        ('doing', 'Doing'),
+        ('done', 'Done'),
+        ('scrapped', 'Scrapped'),
+
+    ]
+
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     description = models.TextField()
     deadline = models.DateField()
-    status = models.CharField(max_length=100)
+    status = models.CharField(max_length=100, choices=STATUS_CHOICES, default='backlog')
     users = models.ManyToManyField(CustomUser, blank=True, related_name='assigned_tasks')
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
