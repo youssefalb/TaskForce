@@ -1,23 +1,25 @@
 from user_auth.models import CustomUser
-from .models import Project, ProjectUserRole, Record, Role, Task
+from .models import Project, ProjectUserRole, Record, Role, Task, Ticket
 from rest_framework import serializers
 
 # For now include all fields
 
 
 class ProjectUserRoleSerializer(serializers.ModelSerializer):
-    user_username = serializers.CharField(source='user.username', read_only=True)
+    username = serializers.CharField(source='user.username', read_only=True)
+    email = serializers.CharField(source='user.email', read_only=True)
+    image = serializers.CharField(source='user.image', read_only=True)
     role_name = serializers.CharField(source='role.name')
     class Meta:
         model = ProjectUserRole
-        fields = ('id', 'user','project',  'user_username', 'role_name')
+        fields = ('id', 'user','project',  'username', 'role_name', 'email', 'image')
 
 
 
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = '__all__'
+        fields = ('id', 'STATUS_CHOICES','title',  'image', 'description', 'start_date', 'end_date', 'status')
 
     def create(self, validated_data):
         role_owner, _ = Role.objects.get_or_create(name="Owner")
@@ -48,4 +50,9 @@ class RoleSerializer(serializers.ModelSerializer):
 class RecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = Record
+        fields = '__all__'
+
+class TicketSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ticket
         fields = '__all__'

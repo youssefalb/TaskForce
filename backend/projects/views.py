@@ -6,13 +6,14 @@ from rest_framework import generics
 from user_auth.models import CustomUser
 from rest_framework.views import APIView
 
-from .models import ProjectUserRole, Record, Role, Task, Project
-from .serializers import ProjectUserRoleSerializer, RecordSerializer, RoleSerializer, TaskSerializer, ProjectSerializer
+from .models import ProjectUserRole, Record, Role, Task, Project, Ticket
+from .serializers import ProjectUserRoleSerializer, RecordSerializer, RoleSerializer, TaskSerializer, ProjectSerializer, TicketSerializer
 
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import Permission
+
 class TaskListCreateView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,) 
     authentication_classes = (TokenAuthentication,) 
@@ -57,14 +58,11 @@ class ProjectDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def put(self, request, *args, **kwargs):
         instance = self.get_object()
-        print ("Test 1")
         user_role = ProjectUserRole.objects.filter(user=request.user, project=instance).first()
-        print ("Test 2")
 
         user_ids_to_add = request.data.get('users_to_add', [])
         user_ids_to_remove = request.data.get('users_to_remove', [])
         role_name = request.data.get('role_name', 'Guest')
-        print ("Test 3")
         print(user_ids_to_add)
         if user_ids_to_add:
             if  user_role and user_role.role.permissions.filter(codename="add_members").first():
@@ -114,12 +112,42 @@ class UserProjectsListView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         return Project.objects.filter(users=user)
+    
 
+
+class ProjectRolesView(generics.ListAPIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = RoleSerializer
+
+    def get_queryset(self):
+        project_id = self.kwargs['project_id']
+        # Retrieve roles related to the specified project
+        return Role.objects.filter(projects__id=project_id)
+
+class ProjectTicketsView(generics.ListAPIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = TicketSerializer
+
+    def get_queryset(self):
+        project_id = self.kwargs['project_id']
+        return Ticket.objects.filter(project_id=project_id)
+class ProjectTasksView(generics.ListAPIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = TaskSerializer
+
+    def get_queryset(self):
+        project_id = self.kwargs['project_id']
+        return Task.objects.filter(project_id=project_id)
+    
 class ProjectUsersView(generics.ListAPIView):
     serializer_class = ProjectUserRoleSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
-
+    serializer_class = ProjectUserRoleSerializer
+    
     def get_queryset(self):
         project_id = self.kwargs['project_id']
         return ProjectUserRole.objects.filter(project_id=project_id)

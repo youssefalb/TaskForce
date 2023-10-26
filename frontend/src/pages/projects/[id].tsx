@@ -7,10 +7,11 @@ import Tickets from "../../components/projects/Tickets";
 import { getProjectDetails } from '@/lib/projects';
 import Users from '@/components/projects/Users';
 import Settings from '@/components/projects/Settings';
+import Home from '@/components/projects/Home';
 
 export default function ProjectPage() {
     const [activeTab, setActiveTab] = useState(0);
-    const [project, setProject] = useState(null);
+    const [project, setProject] = useState([]);
     const router = useRouter()
     const { id } = router.query
     const { data: session } = useSession()
@@ -52,9 +53,9 @@ return (
       </Tabs>
         <Box p={3}>
           {activeTab === 0 &&  <div>Info</div> }
-          {activeTab === 1 && <div>Home </div>}
+          {activeTab === 1 && <div><Home /> </div>}
           {activeTab === 2 && <div><Settings details = {project}/> </div>}
-          {activeTab === 3 && <div><Users users= {project?.users}/></div>}
+          {activeTab === 3 && <div><Users projectId= {id}/></div>}
           {activeTab === 4 && <div><Tickets projectId ={id}/></div>}
         </Box>
     </div>
