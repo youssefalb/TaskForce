@@ -53,7 +53,7 @@ return (
       </Tabs>
         <Box p={3}>
           {activeTab === 0 &&  <div>Info</div> }
-          {activeTab === 1 && <div><Home /> </div>}
+          {activeTab === 1 && <div><Home projectId= {id}/> </div>}
           {activeTab === 2 && <div><Settings details = {project}/> </div>}
           {activeTab === 3 && <div><Users projectId= {id}/></div>}
           {activeTab === 4 && <div><Tickets projectId ={id}/></div>}
