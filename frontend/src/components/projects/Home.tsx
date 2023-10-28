@@ -70,8 +70,6 @@ const Home = ({ projectId }: any) => {
     console.log('Tasks: ', tasks);
     await changeTaskStatus(session?.user?.accessToken, draggedTask.id, result.destination.droppableId)
       .then((data) => {
-
-        
         setTasks(updatedTasks);
       })
       .catch((error) => {
