@@ -35,17 +35,50 @@ class ProjectSerializer(serializers.ModelSerializer):
     
 
 # For now include all fields (Same as ProjectSerializer)
-
 class TaskUserSerializer(serializers.ModelSerializer):
+    role_name = serializers.SerializerMethodField()
+
     class Meta:
         model = CustomUser
-        fields = ('id', 'username', 'image')
+        fields = ('id', 'username', 'image', 'role_name')
+
+    def get_role_name(self, user):
+        project = self.context.get('project')
+        role_name = None
+        print("project: ", project)
+        if project:
+            try:
+                project_user_role = ProjectUserRole.objects.get(user=user, project=project)
+                role_name = project_user_role.role.name
+            except ProjectUserRole.DoesNotExist:
+                pass
+
+        return role_name
+
+
+
 class TaskSerializer(serializers.ModelSerializer):
-    users = TaskUserSerializer(many=True, read_only=True)  
+    users = TaskUserSerializer(many=True, read_only=True)
 
     class Meta:
         model = Task
         fields = '__all__'
+
+    def to_representation(self, instance):
+        print("instance: ", instance)
+        context = self.context
+        context['project'] = instance.project
+
+        user_serializer = TaskUserSerializer(instance.users, many=True, context=context)
+
+        user_data = user_serializer.data
+
+        data = super(TaskSerializer, self).to_representation(instance)
+        data['users'] = user_data
+
+        return data
+
+
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role

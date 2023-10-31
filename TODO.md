@@ -13,6 +13,7 @@
 - [] User should be able to register using the normal credentials (Onlt Google auth is available now)
 - [] Check for session in the Side bar menu
 - [] Add role names to task users data 
+- [] Add empty component
 
 
 

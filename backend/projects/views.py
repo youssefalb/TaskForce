@@ -25,22 +25,16 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = (TokenAuthentication,) 
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    def put(self, request, *args, **kwargs):
+
+    def update(self, request, *args, **kwargs):
         instance = self.get_object()
-        user_ids_to_add = request.data.get('users_to_add', [])
-        user_ids_to_remove = request.data.get('users_to_remove', [])
-        if user_ids_to_add:
-            instance.users.add(*user_ids_to_add)
-
-        if user_ids_to_remove:
-            instance.users.remove(*user_ids_to_remove)
-
+        user_ids = request.data.get('users', []) 
+        instance.users.set(user_ids)  
+        instance.title = request.data.get('title', instance.title)
+        instance.description = request.data.get('description', instance.description)
         instance.save()
-
-        # Serialize the updated instance
-        serialized_instance = TaskSerializer(instance)
-
-        return Response(data=serialized_instance.data, status=status.HTTP_200_OK)
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class ProjectListCreateView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,) 
