@@ -24,14 +24,11 @@ const Home = ({ projectId }: any) => {
 
   const [selectedTask, setSelectedTask] = useState<Task | null>(null); // State to track the selected task for editing
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  useEffect(() => {
     const fetchData = async () => {
       if (session?.user?.accessToken) {
         try {
           const data = await getProjectTasks(session.user.accessToken, projectId);
 
-          // Tasks but with string ids since the draggable component requires string ids
           const tasksWithStringsIds = data.map((task: Task) => ({
             ...task,
             id: task.id.toString(),
@@ -45,6 +42,9 @@ const Home = ({ projectId }: any) => {
         console.error('Access token or user ID is undefined.');
       }
     };
+
+  useEffect(() => {
+
     fetchData();
   }, [session, projectId]);
 
@@ -125,7 +125,7 @@ const Home = ({ projectId }: any) => {
                                 onClick={() => openTaskModal(task)} // Open edit dialog on click
                               >
                                 <CardContent>
-                                  <Typography variant="h6" component="div">
+                                  <Typography variant="h6" component="div" className='bold'>
                                     {task.title}
                                   </Typography>
                                   <Typography variant="body2" color="text.secondary">
@@ -133,17 +133,17 @@ const Home = ({ projectId }: any) => {
                                       {task.description}
                                     </div>
                                   </Typography>
-                                  <div>
+                                  <div className='flex my-2'>
                                     {task.users.map((user) => (
                                       <div key={user.id}>
                                         <Avatar src={user.image} alt={user.username} title={user.username} />
+
                                       </div>
                                     ))}
-
-                                    <Typography variant="body2" align="right">
+                                  </div>
+                                    <Typography variant="body2" align="right" color="text.secondary">
                                       Due {task.deadline}
                                     </Typography>
-                                  </div>
                                 </CardContent>
                               </Card>
                             )}
@@ -164,6 +164,7 @@ const Home = ({ projectId }: any) => {
       {/* Task Edit Dialog */}
       <TaskSettingsDialog
         open={isModalOpen}
+        onSave={fetchData}
         onClose={closeTaskModal}
         task={selectedTask}
         projectId={projectId}
