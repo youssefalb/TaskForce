@@ -19,6 +19,21 @@ class TaskListCreateView(generics.ListCreateAPIView):
     authentication_classes = (TokenAuthentication,) 
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    def create(self, request, *args, **kwargs):
+        user_ids = request.data.get("users", [])
+
+        task_data = request.data
+        task_serializer = TaskSerializer(data=task_data)
+
+        if task_serializer.is_valid():
+            task = task_serializer.save()
+
+            users = CustomUser.objects.filter(id__in=user_ids)
+            task.users.set(users)
+
+            return Response(task_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(task_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthenticated,) 
@@ -32,6 +47,7 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
         instance.users.set(user_ids)  
         instance.title = request.data.get('title', instance.title)
         instance.description = request.data.get('description', instance.description)
+        instance.deadline = request.data.get('deadline', instance.deadline)
         instance.save()
         serializer = self.get_serializer(instance)
         return Response(serializer.data, status=status.HTTP_200_OK)

@@ -65,19 +65,18 @@ class TaskSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def to_representation(self, instance):
-        print("instance: ", instance)
+        data = super(TaskSerializer, self).to_representation(instance)
         context = self.context
         context['project'] = instance.project
 
-        user_serializer = TaskUserSerializer(instance.users, many=True, context=context)
+        # Assuming 'users' is a many-to-many field on your Task model
+        users = instance.users.all()  # Fetch all related users
 
-        user_data = user_serializer.data
-
-        data = super(TaskSerializer, self).to_representation(instance)
-        data['users'] = user_data
+        # Serialize the users using TaskUserSerializer
+        user_serializer = TaskUserSerializer(users, many=True, context=context)
+        data['users'] = user_serializer.data
 
         return data
-
 
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
