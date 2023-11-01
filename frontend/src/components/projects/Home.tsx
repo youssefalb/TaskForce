@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Grid, Paper, Typography, Card, CardContent, Avatar, Button } from '@mui/material';
+import { Container, Grid, Paper, Typography, Card, CardContent, Avatar, Button, Modal } from '@mui/material';
 import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd';
 import { useSession } from 'next-auth/react';
 import { changeTaskStatus, getProjectTasks } from '@/lib/projects';
-import TaskSettingsDialog from '../TaskSettingsDialog'; // Import the EditTaskDialog component
+import TaskDialog from '../TaskDialog';
 
 const Home = ({ projectId }: any) => {
   type Task = {
@@ -22,35 +22,44 @@ const Home = ({ projectId }: any) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const { data: session } = useSession();
 
-  const [selectedTask, setSelectedTask] = useState<Task | null>(null); // State to track the selected task for editing
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-    const fetchData = async () => {
-      if (session?.user?.accessToken) {
-        try {
-          const data = await getProjectTasks(session.user.accessToken, projectId);
+  const fetchData = async () => {
+    if (session?.user?.accessToken) {
+      try {
+        const data = await getProjectTasks(session.user.accessToken, projectId);
 
-          const tasksWithStringsIds = data.map((task: Task) => ({
-            ...task,
-            id: task.id.toString(),
-          }));
+        const tasksWithStringsIds = data.map((task: Task) => ({
+          ...task,
+          id: task.id.toString(),
+        }));
 
-          setTasks(tasksWithStringsIds);
-        } catch (error) {
-          console.error(error);
-        }
-      } else {
-        console.error('Access token or user ID is undefined.');
+        setTasks(tasksWithStringsIds);
+      } catch (error) {
+        console.error(error);
       }
-    };
+    } else {
+      console.error('Access token or user ID is undefined.');
+    }
+  };
 
   useEffect(() => {
 
     fetchData();
   }, [session, projectId]);
 
-  const addTask = () => {
-    console.log('add task');
-  }
+
+  useEffect(() => {
+    console.log('Selected Task: ', selectedTask);
+  }, [selectedTask]);
+
+const addTask = () => {
+    setSelectedTask(null);
+    console.log('Add Task is triggred');
+    setIsModalOpen(true);
+  };
+
+
 
   const onDragEnd = async (result: any) => {
     if (!result.destination) {
@@ -73,17 +82,18 @@ const Home = ({ projectId }: any) => {
       });
   };
 
-  // Function to open the edit task dialog
   const openTaskModal = (task: Task) => {
+    console.log('Open Task Modal is triggred');
+    console.log('Task: ', task);
     setSelectedTask(task);
     setIsModalOpen(true);
   };
 
-  // Function to close the edit task dialog
   const closeTaskModal = () => {
-    setSelectedTask(null);
     setIsModalOpen(false);
   };
+
+
 
   return (
     <div>
@@ -99,8 +109,10 @@ const Home = ({ projectId }: any) => {
                 <Grid item xs={2.4} ref={provided.innerRef}>
                   <Paper className="p-4">
                     <div className="flex justify-between items-center mb-4">
-                      <Typography variant="h6" className="text-lg font-semibold mb-4">
-                        {columnId}
+                      <Typography variant="h5" >
+                        <strong>
+                          {columnId.charAt(0).toUpperCase() + columnId.slice(1)}
+                          </strong>
                       </Typography>
                       {columnId === 'backlog' && (
                         <button onClick={addTask} className="p-2 m-2 text-black font-bold bg-zinc-300 rounded-2xl">
@@ -120,8 +132,8 @@ const Home = ({ projectId }: any) => {
                                 elevation={3}
                                 className={`p-2 mb-2 ${columnId === 'todo' ? 'bg-blue-100' :
                                   columnId === 'doing' ? 'bg-yellow-100' :
-                                  columnId === 'scrapped' ? 'bg-red-100' : 'bg-green-100'
-                                } rounded`}
+                                    columnId === 'scrapped' ? 'bg-red-100' : 'bg-green-100'
+                                  } rounded`}
                                 onClick={() => openTaskModal(task)} // Open edit dialog on click
                               >
                                 <CardContent>
@@ -129,7 +141,7 @@ const Home = ({ projectId }: any) => {
                                     {task.title}
                                   </Typography>
                                   <Typography variant="body2" color="text.secondary">
-                                    <div className='overflow-hidden  text-ellipsis'>
+                                    <div className='overflow-hidden text-ellipsis'>
                                       {task.description}
                                     </div>
                                   </Typography>
@@ -141,9 +153,9 @@ const Home = ({ projectId }: any) => {
                                       </div>
                                     ))}
                                   </div>
-                                    <Typography variant="body2" align="right" color="text.secondary">
-                                      Due {task.deadline}
-                                    </Typography>
+                                  <Typography variant="body2" align="right" color="text.secondary">
+                                    Due {task.deadline}
+                                  </Typography>
                                 </CardContent>
                               </Card>
                             )}
@@ -160,9 +172,8 @@ const Home = ({ projectId }: any) => {
           ))}
         </Grid>
       </DragDropContext>
-      
-      {/* Task Edit Dialog */}
-      <TaskSettingsDialog
+
+      <TaskDialog
         open={isModalOpen}
         onSave={fetchData}
         onClose={closeTaskModal}
