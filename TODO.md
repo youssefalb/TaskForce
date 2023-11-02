@@ -7,15 +7,17 @@
 - [x] Edit task details
     * A task page should show the title description and Users
     * Only users who have the permissions to Edit will be able to edit the task
-- [] Add task Dialog
-- [] Add project Dialog
-- [] See Project Info in a nice styled page and be able to edit it
+- [x] Add task Dialog
+- [x] Add project Dialog
+- [x] See Project Info in a nice styled page and be able to edit it
+- [] Display project status in the projects page
 - [] Ability to attach file to Projects/Tickets
 - [] see tickets list
 - [] User should be able to register using the normal credentials (Onlt Google auth is available now)
 - [] Check for session in the Side bar menu
 - [] Add role names to task users data 
 - [] Add empty component
+- [] use cloudinary to save images and files
 
 
 

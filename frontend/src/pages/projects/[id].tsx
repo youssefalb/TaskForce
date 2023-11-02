@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import Tickets from "../../components/projects/Tickets";
 import { getProjectDetails } from '@/lib/projects';
 import Users from '@/components/projects/Users';
-import Settings from '@/components/projects/Settings';
+import ProjectInfo from '@/components/projects/ProjectInfo';
 import Home from '@/components/projects/Home';
 
 export default function ProjectPage() {
@@ -45,18 +45,16 @@ return (
         textColor="primary"
         centered
       >
-        <Tab label="Info" />
         <Tab label="Home" />
-        <Tab label="Settings" />
+        <Tab label="Info" />
         <Tab label="Users" />
         <Tab label="Tickets" />
       </Tabs>
         <Box p={3}>
-          {activeTab === 0 &&  <div>Info</div> }
-          {activeTab === 1 && <div><Home projectId= {id}/> </div>}
-          {activeTab === 2 && <div><Settings details = {project}/> </div>}
-          {activeTab === 3 && <div><Users projectId= {id}/></div>}
-          {activeTab === 4 && <div><Tickets projectId ={id}/></div>}
+          {activeTab === 0 && <div><Home projectId= {id}/> </div>}
+          {activeTab === 1 && <div><ProjectInfo details={project} fetchData={fetchData} /></div>}
+          {activeTab === 2 && <div><Users projectId= {id}/></div>}
+          {activeTab === 3 && <div><Tickets projectId ={id}/></div>}
         </Box>
     </div>
   );

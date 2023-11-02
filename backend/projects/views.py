@@ -80,6 +80,7 @@ class ProjectDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
     def put(self, request, *args, **kwargs):
+        print("Called here")
         instance = self.get_object()
         user_role = ProjectUserRole.objects.filter(user=request.user, project=instance).first()
 
