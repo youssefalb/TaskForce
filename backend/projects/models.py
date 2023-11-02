@@ -108,13 +108,11 @@ class Task(models.Model):
     
     
     def delete_check(self, user):
-        return ( user in self.project.users.all() and user.has_perm("delete_task", self.project))
-    
-    def delete(self, using=None, keep_parents=False, user=None):
-        if not self.delete_check(user):
-            raise PermissionDenied("You do not have permission to delete this task.")
-        super().delete(using=using, keep_parents=keep_parents)
-    
+        print(f"User: {user}")
+        user_role = ProjectUserRole.objects.filter(user=user, project=self.project).first()
+        can_delete_task = user_role and user_role.role.permissions.filter(codename="delete_task").first()
+        return can_delete_task
+
 
 
 class Ticket(models.Model):

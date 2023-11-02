@@ -49,13 +49,8 @@ const Home = ({ projectId }: any) => {
   }, [session, projectId]);
 
 
-  useEffect(() => {
-    console.log('Selected Task: ', selectedTask);
-  }, [selectedTask]);
-
 const addTask = () => {
     setSelectedTask(null);
-    console.log('Add Task is triggred');
     setIsModalOpen(true);
   };
 
@@ -83,14 +78,14 @@ const addTask = () => {
   };
 
   const openTaskModal = (task: Task) => {
-    console.log('Open Task Modal is triggred');
-    console.log('Task: ', task);
+
     setSelectedTask(task);
     setIsModalOpen(true);
   };
 
   const closeTaskModal = () => {
     setIsModalOpen(false);
+    fetchData();
   };
 
 

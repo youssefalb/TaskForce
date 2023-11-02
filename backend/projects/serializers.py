@@ -45,7 +45,6 @@ class TaskUserSerializer(serializers.ModelSerializer):
     def get_role_name(self, user):
         project = self.context.get('project')
         role_name = None
-        print("project: ", project)
         if project:
             try:
                 project_user_role = ProjectUserRole.objects.get(user=user, project=project)
@@ -68,11 +67,9 @@ class TaskSerializer(serializers.ModelSerializer):
         data = super(TaskSerializer, self).to_representation(instance)
         context = self.context
         context['project'] = instance.project
+        print("Called here in the representation")
+        users = instance.users.all() 
 
-        # Assuming 'users' is a many-to-many field on your Task model
-        users = instance.users.all()  # Fetch all related users
-
-        # Serialize the users using TaskUserSerializer
         user_serializer = TaskUserSerializer(users, many=True, context=context)
         data['users'] = user_serializer.data
 

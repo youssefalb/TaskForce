@@ -41,6 +41,15 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
 
+
+
+    def perform_destroy(self, instance):
+        user = self.request.user
+        if not instance.delete_check(user):
+            raise PermissionDenied("You do not have permission to delete this task.")
+        instance.delete()
+
+
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         user_ids = request.data.get('users', []) 
