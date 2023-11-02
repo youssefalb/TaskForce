@@ -57,6 +57,10 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
         instance.title = request.data.get('title', instance.title)
         instance.description = request.data.get('description', instance.description)
         instance.deadline = request.data.get('deadline', instance.deadline)
+        
+        if 'status' in request.data:
+            instance.status = request.data.get('status', instance.status)
+        
         instance.save()
         serializer = self.get_serializer(instance)
         return Response(serializer.data, status=status.HTTP_200_OK)

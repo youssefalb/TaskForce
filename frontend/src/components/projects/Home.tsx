@@ -24,6 +24,7 @@ const Home = ({ projectId }: any) => {
 
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const fetchData = async () => {
     if (session?.user?.accessToken) {
       try {
@@ -67,10 +68,14 @@ const addTask = () => {
       ...draggedTask,
       status: result.destination.droppableId,
     });
-
+    console.log(updatedTasks);
+    console.log("draggable ID: ", draggedTask.id);
+    console.log("result ID: ", result.destination.droppableId);
+    
     await changeTaskStatus(session?.user?.accessToken, draggedTask.id, result.destination.droppableId)
       .then((data) => {
         setTasks(updatedTasks);
+        console.log(updatedTasks);
       })
       .catch((error) => {
         console.error('Error changing task status:', error);

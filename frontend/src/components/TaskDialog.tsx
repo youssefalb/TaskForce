@@ -55,7 +55,7 @@ const TaskDialog = (props: any) => {
     if (session?.user?.accessToken) {
       try {
         const data = await getProjectUsers(session.user.accessToken, projectId);
-        console.log('Project Users: ', data);
+       setProjectUsers(changeProjectUsersBody(data));
       } catch (error) {
         console.error(error);
       }
@@ -67,6 +67,9 @@ const TaskDialog = (props: any) => {
 
 
   useEffect(() => {
+    if (projectId) {
+      getProjectUsersData();
+    }
     if (task) {
       setEditedTitle(task?.title);
       setEditedDescription(task?.description);
@@ -79,12 +82,8 @@ const TaskDialog = (props: any) => {
       setDeadline("");
       setSelectedUsers([]);
     }
-    if (projectId) {
-      getProjectUsersData();
-    }
 
-
-  }, [task, action]);
+  }, [task]);
 
   const handleClose = () => {
     onClose();
@@ -93,10 +92,7 @@ const TaskDialog = (props: any) => {
   const handleDelete = async () => {
     if (task?.id && session?.user?.accessToken) {
       try {
-        console.log('Access Token: ', session?.user?.accessToken);
-        console.log('Task ID before delete: ', task?.id);
         const response = await deleteTask(session.user.accessToken, task?.id);
-        console.log('Response:', response);
       }
       catch (error) {
         console.error(error);
@@ -124,8 +120,7 @@ const TaskDialog = (props: any) => {
           );
           console.log('Response:', response);
         } else {
-          console.log('Task ID: ', task?.id);
-          console.log('Deadline: ', deadline);
+
           const response = await addTask(
             session?.user?.accessToken,
             projectId,
