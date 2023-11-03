@@ -10,8 +10,6 @@
 - [x] Add task Dialog
 - [x] Add project Dialog
 - [x] See Project Info in a nice styled page and be able to edit it
-- [] Display project status in the projects page
-- [] Ability to attach file to Projects/Tickets
 - [] see tickets list
 - [] User should be able to register using the normal credentials (Onlt Google auth is available now)
 - [] Check for session in the Side bar menu
@@ -19,6 +17,9 @@
 - [] Add empty component
 - [] use cloudinary to save images and files
 
+# projects
+- [] Display project status in the projects page
+- [] Ability to attach file to Projects/Tickets
 
 
 
