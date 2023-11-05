@@ -1,12 +1,21 @@
 import React from 'react';
-import { Avatar, Card, CardContent, Typography, Grid, Paper } from '@mui/material';
 
+const UserCard = ({ user, canBanUser, onBanUserClick }: any) => {
+  const handleBanUserClick = () => {
+    if (canBanUser) {
+      // Handle the ban user action here
+      if (onBanUserClick) {
+        onBanUserClick(user.id); // Pass the user ID or relevant data to the parent component
+      }
+    }
+  };
 
+  console.log('User ID', user.id);
+  console.log('User', user);
+  console.log('Can Ban User', canBanUser);
 
-
-const UserCard = ({ user }: any) => {
- return (
-    <div className="border border-gray-200 rounded-md p-4 shadow-lg">
+  return (
+    <div className="border border-gray-200 rounded-md p-4 shadow-lg flex">
       <div className="flex items-center">
         <div className="w-16 h-16">
           <img
@@ -20,10 +29,19 @@ const UserCard = ({ user }: any) => {
           <p className="text-gray-600">{user.email}</p>
           <p className="text-gray-600">Role: {user.role_name}</p>
         </div>
+        {canBanUser && (
+            <div className="left-0 flex">
+           <img
+              src="/images/ban-user.png"
+              alt={user.username}
+              className="w-10 h-10 rounded-full object-cover align-right"
+              onClick={() => handleBanUserClick()}
+            />
+            </div>
+        )}
       </div>
     </div>
   );
 };
-
 
 export default UserCard;

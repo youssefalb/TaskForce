@@ -16,19 +16,19 @@
 - [] use cloudinary to save images and files
 
 # projects
-- [] Display project status in the projects page
+- [x] Display project status in the projects page
 - [] Attach file to Projects/Tickets
 - [] Kick users for admin and owner roles
 - [] Add roles with permissions
 - [] Change the role of users
-
+- [] Update the permissions of a role and the role name
 
 # Tickets
 - [] Add ticket
 - [] Update Ticket Status
 - [] see tickets list
 - [] Add filter to tickets page that will show be default only the open ones
-- [] Attach and downald files from a ticket
+- [] Attach and download files from a ticket
 
 
 # Tasks

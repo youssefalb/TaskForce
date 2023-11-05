@@ -8,6 +8,7 @@ import { getProjectDetails } from '@/lib/projects';
 import Users from '@/components/projects/Users';
 import ProjectInfo from '@/components/projects/ProjectInfo';
 import Home from '@/components/projects/Home';
+import ProjectRoles from '@/components/projects/ProjectRoles';
 
 export default function ProjectPage() {
     const [activeTab, setActiveTab] = useState(0);
@@ -49,12 +50,14 @@ return (
         <Tab label="Info" />
         <Tab label="Users" />
         <Tab label="Tickets" />
+        <Tab label="Roles" />
       </Tabs>
         <Box p={3}>
           {activeTab === 0 && <div><Home projectId= {id}/> </div>}
           {activeTab === 1 && <div><ProjectInfo details={project} fetchData={fetchData} /></div>}
           {activeTab === 2 && <div><Users projectId= {id}/></div>}
-          {activeTab === 3 && <div><Tickets projectId ={id}/></div>}
+          {activeTab === 3 && <div><Tickets projectId= {id}/></div>}
+          {activeTab === 4 && <div><ProjectRoles projectId ={id}/></div>}
         </Box>
     </div>
   );

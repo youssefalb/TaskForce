@@ -1,18 +1,48 @@
 from user_auth.models import CustomUser
 from .models import Project, ProjectUserRole, Record, Role, Task, Ticket
 from rest_framework import serializers
-
+from django.contrib.auth.models import Permission
 # For now include all fields
 
+
+class PermissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = ['id', 'name', 'codename']
+
+        
+class RoleSerializer(serializers.ModelSerializer):
+    permissions = serializers.PrimaryKeyRelatedField(many=True, queryset=Permission.objects.all())
+    class Meta:
+        model = Role
+        fields = '__all__'
+
+
+    def to_representation(self, instance):
+        ret = super(RoleSerializer, self).to_representation(instance)
+        ret['permissions'] = PermissionSerializer(instance.permissions.all(), many=True).data
+        return ret
+    
+
+    def update(self, instance, validated_data):
+        print(validated_data)
+        instance.name = validated_data.get('name', instance.name)
+        if 'permissions' in validated_data:
+            permissions = validated_data.pop('permissions')
+            instance.permissions.set(permissions)
+
+        instance.save()
+        return instance
 
 class ProjectUserRoleSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
     email = serializers.CharField(source='user.email', read_only=True)
     image = serializers.CharField(source='user.image', read_only=True)
     role_name = serializers.CharField(source='role.name')
+    role = RoleSerializer(read_only=True)
     class Meta:
         model = ProjectUserRole
-        fields = ('id', 'user','project',  'username', 'role_name', 'email', 'image')
+        fields = ('id', 'user','project',  'username', 'role_name', 'email', 'image', 'role')
 
 
 
@@ -75,10 +105,7 @@ class TaskSerializer(serializers.ModelSerializer):
 
         return data
 
-class RoleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Role
-        fields = '__all__'
+
 
 
 class RecordSerializer(serializers.ModelSerializer):

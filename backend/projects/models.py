@@ -8,6 +8,7 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.auth import get_user
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import Q
 
 class Project(models.Model):
 
@@ -56,7 +57,7 @@ class Role(models.Model):
     permissions = models.ManyToManyField(
         Permission,
         blank=True,
-        limit_choices_to={'content_type__app_label': 'projects'}, 
+        limit_choices_to=Q(~Q(content_type__model='task'), content_type__app_label='projects'),
     )
     def __str__(self):
         return self.name

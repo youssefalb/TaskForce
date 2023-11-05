@@ -1,7 +1,7 @@
 import { getProjectUsers } from '@/lib/projects';
 import { Grid, TextField } from '@mui/material';
 import { useSession } from 'next-auth/react';
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import UserCard from './UserCard';
 
 const Users = ({ projectId }: any) => {
@@ -19,6 +19,11 @@ const Users = ({ projectId }: any) => {
       console.error("Access token or user ID is undefined.");
     }
   }
+  const checkPermissionsForBan = () => {
+    const user = users.find((user) => user.user === session?.user?.id);
+    const hasAddMemberPermission = user.role.permissions.some(permission => permission.codename === 'add_members');
+    return hasAddMemberPermission;
+  }
 
   useEffect(() => {
 
@@ -26,9 +31,17 @@ const Users = ({ projectId }: any) => {
   }, [projectId]);
 
 
+
 const filteredUsers = users.filter((user) =>
     user.username.toLowerCase().includes(usernameSearchValue.toLowerCase())
   );
+
+
+  const handleBanUserClick = (userId) => {
+
+    console.log('User ID');
+  };
+
 
   return (
     <div>
@@ -43,7 +56,12 @@ const filteredUsers = users.filter((user) =>
       <Grid container spacing={2}>
         {filteredUsers.map((user) => (
           <Grid item key={user.username} xs={12} sm={6} md={4} lg={3}>
-            <UserCard user={user} />
+        <UserCard
+          user={user}
+          canBanUser={checkPermissionsForBan()} 
+          onBanUserClick={handleBanUserClick} // Pass the ban user action function
+        />        
+        
           </Grid>
         ))}
       </Grid>
