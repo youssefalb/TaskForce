@@ -21,7 +21,7 @@
 - [] Kick users for admin and owner roles
 - [] Add roles with permissions
 - [] Change the role of users
-- [] Update the permissions of a role and the role name
+- [x] Update the permissions of a role and the role name
 
 # Tickets
 - [] Add ticket
