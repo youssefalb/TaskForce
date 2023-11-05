@@ -4,6 +4,7 @@ import CustomTextInput from '../../components/CustomTextInput';
 import React from 'react';
 import axios from 'axios';
 import AuthGuard from '../../components/AuthGuard';
+import { registerUser } from '@/lib/userData';
 
 
 export default function Register() {
@@ -11,6 +12,7 @@ export default function Register() {
     const [password, setPassword] = useState('');
     const [firstName, setFname] = useState('');
     const [lastName, setLname] = useState('');
+    const [username, setUsername] = useState('');
 
 
     const handleSubmit = async (e: any) => {
@@ -21,17 +23,15 @@ export default function Register() {
             password,
             first_name: firstName,
             last_name: lastName,
+            username,
         };
 
         try {
-            const response = await axios.post('http://localhost:8000/register/', userData);
-            if (response.status === 201) {
-                console.log('User registered successfully!');
-            } else {
-                console.error('Failed to register user.');
-            }
-        } catch (error) {
-            console.error('An error occurred:', error);
+            const response = await registerUser(userData);
+            console.log(response);
+        }
+        catch (error) {
+            console.error(error);
         }
     };
 
@@ -50,7 +50,9 @@ export default function Register() {
                                 <CustomTextInput type='text' name='fname' placeholder='First name' onChange={(e) => setFname(e.target.value)} />
                                 <CustomTextInput type='text' name='lname' placeholder='Last name' onChange={(e) => setLname(e.target.value)} />
                                 <CustomTextInput type='email' name='email' placeholder='Email' onChange={(e) => setEmail(e.target.value)} />
+                                <CustomTextInput type='text' name='username' placeholder='Username' onChange={(e) => setUsername(e.target.value)} />
                                 <CustomTextInput type='password' name='password' placeholder='Password' onChange={(e) => setPassword(e.target.value)} />
+
                             </div>
                             <button
                                 type='submit'

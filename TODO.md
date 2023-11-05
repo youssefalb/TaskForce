@@ -9,11 +9,12 @@
 - [x] Add task Dialog
 - [x] Add project Dialog
 - [x] See Project Info in a nice styled page and be able to edit it
-- [] User should be able to register using the normal credentials (Onlt Google auth is available now)
+- [x] User should be able to register using the normal credentials (Only Google auth is available now)
 - [] Check for session in the Side bar menu
 - [x] Add role names to task users data 
 - [] Add empty component
 - [] use cloudinary to save images and files
+- [] Password Security check when signing up
 
 # projects
 - [x] Display project status in the projects page
