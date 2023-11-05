@@ -45,6 +45,7 @@ const RoleDialog = ({ open, onClose, onSave, role }) => {
     }, []);
 
     const handleSave = () => {
+        console.log("Role state: ", roleState);
         onSave(roleState);
     };
 

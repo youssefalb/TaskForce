@@ -4,7 +4,7 @@ import RoleDialog from '../RoleDialog';
 import { getProjectRoles } from '@/lib/projects';
 import { useSession } from 'next-auth/react';
 import CustomButton from '../CustomButton';
-import { updateRole } from '@/lib/projects';
+import { updateRole, createRole } from '@/lib/projects';
 
 
 const RolesPage = ({ projectId }: any) => {
@@ -26,16 +26,30 @@ const RolesPage = ({ projectId }: any) => {
     };
 
     const handleRoleUpdate = (role: Role) => {
-        console.log("Role to update: ", role);
-        if (session?.user?.accessToken){
-            try{
-            updateRole(session.user.accessToken, role);
+        if (role?.id) {
+            if (session?.user?.accessToken) {
+                try {
+                    updateRole(session.user.accessToken, role);
+
+                }
+                catch (error) {
+                    console.error(error);
+                }
+                setRoles(prevRoles => prevRoles.map(r => r.id === role.id ? role : r));
+            }
+        }
+        else {
+            if (session?.user?.accessToken) {
+                try {
+                    createRole(session.user.accessToken, projectId,  role);
+                }
+                catch (error) {
+                    console.error(error);
+                }
+                setRoles(prevRoles => [...prevRoles, role]);
+            }
             
-            }
-            catch(error){
-                console.error(error);
-            }
-            setRoles(prevRoles => prevRoles.map(r => r.id === role.id ? role : r)); 
+            fetchData()
         }
         handleDialogClose();
     };
