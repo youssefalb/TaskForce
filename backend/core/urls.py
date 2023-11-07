@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from user_auth.views import UpdateUserDataView, GetUserDataView, LoginView, UserRegistrationView, GoogleLoginView
+from user_auth.views import UpdateUserDataView, GetUserDataView, LoginView, UserRegistrationView, GoogleLoginView, activate_account,  send_verification_email_view
 from projects.views import  ListPermissionsView, ProjectDetailView, ProjectListCreateView, ProjectRolesView, ProjectUsersView, RecordCreateView, TaskDetailView, UpdateRoleView,  TaskListCreateView, UpdateUserRoleView, CreateRoleView, UserProjectsListView, ProjectTasksView
 
 urlpatterns = [
@@ -40,5 +40,7 @@ urlpatterns = [
     path('api/project/<int:project_id>/tasks/', ProjectTasksView.as_view(), name='project-tasks-list'),
     path('api/project/<int:project_id>/roles/', ProjectRolesView.as_view(), name='project-roles'),
     path('roles/<int:id>/', UpdateRoleView.as_view(), name='update-role'),
+    path('activate-account/', activate_account, name='activate-account'),
+    path('send-verification-email/<user_id>/', send_verification_email_view, name='send_verification_email'),
 
 ]

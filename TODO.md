@@ -1,6 +1,6 @@
 
 ## Missing
-- [] Send the email verification and verifying the account (After register and when the user wants to get verified)
+- [x] Send the email verification and verifying the account (After register and when the user wants to get verified)
 - [] Check or add permission to acces the views for example and handle that in the f.e (a user cannot add a task or can not see a project in which he not involved)
 - [] Connect and host a DB and start working with it
 - [x] Edit task details
@@ -31,7 +31,7 @@
 - [] Add ticket
 - [] Update Ticket Status
 - [] see tickets list
-- [] Add filter to tickets page that will show be default only the open ones
+- [] Add filter to tickets page that will show by default only the open ones
 - [] Attach and download files from a ticket
 
 
@@ -45,4 +45,7 @@
 - [] Settings, after change saved or not
 - [] After Login or Register
 
+
+## bugs:
+- [] When a user regiters by email the role is not default (Guest)
 

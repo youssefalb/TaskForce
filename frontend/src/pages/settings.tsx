@@ -69,6 +69,9 @@ const UserSettings = () => {
         fetchData()
     }, [session])
 
+    const sendVerificationEmail = async () => {
+    }
+
     return (
         <div>
             <div className="relative">
@@ -132,10 +135,19 @@ const UserSettings = () => {
                                 type="email"
                                 onChange={(e) => setEmail(e.target.value)}
                             />
-                            <span className="text-red-500 flex my-2">
-                                Email not verified
+                        {session?.user?.emailVerified ? (
+                            <span className="text-green-500 flex my-2">
+                                Email verified
                             </span>
-                            <CustomButton buttonText={"Save Email"} color="gray" />
+                        ) : (
+                            <>
+                                <span className="text-red-500 flex my-2">
+                                    Email not verified
+                                </span>
+                                <CustomButton buttonText={"Verify Email"} color="gray" onClick={() => {sendVerificationEmail()}} />
+                            </>
+                        )}
+                        <CustomButton buttonText={"Save Email"} color="gray" />
                         </div>
                     </form>
                 </div>
