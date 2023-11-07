@@ -18,7 +18,6 @@ export default function ProjectPage() {
     const { data: session } = useSession()
 
     const fetchData = async () => {
-        console.log('Kurwa sesja', session)
         if (session?.user?.accessToken && id) {
             await getProjectDetails(session.user.accessToken, id.toString())
                 .then((data) => { setProject(data); console.log('Response Data', data); } )

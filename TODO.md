@@ -19,7 +19,7 @@
 # projects
 - [x] Display project status in the projects page
 - [] Attach file to Projects/Tickets
-- [] Kick users for admin and owner roles
+- [x] Kick users for admin and owner roles
 - [x] Add roles with permissions
 - [] Change the role of users
 - [x] Update the permissions of a role and the role name

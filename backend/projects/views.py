@@ -87,7 +87,7 @@ class ProjectDetailView(generics.RetrieveUpdateDestroyAPIView):
         print("Called here")
         instance = self.get_object()
         user_role = ProjectUserRole.objects.filter(user=request.user, project=instance).first()
-
+        print(request.data)
         user_ids_to_add = request.data.get('users_to_add', [])
         user_ids_to_remove = request.data.get('users_to_remove', [])
         role_name = request.data.get('role_name', 'Guest')
@@ -109,6 +109,11 @@ class ProjectDetailView(generics.RetrieveUpdateDestroyAPIView):
 
         if user_ids_to_remove and user_role and user_role.role.permissions.filter(codename="delete_members").first():
             instance.users.remove(*user_ids_to_remove)
+            print(f"Attempting to remove users with IDs: {user_ids_to_remove}")
+            removed_roles = ProjectUserRole.objects.filter(project=instance, user_id__in=user_ids_to_remove)
+            print(f"Roles to be removed: {removed_roles.count()}")
+            ProjectUserRole.objects.filter(project=instance, user_id__in=user_ids_to_remove).delete()
+            print("Removed")
         elif user_ids_to_remove:
             raise PermissionDenied("You do not have permission to remove members from this project.")
 

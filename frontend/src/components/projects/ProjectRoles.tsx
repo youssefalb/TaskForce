@@ -25,7 +25,7 @@ const RolesPage = ({ projectId }: any) => {
         setDialogOpen(false);
     };
 
-    const handleRoleUpdate = (role: Role) => {
+    const handleRoleUpdate = async (role: Role) => {
         if (role?.id) {
             if (session?.user?.accessToken) {
                 try {
@@ -41,16 +41,17 @@ const RolesPage = ({ projectId }: any) => {
         else {
             if (session?.user?.accessToken) {
                 try {
-                    createRole(session.user.accessToken, projectId,  role);
+                    await createRole(session.user.accessToken, projectId,  role);
                 }
                 catch (error) {
                     console.error(error);
                 }
                 setRoles(prevRoles => [...prevRoles, role]);
+                console.log('New role added', role);
             }
-            
-            fetchData()
+            fetchData();
         }
+
         handleDialogClose();
     };
 
