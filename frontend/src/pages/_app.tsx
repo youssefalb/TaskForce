@@ -3,6 +3,7 @@ import '@/styles/globals.css'
 import { SessionProvider } from 'next-auth/react'
 import type { AppProps } from 'next/app'
 import { DragDropContext} from 'react-beautiful-dnd'
+import { ToastContainer } from 'react-toastify';
 
 
 
@@ -23,6 +24,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
         <Layout>
          <Component {...pageProps} />
+          <ToastContainer/>
         </Layout>
         </SessionProvider>
       </DragDropContext>

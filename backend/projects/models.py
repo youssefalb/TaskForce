@@ -67,7 +67,8 @@ class ProjectUserRole(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     role = models.ForeignKey(Role, on_delete=models.CASCADE)
-
+    class Meta:
+        unique_together = ('user', 'project')
     def __str__(self):
         return f"{self.user.username} - {self.project.title} - {self.role.name}"  
     

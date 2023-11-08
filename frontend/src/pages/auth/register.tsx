@@ -2,9 +2,11 @@
 import { useState } from 'react';
 import CustomTextInput from '../../components/CustomTextInput';
 import React from 'react';
-import axios from 'axios';
-import AuthGuard from '../../components/AuthGuard';
 import { registerUser } from '@/lib/userData';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 export default function Register() {
@@ -13,8 +15,8 @@ export default function Register() {
     const [firstName, setFname] = useState('');
     const [lastName, setLname] = useState('');
     const [username, setUsername] = useState('');
-
-
+    const { data: session } = useSession();
+    const router = useRouter();
     const handleSubmit = async (e: any) => {
         e.preventDefault();
 
@@ -27,17 +29,39 @@ export default function Register() {
         };
 
         try {
+            console.log('Registering user');
             const response = await registerUser(userData);
             console.log(response);
+            if (response.status === 201) {
+                toast.success("You are registered successfully, a verfication email was sent to you :)", {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    progress: undefined,
+                });
+                router.push('/auth/login');
+            }
         }
         catch (error) {
+        let errorMessage = "";
+        for (const [field, errors] of Object.entries(error.response.data)) {
+            errorMessage += `${errors.join(", ")}\n`;
+        } 
+        toast.error(`Errors occurred: \n${errorMessage}`, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            progress: undefined,
+        });
+
             console.error(error);
         }
     };
 
-
-    return (
-        <AuthGuard>
+    if (!session?.user) {
+        return (
             <div className="bg-gray-50 min-h-screen">
                 <div className="container mx-auto py-8">
                     <h1 className="text-4xl font-bold text-center mb-4 mt-1">Welcome to TaskForce!</h1>
@@ -65,6 +89,10 @@ export default function Register() {
                     </div>
                 </div>
             </div>
-        </AuthGuard>
-    );
+        );
+    }
+
+    else {
+        router.push('/');
+    }
 };  

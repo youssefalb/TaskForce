@@ -24,6 +24,7 @@
 - [] Change the role of users
 - [x] Update the permissions of a role and the role name
 - [] Fix warning of encountered two children with the same key
+- [] Make projectuserrole entries unique (userId, ProjectId)
 - [] Delete a role?
 
 
@@ -43,7 +44,7 @@
 
 ## Toasting:
 - [] Settings, after change saved or not
-- [] After Login or Register
+- [x] After Login or Register
 
 
 ## bugs:

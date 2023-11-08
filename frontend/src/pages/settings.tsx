@@ -3,7 +3,8 @@ import TextField from "@mui/material/TextField";
 import CustomButton from "../components/CustomButton";
 import { useSession } from "next-auth/react";
 import { getUserData, updateUserData ,sendVerificationEmail} from "@/lib/userData";
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const UserSettings = () => {
     const { data: session, update } = useSession();
@@ -36,10 +37,15 @@ const UserSettings = () => {
             const response = await updateUserData(session?.user?.accessToken as string, userData);
         }
         catch (e) {
-            console.log(e);
+            toast.error("An error occurred", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                progress: undefined,
+            });
         }
         if (session?.user) {
-            // Create a copy of the session.user object
             const updatedUser = { ...session.user };
             updatedUser.first_name = firstName;
             updatedUser.last_name = lastName;
@@ -49,8 +55,14 @@ const UserSettings = () => {
             const updatedSession = { ...session, user: updatedUser };
             session.user = updatedSession.user;
             update(updatedSession);
+            toast.success("Your data was updated successfully", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                progress: undefined,
+            });
 
-            console.log("After session Update", session);
         }
     }
 
@@ -72,10 +84,24 @@ const UserSettings = () => {
     const sendVerificationEmailClick = async () => {
         try {
             const response = await sendVerificationEmail(session?.user?.accessToken as string, session?.user?.id as string);
-            console.log(response);
+                toast.success("Verification email sent successfully", {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    progress: undefined,
+                });
+
         }
         catch (e) {
             console.log(e);
+            toast.error("An error occurred", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                progress: undefined,
+            });
         }
     }
 
@@ -132,7 +158,6 @@ const UserSettings = () => {
                     </form>
                 </div>
                 <div className="text-center">
-                    <form onSubmit={updateData}>
                         <div className="my-10">
                             <TextField
                                 fullWidth
@@ -154,9 +179,10 @@ const UserSettings = () => {
                                 <CustomButton buttonText={"Verify Email"} color="gray" onClick={() => {sendVerificationEmailClick()}} />
                             </>
                         )}
+                        <form onSubmit={updateData}>
                         <CustomButton buttonText={"Save Email"} color="gray" />
+                        </form>
                         </div>
-                    </form>
                 </div>
 
 
