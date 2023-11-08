@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import CustomButton from "../components/CustomButton";
 import { useSession } from "next-auth/react";
-import { getUserData, updateUserData } from "@/lib/userData";
+import { getUserData, updateUserData ,sendVerificationEmail} from "@/lib/userData";
 
 
 const UserSettings = () => {
@@ -69,7 +69,14 @@ const UserSettings = () => {
         fetchData()
     }, [session])
 
-    const sendVerificationEmail = async () => {
+    const sendVerificationEmailClick = async () => {
+        try {
+            const response = await sendVerificationEmail(session?.user?.accessToken as string, session?.user?.id as string);
+            console.log(response);
+        }
+        catch (e) {
+            console.log(e);
+        }
     }
 
     return (
@@ -144,7 +151,7 @@ const UserSettings = () => {
                                 <span className="text-red-500 flex my-2">
                                     Email not verified
                                 </span>
-                                <CustomButton buttonText={"Verify Email"} color="gray" onClick={() => {sendVerificationEmail()}} />
+                                <CustomButton buttonText={"Verify Email"} color="gray" onClick={() => {sendVerificationEmailClick()}} />
                             </>
                         )}
                         <CustomButton buttonText={"Save Email"} color="gray" />
