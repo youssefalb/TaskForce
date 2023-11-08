@@ -16,7 +16,7 @@
 - [] use cloudinary to save images and files
 - [] Password Security check when signing up
 
-# projects
+## projects
 - [x] Display project status in the projects page
 - [] Attach file to Projects/Tickets
 - [x] Kick users for admin and owner roles
@@ -28,7 +28,7 @@
 - [] Delete a role?
 
 
-# Tickets
+## Tickets
 - [] Add ticket
 - [] Update Ticket Status
 - [] see tickets list
@@ -36,7 +36,7 @@
 - [] Attach and download files from a ticket
 
 
-# Tasks
+## Tasks
 - [] Add a comments feature to the task
 - [] fix the coloring issue
 - [] redesign the page (optional)
@@ -46,6 +46,8 @@
 - [] Settings, after change saved or not
 - [x] After Login or Register
 
+## Checking for permissions
+- [x] Add Task, update, delete
 
 ## bugs:
 - [] When a user regiters by email the role is not default (Guest)

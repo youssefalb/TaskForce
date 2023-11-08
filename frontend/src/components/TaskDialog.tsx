@@ -28,14 +28,18 @@ const TaskDialog = (props: any) => {
   };
 
 
-  const { data: session } = useSession();
-  const { open, onClose, onSave, action, task, projectId } = props;
 
+
+  const { data: session } = useSession();
+  const { open, onClose, onSave, task, projectId, checkPermission } = props;
   const [editedTitle, setEditedTitle] = useState("");
   const [editedDescription, setEditedDescription] = useState("");
   const [projectUsers, setProjectUsers] = useState<any[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<users[]>([]);
   const [deadline, setDeadline] = useState('');
+  let canUpdateTask = checkPermission('update_task');
+  let canDeleteTask = checkPermission('delete_task');
+  let canAddTask = checkPermission('add_task');
 
 
 
@@ -153,6 +157,7 @@ const TaskDialog = (props: any) => {
       <DialogContent>
         <TextField
           sx={{ m: 2 }}
+          disabled={!canUpdateTask}
           label="Title"
           fullWidth
           value={editedTitle}
@@ -161,6 +166,7 @@ const TaskDialog = (props: any) => {
         <TextField
           label="Description"
           sx={{ m: 2 }}
+          disabled={!canUpdateTask}
           fullWidth
           multiline
           value={editedDescription}
@@ -170,6 +176,7 @@ const TaskDialog = (props: any) => {
         <TextField
           label="Deadline"
           fullWidth
+          disabled={!canUpdateTask}
           sx={{ m: 2 }}
           InputLabelProps={{ shrink: true }}
           type="date"
@@ -179,6 +186,7 @@ const TaskDialog = (props: any) => {
         <FormControl fullWidth>
           <Autocomplete
             multiple
+            disabled={!canUpdateTask}
             fullWidth
             sx={{ m: 2 }}
             id="user-select"
@@ -194,6 +202,7 @@ const TaskDialog = (props: any) => {
             renderInput={(params) => (
               <TextField
                 {...params}
+                disabled={!canUpdateTask}
                 label="Users"
                 fullWidth
               />
@@ -221,14 +230,14 @@ const TaskDialog = (props: any) => {
       </DialogContent>
       <DialogActions>
         {task?.id && (
-          <Button onClick={handleDelete} color="error">
+          <Button onClick={handleDelete} disabled={!canDeleteTask}color="error">
             Delete
           </Button>)
         }
         <Button onClick={handleClose} color="primary">
           Cancel
         </Button>
-        <Button onClick={handleSave} color="primary">
+        <Button onClick={handleSave} disabled={!canUpdateTask} color="primary">
           Save
         </Button>
 

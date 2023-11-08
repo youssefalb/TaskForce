@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import { changeTaskStatus, getProjectTasks } from '@/lib/projects';
 import TaskDialog from '../TaskDialog';
 
-const Home = ({ projectId }: any) => {
+const Home = ({ projectId , permissions}: any) => {
   type Task = {
     id: string;
     title: string;
@@ -17,6 +17,12 @@ const Home = ({ projectId }: any) => {
       image: string;
     }[];
     deadline: string;
+  };
+  
+  const checkPermission = (permission: string) => {
+    console.log('permission passed', permission);
+    console.log('permissions', permissions);
+    return permissions?.includes(permission);
   };
 
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -179,6 +185,7 @@ const addTask = () => {
         onClose={closeTaskModal}
         task={selectedTask}
         projectId={projectId}
+        checkPermission={checkPermission}
       />
     </div>
   );

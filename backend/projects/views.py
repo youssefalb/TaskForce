@@ -11,7 +11,7 @@ from django.db.models import Q
 
 
 from .models import ProjectUserRole, Record, Role, Task, Project, Ticket
-from .serializers import ProjectUserRoleSerializer, RecordSerializer, RoleSerializer, TaskSerializer, ProjectSerializer, TicketSerializer
+from .serializers import PermissionSerializer, ProjectUserRoleSerializer, RecordSerializer, RoleSerializer, TaskSerializer, ProjectSerializer, TicketSerializer
 
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -146,7 +146,17 @@ class UserProjectsListView(generics.ListAPIView):
         user = self.request.user
         return Project.objects.filter(users=user)
     
+class UserProjectPermissionsView(APIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
+    def get(self, request, project_id, user_id):
+        project_user_role = get_object_or_404(ProjectUserRole, user_id=user_id, project_id=project_id)
+
+        role_permissions = project_user_role.role.permissions.all()
+        permissions_serializer = PermissionSerializer(role_permissions, many=True)
+        print(permissions_serializer.data)
+        return Response(permissions_serializer.data)
 
 class ProjectRolesView(generics.ListAPIView):
     authentication_classes = (TokenAuthentication,)

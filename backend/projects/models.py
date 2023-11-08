@@ -42,6 +42,7 @@ class Project(models.Model):
         permissions = [
             ("add_task", "Can add task"),
             ("delete_task", "Can delete task"),
+            ("update_task", "Can update task"),
             ("delete_members", "Can delete members from project"),
             ("add_members", "Can add members to project"),
             ("can_delete_project", "Can delete project"),
