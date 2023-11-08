@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { getProjectUsers, removeUserFromProject } from '@/lib/projects';
+import { changeUserRole, getProjectUsers, removeUserFromProject } from '@/lib/projects';
 import { Grid, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import UserCard from './UserCard';
 
-const Users = ({ projectId }) => {
+const Users = ({ projectId, projectRoles }: any) => {
   const { data: session } = useSession();
   const [users, setUsers] = useState([]);
   const [usernameSearchValue, setUsernameSearchValue] = useState('');
   const [openBanDialog, setOpenBanDialog] = useState(false);
   const [userToKick, setUserToKick] = useState(null);
-
-  useEffect(() => {
     const fetchData = async () => {
       if (session?.user?.accessToken && projectId) {
         try {
           const data = await getProjectUsers(session.user.accessToken, projectId);
           setUsers(data);
           console.log('Response Data', data);
+          console.log('Project Roles', projectRoles);
         } catch (error) {
           console.error(error);
         }
@@ -25,7 +24,8 @@ const Users = ({ projectId }) => {
         console.error("Access token or projectId is undefined.");
       }
     };
-
+    
+    useEffect(() => {
     fetchData();
   }, [session?.user?.accessToken, projectId]);
 
@@ -58,6 +58,28 @@ const Users = ({ projectId }) => {
     user.username.toLowerCase().includes(usernameSearchValue.toLowerCase())
   );
 
+
+
+  const handleRoleChange = async (roleId, newRoleId) => {
+    try {
+      if (session?.user?.accessToken && projectId) {
+        await changeUserRole(session.user.accessToken, roleId ,newRoleId);
+        setUsers((prevUsers) => 
+        prevUsers.map((user) => {
+          if (user.id === roleId) { 
+            return { ...user, role: projectRoles.find((role) => role.id === newRoleId) }; // Updating the role object with new role details
+          }
+          return user;
+        })
+      );
+      fetchData();
+      }
+    }
+    catch (error) {
+      console.error(error);
+    }
+};
+
   return (
     <div>
       <div className="mb-10">
@@ -68,17 +90,24 @@ const Users = ({ projectId }) => {
           className="w-full p-2 m-10"
         />
       </div>
+      <button className="p-2 m-2 text-black font-bold bg-zinc-300 rounded-2xl">
+        + Add Project Member
+      </button>
       <Grid container spacing={2}>
         {filteredUsers.map((user) => (
           <Grid item key={user.id} xs={12} sm={6} md={4} lg={3}>
             <UserCard
               user={user}
               canBanUser={checkPermissionsForBan()}
+              onChangeUserRole={handleRoleChange}
+              availableRoles = {projectRoles}
               onBanUserClick={() => handleOpenBanDialog(user)}
             />
           </Grid>
         ))}
       </Grid>
+
+
       <Dialog open={openBanDialog} onClose={() => setOpenBanDialog(false)}>
         <DialogTitle>{"Confirm Ban"}</DialogTitle>
         <DialogContent>

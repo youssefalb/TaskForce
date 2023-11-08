@@ -11,7 +11,7 @@ from django.db.models import Q
 
 
 from .models import ProjectUserRole, Record, Role, Task, Project, Ticket
-from .serializers import PermissionSerializer, ProjectUserRoleSerializer, RecordSerializer, RoleSerializer, TaskSerializer, ProjectSerializer, TicketSerializer
+from .serializers import PermissionSerializer, ProjectUserRoleSerializer, ProjectUserRoleUpdateSerializer, RecordSerializer, RoleSerializer, TaskSerializer, ProjectSerializer, TicketSerializer
 
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -230,6 +230,12 @@ class UpdateRoleView(generics.RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]    
     lookup_field = 'id'
+
+class ProjectUserRoleUpdateView(generics.RetrieveUpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]    
+    queryset = ProjectUserRole.objects.all()
+    serializer_class = ProjectUserRoleUpdateSerializer
 
 class ListPermissionsView(APIView):
     permission_classes = (AllowAny,)

@@ -122,7 +122,6 @@ const TaskDialog = (props: any) => {
             deadline,
             selectedUserIds
           );
-          console.log('Response:', response);
         } else {
 
           const response = await addTask(
@@ -133,7 +132,6 @@ const TaskDialog = (props: any) => {
             deadline,
             selectedUserIds
           );
-          console.log('Response:', response);
         }
       }
     } catch (error) {

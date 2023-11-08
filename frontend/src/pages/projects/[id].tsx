@@ -22,7 +22,7 @@ export default function ProjectPage() {
   const fetchData = async () => {
     if (session?.user?.accessToken && id) {
       await getProjectDetails(session.user.accessToken, id.toString())
-        .then((data) => { setProject(data); })
+        .then((data) => { setProject(data); console.log('Projectyyyy: ', data)})
         .catch((error) => console.error(error));
     } else {
       console.error("Access token or user ID is undefined.");
@@ -74,9 +74,9 @@ export default function ProjectPage() {
         <Tab label="Roles" />
       </Tabs>
       <Box p={3}>
-        {activeTab === 0 && <div><Home projectId={id} permissions={permissions}/> </div>}
+        {activeTab === 0 && <div><Home projectId={id} permissions={permissions} /> </div>}
         {activeTab === 1 && <div><ProjectInfo details={project} fetchData={fetchData} /></div>}
-        {activeTab === 2 && <div><Users projectId={id} /></div>}
+        {activeTab === 2 && <div><Users projectId={id} projectRoles={project?.roles}/></div>}
         {activeTab === 3 && <div><Tickets projectId={id} /></div>}
         {activeTab === 4 && <div><ProjectRoles projectId={id} /></div>}
       </Box>

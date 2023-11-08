@@ -45,11 +45,21 @@ class ProjectUserRoleSerializer(serializers.ModelSerializer):
         fields = ('id', 'user','project',  'username', 'role_name', 'email', 'image', 'role')
 
 
+class ProjectUserRoleUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProjectUserRole
+        fields = ['role'] 
+
+class ProjectRoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Role
+        fields = ('id', 'name')
 
 class ProjectSerializer(serializers.ModelSerializer):
+    roles = RoleSerializer(many=True, read_only=True)  
     class Meta:
         model = Project
-        fields = ('id', 'STATUS_CHOICES','title',  'image', 'description', 'start_date', 'end_date', 'status')
+        fields = ('id', 'STATUS_CHOICES','title',  'image', 'description', 'start_date', 'end_date', 'status', 'roles')
 
     def create(self, validated_data):
         role_owner, _ = Role.objects.get_or_create(name="Owner")
@@ -104,7 +114,6 @@ class TaskSerializer(serializers.ModelSerializer):
         data['users'] = user_serializer.data
 
         return data
-
 
 
 
