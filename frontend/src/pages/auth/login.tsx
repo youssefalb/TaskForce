@@ -59,6 +59,7 @@ const Login = () => {
 
   const handleGoogleLogin = async (e: any) => {
     e.preventDefault();
+    console.log(process.env.NEXTAUTH_URL);
     console.log('google login');
     try {
       const result = await signIn('google', {

@@ -1,20 +1,23 @@
 import React, { use, useEffect, useState } from 'react';
 import { Typography, Button, List, ListItem, ListItemText, ListItemButton, Box, Paper, Chip } from '@mui/material';
 import RoleDialog from '../RoleDialog';
-import { getProjectRoles } from '@/lib/projects';
+import { deleteRole, getProjectRoles } from '@/lib/projects';
 import { useSession } from 'next-auth/react';
 import CustomButton from '../CustomButton';
 import { updateRole, createRole } from '@/lib/projects';
 
 
-const RolesPage = ({ projectId }: any) => {
+const RolesPage = ({ projectId, permissions }: any) => {
     const [roles, setRoles] = useState([]);
 
     const [selectedRole, setSelectedRole] = useState(null);
 
     const [isDialogOpen, setDialogOpen] = useState(false);
+    const canAddRoles = permissions?.includes('can_add_role');
+    const canEditRoles = permissions?.includes('change_role');
 
     const { data: session } = useSession();
+
 
     const handleDialogOpen = (role) => {
         setSelectedRole(role);
@@ -41,7 +44,7 @@ const RolesPage = ({ projectId }: any) => {
         else {
             if (session?.user?.accessToken) {
                 try {
-                    await createRole(session.user.accessToken, projectId,  role);
+                    await createRole(session.user.accessToken, projectId, role);
                 }
                 catch (error) {
                     console.error(error);
@@ -65,6 +68,19 @@ const RolesPage = ({ projectId }: any) => {
             console.error("Access token or user ID is undefined.");
         }
     }
+    const handleRoleDelete = async (roleId) => {
+        console.log('Role ID', roleId);
+
+        if (session?.user?.accessToken && projectId) {
+            try {
+                await deleteRole(session.user.accessToken, roleId);
+                setRoles(roles.filter(r => r.id !== roleId));
+                handleDialogClose();
+
+            } catch (error) {
+            }
+        }
+    }
 
 
     useEffect(() => {
@@ -75,14 +91,18 @@ const RolesPage = ({ projectId }: any) => {
     return (
         <div>
             <Typography variant="h4" gutterBottom>Project Roles</Typography>
-            <CustomButton onClick={() => handleDialogOpen(null)} buttonText={"Add New Role"} />
+            {canAddRoles && <CustomButton onClick={() => handleDialogOpen(null)} buttonText={"Add New Role"} />}
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 {roles.map((role) => (
                     <Paper
                         key={role.id}
                         elevation={2}
                         sx={{ padding: 2, cursor: 'pointer' }}
-                        onClick={() => handleDialogOpen(role)}
+                        onClick={() => {
+                            if (role.name !== 'Owner' && role.name !== 'Admin') {
+                                handleDialogOpen(role);
+                            }
+                        }}
                     >
                         <Typography variant="subtitle1">{role.name}</Typography>
                         <Box sx={{ mt: 1, display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
@@ -95,8 +115,7 @@ const RolesPage = ({ projectId }: any) => {
                     </Paper>
                 ))}
             </Box>
-            <RoleDialog open={isDialogOpen} onClose={handleDialogClose} role={selectedRole} onSave={handleRoleUpdate} />
-        </div>
+            {canEditRoles && <RoleDialog open={isDialogOpen} onClose={handleDialogClose} role={selectedRole} onSave={handleRoleUpdate} onDelete={handleRoleDelete} />}        </div>
     );
 };
 

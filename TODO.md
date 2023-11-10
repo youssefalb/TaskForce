@@ -16,17 +16,29 @@
 - [] use cloudinary to save images and files
 - [] Password Security check when signing up
 
+
+## Settings
+- [] Change the profile picture of a user and save it somewhere
+
 ## projects
 - [x] Display project status in the projects page
-- [] Attach file to Projects/Tickets
 - [x] Kick users for admin and owner roles
 - [x] Add roles with permissions
-- [] Change the role of users
+- [x] Change the role of users
 - [x] Update the permissions of a role and the role name
-- [] Fix warning of encountered two children with the same key
-- [] Make projectuserrole entries unique (userId, ProjectId)
-- [] Delete a role?
+- [x] Make projectuserrole entries unique (userId, ProjectId)
+- [x] Delete a role?
+- [] A form to add a project
+- [] Attach file to Projects/Tickets
 
+
+## Role based access
+- [x] Add project member
+- [x] Change roles (Includes delete) / See them (Owner is always disabled in roles and in users as well)
+- [x] Add Task, update, delete
+- [] for draging and droping tasks (update_task and change_project codename)
+- [x] Update project / delete it (delete_project and )
+- [] Before Deleting any Role you should check if there is a user wih that role and warn the user that he should change the first
 
 ## Tickets
 - [] Add ticket
@@ -46,9 +58,7 @@
 - [] Settings, after change saved or not
 - [x] After Login or Register
 
-## Checking for permissions
-- [x] Add Task, update, delete
-
-## bugs:
+## To fix:
 - [] When a user regiters by email the role is not default (Guest)
+- [] Fix warning of encountered two children with the same key (Home/Tasks)
 

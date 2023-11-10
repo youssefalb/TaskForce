@@ -224,7 +224,7 @@ class CreateRoleView(APIView):
 
         raise PermissionDenied("You do not have permission to add roles to this project.")
 
-class UpdateRoleView(generics.RetrieveUpdateAPIView):
+class UpdateRoleView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Role.objects.all()
     serializer_class = RoleSerializer
     permission_classes = [IsAuthenticated]

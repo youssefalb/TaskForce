@@ -10,19 +10,28 @@ import {
     Select,
     MenuItem,
     InputLabel,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
 } from '@mui/material';
 import CustomButton from '../CustomButton';
 import { useSession } from 'next-auth/react';
-import { updateProjectDetails } from '@/lib/projects';
-import { stat } from 'fs';
+import { deleteProject, updateProjectDetails } from '@/lib/projects';
+import { useRouter } from 'next/router';
 
 
-const ProjectInfo = ({ details, fetchData }: any) => {
+const ProjectInfo = ({ details, fetchData, permissions}: any) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editedDetails, setEditedDetails] = useState({ ...details });
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
-    const { data: session } = useSession();
+    const [openBanDialog, setOpenBanDialog] = useState(false);
+    const router = useRouter();
 
+    const { data: session } = useSession();
+    const canEditProject = permissions?.includes('change_project');
+    const canDeleteProject = permissions?.includes('delete_project');
     const statusChoices = {
         not_started: 'Not Started',
         in_progress: 'In Progress',
@@ -37,6 +46,17 @@ const ProjectInfo = ({ details, fetchData }: any) => {
 
     const handleEditClick = () => {
         setIsEditing(true);
+    };
+    const handleDeleteClick = () => {
+        setOpenBanDialog(true);
+    };
+    const handleDeleteProject = () => {
+        if (session?.user?.accessToken && details?.id) {
+            deleteProject(session.user.accessToken, details.id)
+                .then((data) => { console.log(data); fetchData(); })
+                .catch((error) => console.error(error));
+                router.push('/');
+        }
     };
 
     const handleSaveClick = () => {
@@ -152,9 +172,29 @@ const ProjectInfo = ({ details, fetchData }: any) => {
                 </div>
             ) : (
                 <div className="flex justify-center">
-                    <CustomButton onClick={handleEditClick} buttonText="Edit" color="gray" width="twelve" />
+                    {canEditProject && (<CustomButton onClick={handleEditClick} buttonText="Edit" color="gray" width="twelve" />)}
+                    {canDeleteProject && (<CustomButton onClick={handleDeleteClick} buttonText="Delete" color="red" width="twelve" />) }
+
                 </div>
             )}
+
+
+    <Dialog open={openBanDialog} onClose={() => setOpenBanDialog(false)}>
+        <DialogTitle>{"Confirm Deletion"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {`Are you sure you want to delete this Project? This action cannot be undone.`}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenBanDialog(false)} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleDeleteProject} color="error" autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
 
         </div>
     );

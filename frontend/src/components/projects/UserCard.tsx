@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
-const UserCard = ({ user, canBanUser, onBanUserClick, onChangeUserRole, availableRoles }: any) => {
+const UserCard = ({ user, canBanUser, onBanUserClick, onChangeUserRole, availableRoles, canChangeRole }: any) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   console.log('availableRoles', availableRoles)
@@ -60,20 +60,24 @@ const UserCard = ({ user, canBanUser, onBanUserClick, onChangeUserRole, availabl
             />
           </IconButton>
         )}
-        <IconButton
-          aria-label="more"
-          id="long-button"
-          aria-controls={open ? 'long-menu' : undefined}
-          aria-expanded={open ? 'true' : undefined}
-          aria-haspopup="true"
-          onClick={handleClick}
-        >
-          <img
-            src="/images/more.png" 
-            alt="More options"
-            className='w-8 h-8'
-          />
-        </IconButton>
+
+        {canChangeRole && (
+          <IconButton
+            aria-label="more"
+            id="long-button"
+            aria-controls={open ? 'long-menu' : undefined}
+            aria-expanded={open ? 'true' : undefined}
+            aria-haspopup="true"
+            onClick={handleClick}
+          >
+            <img
+              src="/images/more.png"
+              alt="More options"
+              className='w-8 h-8'
+            />
+          </IconButton>
+        )}
+
         <Menu
           id="long-menu"
           anchorEl={anchorEl}

@@ -16,7 +16,7 @@ import { getAvailablePermissions } from '@/lib/projects';
 
 
 
-const RoleDialog = ({ open, onClose, onSave, role }) => {
+const RoleDialog = ({ open, onClose, onSave, onDelete, role }: any) => {
     const [roleState, setRoleState] = useState({ name: '', permissions: [] });
     const [availablePermissions, setAvailablePermissions] = useState([]);
     const [inputPermission, setInputPermission] = useState('');
@@ -75,6 +75,12 @@ const RoleDialog = ({ open, onClose, onSave, role }) => {
             setInputPermission(''); // Clear input after adding
         }
     };
+    const handleDelete = () => {
+        onDelete(role?.id);
+    }
+
+
+
 
     return (
         <Dialog open={open} onClose={onClose}>
@@ -114,6 +120,7 @@ const RoleDialog = ({ open, onClose, onSave, role }) => {
                 </Stack>
             </DialogContent>
             <DialogActions>
+                <Button onClick={handleDelete} color='error'>Delete</Button>
                 <Button onClick={onClose}>Cancel</Button>
                 <Button onClick={handleSave}>Save</Button>
             </DialogActions>

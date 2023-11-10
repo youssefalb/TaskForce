@@ -75,10 +75,10 @@ export default function ProjectPage() {
       </Tabs>
       <Box p={3}>
         {activeTab === 0 && <div><Home projectId={id} permissions={permissions} /> </div>}
-        {activeTab === 1 && <div><ProjectInfo details={project} fetchData={fetchData} /></div>}
-        {activeTab === 2 && <div><Users projectId={id} projectRoles={project?.roles}/></div>}
+        {activeTab === 1 && <div><ProjectInfo details={project} fetchData={fetchData} permissions={permissions}/></div>}
+        {activeTab === 2 && <div><Users projectId={id} projectRoles={project?.roles} permissions={permissions}/></div>}
         {activeTab === 3 && <div><Tickets projectId={id} /></div>}
-        {activeTab === 4 && <div><ProjectRoles projectId={id} /></div>}
+        {activeTab === 4 && <div><ProjectRoles projectId={id} permissions={permissions} /></div>}
       </Box>
     </div>
   );

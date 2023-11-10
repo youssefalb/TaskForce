@@ -4,12 +4,17 @@ import { changeUserRole, getProjectUsers, removeUserFromProject } from '@/lib/pr
 import { Grid, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import UserCard from './UserCard';
 
-const Users = ({ projectId, projectRoles }: any) => {
+const Users = ({ projectId, projectRoles, permissions}: any) => {
   const { data: session } = useSession();
   const [users, setUsers] = useState([]);
   const [usernameSearchValue, setUsernameSearchValue] = useState('');
   const [openBanDialog, setOpenBanDialog] = useState(false);
   const [userToKick, setUserToKick] = useState(null);
+
+  const canBanUser = permissions?.includes('delete_members');
+  const canChangeRole = permissions?.includes('change_role');
+  const canAddUser = permissions?.includes('add_members');
+
     const fetchData = async () => {
       if (session?.user?.accessToken && projectId) {
         try {
@@ -29,10 +34,6 @@ const Users = ({ projectId, projectRoles }: any) => {
     fetchData();
   }, [session?.user?.accessToken, projectId]);
 
-  const checkPermissionsForBan = () => {
-    const user = users.find((user) => user.user === session?.user?.id);
-    return user?.role?.permissions?.some(permission => permission.codename === 'delete_members');
-  };
 
   const handleOpenBanDialog = (user) => {
     console.log('User to ban', user);
@@ -90,18 +91,21 @@ const Users = ({ projectId, projectRoles }: any) => {
           className="w-full p-2 m-10"
         />
       </div>
-      <button className="p-2 m-2 text-black font-bold bg-zinc-300 rounded-2xl">
+
+      {canAddUser && (   <button className="p-2 m-2 text-black font-bold bg-zinc-300 rounded-2xl">
         + Add Project Member
-      </button>
+      </button>)}
+   
       <Grid container spacing={2}>
         {filteredUsers.map((user) => (
           <Grid item key={user.id} xs={12} sm={6} md={4} lg={3}>
             <UserCard
               user={user}
-              canBanUser={checkPermissionsForBan()}
+              canBanUser={canBanUser}
               onChangeUserRole={handleRoleChange}
               availableRoles = {projectRoles}
               onBanUserClick={() => handleOpenBanDialog(user)}
+              canChangeRole={canChangeRole}
             />
           </Grid>
         ))}
