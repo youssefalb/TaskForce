@@ -175,6 +175,24 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "user_auth.CustomUser"
 
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': os.environ.get('DJANGO_DATABASE_NAME'),
+#         'USER': os.environ.get('DJANGO_DATABASE_USER'),
+#         'PASSWORD': os.environ.get('DJANGO_DATABASE_PASSWORD'),
+#         'HOST': os.environ.get('DJANGO_DATABASE_HOST'),
+#         'PORT': os.environ.get('DJANGO_DATABASE_PORT'),
+#     }
+# }
+
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
+MEDIA_URLS ='/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+ALLOWED_HOSTS = ['*']
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # react url
 ]
