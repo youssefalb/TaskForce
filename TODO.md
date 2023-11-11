@@ -2,7 +2,7 @@
 ## Missing
 - [x] Send the email verification and verifying the account (After register and when the user wants to get verified)
 - [] Check or add permission to acces the views for example and handle that in the f.e (a user cannot add a task or can not see a project in which he not involved)
-- [] Connect and host a DB and start working with it
+- [x] Connect and host a DB and start working with it
 - [x] Edit task details
     * A task page should show the title description and Users
     * Only users who have the permissions to Edit will be able to edit the task
@@ -14,6 +14,7 @@
 - [x] Add role names to task users data 
 - [] Add empty component
 - [] use cloudinary to save images and files
+- [] reset password functionality for everyone
 - [] Password Security check when signing up
 
 
