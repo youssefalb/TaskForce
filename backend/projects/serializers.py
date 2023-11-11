@@ -34,6 +34,12 @@ class RoleSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+
+class TicketSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ticket
+        fields = '__all__' 
+
 class ProjectUserRoleSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
     email = serializers.CharField(source='user.email', read_only=True)
@@ -122,7 +128,3 @@ class RecordSerializer(serializers.ModelSerializer):
         model = Record
         fields = '__all__'
 
-class TicketSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Ticket
-        fields = '__all__'

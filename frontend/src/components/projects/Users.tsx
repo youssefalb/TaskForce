@@ -68,7 +68,7 @@ const Users = ({ projectId, projectRoles, permissions}: any) => {
         setUsers((prevUsers) => 
         prevUsers.map((user) => {
           if (user.id === roleId) { 
-            return { ...user, role: projectRoles.find((role) => role.id === newRoleId) }; // Updating the role object with new role details
+            return { ...user, role: projectRoles.find((role) => role.id === newRoleId) }; 
           }
           return user;
         })

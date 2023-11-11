@@ -13,9 +13,11 @@
 - [] Check for session in the Side bar menu
 - [x] Add role names to task users data 
 - [] Add empty component
+- [] Add loading compenent since the fetching stated to be slow
 - [] use cloudinary to save images and files
 - [] reset password functionality for everyone
 - [] Password Security check when signing up
+- [] App icon should be changed form the next.js one
 
 
 ## Settings
@@ -33,20 +35,23 @@
 - [] Attach file to Projects/Tickets
 
 
+
 ## Role based access
 - [x] Add project member
 - [x] Change roles (Includes delete) / See them (Owner is always disabled in roles and in users as well)
 - [x] Add Task, update, delete
-- [] for draging and droping tasks (update_task and change_project codename)
-- [x] Update project / delete it (delete_project and )
-- [] Before Deleting any Role you should check if there is a user wih that role and warn the user that he should change the first
+- [x] Update project / delete it (delete_project and change_project)
+- [] for draging and droping tasks (update_task codename)
+- [] view roles with permissions!(can_view_roles)
+- [] Before Deleting any Role you should check if there is a user with that role and warn the user that he should change the first
 
 ## Tickets
+- [X] see tickets list
 - [] Add ticket
-- [] Update Ticket Status
-- [] see tickets list
-- [] Add filter to tickets page that will show by default only the open ones
+- [] Add ticket page
 - [] Attach and download files from a ticket
+- [] Update Ticket Status
+- [] Add filter to tickets page that will show by default only the open ones
 
 
 ## Tasks
@@ -56,8 +61,8 @@
 
 
 ## Toasting:
-- [] Settings, after change saved or not
 - [x] After Login or Register
+- [] Settings, after change saved or not
 
 ## To fix:
 - [] When a user regiters by email the role is not default (Guest)

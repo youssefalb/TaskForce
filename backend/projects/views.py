@@ -165,7 +165,6 @@ class ProjectRolesView(generics.ListAPIView):
 
     def get_queryset(self):
         project_id = self.kwargs['project_id']
-        # Retrieve roles related to the specified project
         return Role.objects.filter(projects__id=project_id)
 
 class ProjectTicketsView(generics.ListAPIView):
@@ -176,6 +175,8 @@ class ProjectTicketsView(generics.ListAPIView):
     def get_queryset(self):
         project_id = self.kwargs['project_id']
         return Ticket.objects.filter(project_id=project_id)
+    
+
 class ProjectTasksView(generics.ListAPIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
@@ -254,6 +255,8 @@ class ListPermissionsView(APIView):
         ]
         return Response(data=permission_data, status=status.HTTP_200_OK)
 
+
+    
 
 class RecordCreateView(generics.CreateAPIView):
     permission_classes = (IsAuthenticated,)

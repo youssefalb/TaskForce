@@ -32,7 +32,7 @@ class Project(models.Model):
     end_date = models.DateField()
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default='not_started')    
     roles = models.ManyToManyField('Role', blank=True, related_name='projects')
-    users = models.ManyToManyField(CustomUser,through='ProjectUserRole', blank=True, related_name='projects')
+    users = models.ManyToManyField(CustomUser, through='ProjectUserRole', blank=True, related_name='projects')
 
     
     def __str__(self):
