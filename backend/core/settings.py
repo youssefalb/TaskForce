@@ -14,6 +14,7 @@ import os
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -169,13 +170,14 @@ AUTH_USER_MODEL = "user_auth.CustomUser"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('DJANGO_DATABASE_NAME'),
-        'USER': os.environ.get('DJANGO_DATABASE_USER'),
-        'PASSWORD': os.environ.get('DJANGO_DATABASE_PASSWORD'),
-        'HOST': os.environ.get('DJANGO_DATABASE_HOST'),
-        'PORT': os.environ.get('DJANGO_DATABASE_PORT'),
-    }
+        'NAME': os.environ.get('POSTGRES_DATABASE', 'your_default_db_name'), 
+        'USER': os.environ.get('POSTGRES_USER'), 
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'), 
+        'HOST': os.environ.get('POSTGRES_HOST'), 
+        'PORT': os.environ.get('POSTGRES_PORT'),
+    },
 }
+
 
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
@@ -207,6 +209,7 @@ CORS_ALLOW_METHODS = [
     'POST',
     'PUT',
 ]
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
