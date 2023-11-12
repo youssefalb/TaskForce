@@ -47,10 +47,11 @@
 
 ## Tickets
 - [X] see tickets list
-- [] Add ticket
-- [] Add ticket page
+- [x] Add ticket page
+- [x] fetch Users data for tickets
 - [] Attach and download files from a ticket
-- [] Update Ticket Status
+- [] Update Ticket Status and details
+- [] Add ticket
 - [] Add filter to tickets page that will show by default only the open ones
 
 

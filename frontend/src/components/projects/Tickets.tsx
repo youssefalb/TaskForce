@@ -10,26 +10,11 @@ import {
   Paper,
   Button,
   TableHead,
-  Typography,
-  Box,
-  Chip,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { stat } from 'fs';
-
-const statusColors = {
-  'open': 'lightblue',
-  'in_progress': 'orange',
-  'resolved': 'green',
-  'closed': 'grey',
-};
-
-const priorityColors = {
-  'urgent': 'red',
-  'high': 'orange',
-  'medium': 'yellow',
-  'low': 'green',
-};
+import { useRouter } from 'next/router';
+import PriorityChip from '../chips/PriorityChips';
+import StatusChip from '../chips/StatusChips';
 
 const TableCellStyled = styled(TableCell)({
   fontWeight: 'bold',
@@ -39,24 +24,12 @@ const TableCellStyled = styled(TableCell)({
   maxWidth: '200px',
 });
 
-const statusMap = {
-  open: 'Open',
-  in_progress: 'In Progress',
-  resolved: 'Resolved',
-  closed: 'Closed',
-};
 
-const priorityMap = {
-  low: 'Low',
-  medium: 'Medium',
-  high: 'High',
-  urgent: 'Urgent',
-};
 
 const Tickets = ({ projectId }) => {
   const [tickets, setTickets] = useState([]);
   const { data: session } = useSession();
-
+  const router = useRouter();
 
   const fetchData = async () => {
     if (session?.user?.accessToken && projectId) {
@@ -76,30 +49,30 @@ const Tickets = ({ projectId }) => {
     if (projectId && session?.user?.accessToken) {
       fetchData();
       console.log('Tickets', tickets);
-
     }
   }, [projectId]);
 
-  const renderStatus = (status) => (
-    <Chip label={statusMap[status]} size="small" style={{ backgroundColor: statusColors[status.toLowerCase()] }} />
-  );
 
 
-  const renderPriority = (priority) => (
-    <Chip label={priorityMap[priority]} size="small" style={{ backgroundColor: priorityColors[priority.toLowerCase()] }} />
-  );
+
 
   const ticketRows = tickets.map((ticket) => (
     <TableRow key={ticket.id} hover className="hover:bg-gray-100">
-      {/* Apply font-bold to each cell that should contain bold text */}
       <TableCellStyled>{ticket.title}</TableCellStyled>
-      <TableCellStyled>{renderPriority(ticket.priority)}</TableCellStyled>
-      <TableCellStyled >{renderStatus(ticket.status)}</TableCellStyled>
+      <TableCellStyled>
+        <PriorityChip priority={ticket.priority} />
+        </TableCellStyled>
+
       <TableCellStyled >
-          {ticket.description}
+        <StatusChip status={ticket.status} />
+      </TableCellStyled>
+
+
+      <TableCellStyled >
+        {ticket.description}
       </TableCellStyled>
       <TableCell>
-        <Button variant="contained" color="primary" onClick={() => {/* Logic to handle click */ }}>
+        <Button variant="contained" color="primary" onClick={() => router.push(`${router.asPath}/tickets/${ticket.id}`)}>
           View Details
         </Button>
       </TableCell>
@@ -112,10 +85,10 @@ const Tickets = ({ projectId }) => {
         <Table sx={{ minWidth: 650 }} aria-label="customized table">
           <TableHead>
             <TableRow>
+              <TableCell className="uppercase">Title</TableCell>
               <TableCell className="uppercase">Priority</TableCell>
               <TableCell className="uppercase">Status</TableCell>
               <TableCell className="uppercase">Description</TableCell>
-              <TableCell className="uppercase">Title</TableCell>
               <TableCell className="uppercase">Actions</TableCell>
             </TableRow>
           </TableHead>

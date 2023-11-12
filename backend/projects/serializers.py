@@ -1,5 +1,5 @@
 from user_auth.models import CustomUser
-from .models import Project, ProjectUserRole, Record, Role, Task, Ticket
+from .models import Comment, Project, ProjectUserRole, Record, Role, Task, Ticket
 from rest_framework import serializers
 from django.contrib.auth.models import Permission
 # For now include all fields
@@ -35,10 +35,7 @@ class RoleSerializer(serializers.ModelSerializer):
         return instance
 
 
-class TicketSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Ticket
-        fields = '__all__' 
+
 
 class ProjectUserRoleSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
@@ -60,6 +57,20 @@ class ProjectRoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role
         fields = ('id', 'name')
+
+
+class UserBriefDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ('first_name', 'last_name',  'username', 'image') 
+
+class TicketSerializer(serializers.ModelSerializer):
+    assigned_to = UserBriefDataSerializer()
+    created_by = UserBriefDataSerializer()
+
+    class Meta:
+        model = Ticket
+        fields = '__all__'
 
 class ProjectSerializer(serializers.ModelSerializer):
     roles = RoleSerializer(many=True, read_only=True)  
@@ -121,6 +132,12 @@ class TaskSerializer(serializers.ModelSerializer):
 
         return data
 
+
+class CommentSerializer(serializers.ModelSerializer):
+    author = UserBriefDataSerializer()
+    class Meta:
+        model = Comment
+        fields = '__all__'
 
 
 class RecordSerializer(serializers.ModelSerializer):

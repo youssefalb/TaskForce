@@ -10,8 +10,8 @@ from django.db.models import Q
 
 
 
-from .models import ProjectUserRole, Record, Role, Task, Project, Ticket
-from .serializers import PermissionSerializer, ProjectUserRoleSerializer, ProjectUserRoleUpdateSerializer, RecordSerializer, RoleSerializer, TaskSerializer, ProjectSerializer, TicketSerializer
+from .models import ProjectUserRole, Record, Role, Task, Project, Ticket, Comment
+from .serializers import CommentSerializer, PermissionSerializer, ProjectUserRoleSerializer, ProjectUserRoleUpdateSerializer, RecordSerializer, RoleSerializer, TaskSerializer, ProjectSerializer, TicketSerializer
 
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -166,6 +166,14 @@ class ProjectRolesView(generics.ListAPIView):
     def get_queryset(self):
         project_id = self.kwargs['project_id']
         return Role.objects.filter(projects__id=project_id)
+    
+
+class TicketDetailView(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    queryset = Ticket.objects.all()
+    serializer_class = TicketSerializer
+    lookup_field = 'id'
 
 class ProjectTicketsView(generics.ListAPIView):
     authentication_classes = (TokenAuthentication,)
@@ -185,6 +193,15 @@ class ProjectTasksView(generics.ListAPIView):
     def get_queryset(self):
         project_id = self.kwargs['project_id']
         return Task.objects.filter(project_id=project_id)
+    
+class TicketCommentsView(generics.ListCreateAPIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        ticket_id = self.kwargs['ticket_id']
+        return Comment.objects.filter(ticket_id=ticket_id)
     
 class ProjectUsersView(generics.ListAPIView):
     serializer_class = ProjectUserRoleSerializer
