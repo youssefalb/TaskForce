@@ -11,7 +11,7 @@ from django.db.models import Q
 
 
 from .models import ProjectUserRole, Record, Role, Task, Project, Ticket, Comment
-from .serializers import CommentSerializer, PermissionSerializer, ProjectUserRoleSerializer, ProjectUserRoleUpdateSerializer, RecordSerializer, RoleSerializer, TaskSerializer, ProjectSerializer, TicketSerializer
+from .serializers import CommentSerializer, PermissionSerializer, ProjectUserRoleSerializer, ProjectUserRoleUpdateSerializer, RecordSerializer, RoleSerializer, TaskSerializer, ProjectSerializer, TicketSerializer, TicketUpdateSerializer
 
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -173,6 +173,13 @@ class TicketDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
+    lookup_field = 'id'
+
+class TicketUpdateView(generics.RetrieveUpdateDestroyAPIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    queryset = Ticket.objects.all()
+    serializer_class = TicketUpdateSerializer
     lookup_field = 'id'
 
 class ProjectTicketsView(generics.ListAPIView):

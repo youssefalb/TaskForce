@@ -13,11 +13,14 @@ import {
     ListItemText,
     Divider,
     Button,
+    TextField,
 } from '@mui/material';
 import { useRouter } from 'next/router';
-import { getTicketDetail, getTicketComments } from '@/lib/projects';
+import { getTicketDetail, getTicketComments, updateTicket } from '@/lib/projects';
 import StatusChip from '@/components/chips/StatusChips';
 import PriorityChip from '@/components/chips/PriorityChips';
+import CommentsList from '@/components/CommentsList';
+import { format, set } from 'date-fns';
 
 
 const TicketDetail = () => {
@@ -27,8 +30,27 @@ const TicketDetail = () => {
     const { data: session } = useSession();
     const router = useRouter()
     const { id, ticketId } = router.query
+    const [editMode, setEditMode] = useState(false);
+    const [editValues, setEditValues] = useState({
+        title: '',
+        description: '',
+        priority: '',
+        status: '',
+    });
 
-
+    const handleDetailsSave = async () => {
+        console.log('Saving...');
+        console.log('Edit Values: ', editValues);
+        const details = {
+            title: editValues.title,
+            description: editValues.description,
+            priority: editValues.priority,
+            status: editValues.status,
+        };
+        await updateTicket(session.user.accessToken, id.toString(), ticketId.toString(), details);
+        setTicket(details);
+        setEditMode(false);
+    };
 
     const fetchTicketDetails = async (ticketId) => {
         if (session?.user?.accessToken && ticketId && id) {
@@ -37,9 +59,9 @@ const TicketDetail = () => {
             try {
                 const res = await getTicketDetail(session.user.accessToken, id.toString(), ticketId.toString());
                 const ticketComments = await getTicketComments(session.user.accessToken, id.toString(), ticketId.toString());
-                console.log('Ticket Details: ', res);
-                console.log('Ticket Comments: ', ticketComments);
                 setTicket(res);
+                setEditValues(res);
+                console.log('Ticket Details: ', res);
                 setComments(ticketComments);
             } catch (error) {
                 console.error("Failed to fetch ticket details:", error);
@@ -53,29 +75,65 @@ const TicketDetail = () => {
         fetchTicketDetails(ticketId);
     }, [ticketId, session]);
 
+    const handleInputChange = async (e) => {
+        if (session?.user?.accessToken && ticketId && id) {
+            const { name, value } = e.target;
+            console.log('Name: ', name);
+            console.log('Value: ', value);
+            setEditValues({ ...editValues, [name]: value });
+            console.log('Edit Values: ', editValues);
+        }
+    };
+
+    const cancelEdit = () => {
+        setEditMode(false);
+        setEditValues(ticket);
+        console.log('Edit Values after cancel: ', editValues);
+    };
+
+
     if (loading) {
-        return <CircularProgress />;
+        return (
+            <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                minHeight="100vh"
+                flexDirection="column"
+            >
+                <CircularProgress />
+                <Typography variant="h6" mt={2}>
+                    Loading...
+                </Typography>
+            </Box>
+        );
     }
 
     if (!ticket) {
         return <Typography variant="h6">Ticket not found</Typography>;
     }
 
-
-    // const comments = [
-    //     { id: 1, text: "This is a comment.", author: "Commenter One" },
-    //     // ... more comments
-    // ];
+    const editableField = (fieldValue, label, name, multiline = false) => {
+        return editMode ? (
+            <TextField
+                fullWidth
+                variant="outlined"
+                name={name}
+                label={label}
+                defaultValue={fieldValue}
+                multiline={multiline}
+                onChange={handleInputChange}
+            />
+        ) : (
+            <Typography variant={multiline ? "body1" : "h5"} component="div" gutterBottom sx={{ fontFamily: '"Segoe UI"' }} mb={2}>
+                {fieldValue || `No ${label}`}
+            </Typography>
+        );
+    };
 
     return (
         <CardContent>
-            <Typography variant="h5" component="h2" gutterBottom>
-                {ticket.title}
-            </Typography>
-            <Button color="primary">
-                Edit
-            </Button>
-
+            {editableField(ticket.title, 'Title', 'title')}
             <Button color="primary">
                 Comment
             </Button>
@@ -86,12 +144,28 @@ const TicketDetail = () => {
             <Button color="primary">
                 Assign
             </Button>
+
+            {!editMode && (
+                <Button onClick={() => setEditMode(true)} color="primary">
+                    Edit
+                </Button>
+            )}
+            {editMode && (
+                <>
+                    <Button onClick={() => handleDetailsSave()} color="primary">
+                        Save
+                    </Button>
+                    <Button onClick={() => cancelEdit()} color="secondary">
+                        Cancel
+                    </Button>
+                </>
+            )}
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', flexDirection: 'column', width: '100%' }} mb={2}>
                 {ticket.created_by && (
                     <Box display="flex" sx={{ alignItems: 'center' }} m={1}>
                         <Avatar src={ticket.created_by.image} />
                         <Typography variant="subtitle1" ml={1}>
-                            Created by {ticket.created_by.first_name || "xxxx"} {ticket.created_by.last_name || "xxxx"}
+                            Assigned to {ticket.created_by.first_name || "xxxx"} {ticket.created_by.last_name || "xxxx"}
                         </Typography>
                         <Typography variant="body2" color="textSecondary" ml={1}>
                             @{ticket.created_by.username || "unknown"}
@@ -118,36 +192,25 @@ const TicketDetail = () => {
             </Typography>
 
             <Divider light />
-            <Typography gutterBottom sx={{ fontFamily: '"Segoe UI"' }} mb={2}>
-                        Descirption: 
-                    </Typography>
-            <Typography mb={2}>{ticket.description}</Typography>
+            {editableField(ticket.description, 'Description', 'description', true)}
             <Divider light />
 
-
             {comments.length > 0 && (
-                 <List>
-                {comments.map((comment) => (
-                    <ListItem alignItems="flex-start" key={comment.id}>
-                        <ListItemAvatar>
-                            <Avatar alt={comment.author.image} />
-                        </ListItemAvatar>
-                        <ListItemText primary={comment.text} secondary={
-                                 <>
-                                <Typography variant="subtitle1"component="span">
-                                {comment.author.first_name || "xxxx"} {comment.author.last_name || "xxxx"}
-                                </Typography>
-                                <Typography variant="body2" color="textSecondary" component="span" ml={1}>
-                                @{comment.author.username || "unknown"}
-                                </Typography>
-                            </>
-                        } />
-                    </ListItem>
-                ))}
-            </List>
-                
+                <CommentsList comments={comments} />
             )}
-           
+            {ticket.created_at && ticket.updated_at && (
+                <Box sx={{ mt: 2 }}>
+                    <Typography variant="overline" display="block" gutterBottom>
+                        Created: {ticket ? format(new Date(ticket.created_at), "PPpp") : "N/A"}
+                    </Typography>
+                    <Typography variant="overline" display="block" gutterBottom>
+                        Last Updated: {ticket ? format(new Date(ticket.updated_at), "PPpp") : "N/A"}
+                    </Typography>
+                </Box>
+
+            )}
+
+
         </CardContent>
 
     );

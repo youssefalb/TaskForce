@@ -72,6 +72,12 @@ class TicketSerializer(serializers.ModelSerializer):
         model = Ticket
         fields = '__all__'
 
+class TicketUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Ticket
+        fields = '__all__'
+
 class ProjectSerializer(serializers.ModelSerializer):
     roles = RoleSerializer(many=True, read_only=True)  
     class Meta:

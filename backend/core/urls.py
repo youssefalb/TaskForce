@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 from user_auth.views import UpdateUserDataView, GetUserDataView, LoginView, UserRegistrationView, GoogleLoginView, activate_account,  send_verification_email_view
-from projects.views import  ListPermissionsView, ProjectDetailView, ProjectListCreateView, ProjectRolesView, ProjectTicketsView, ProjectUserRoleUpdateView, ProjectUsersView, RecordCreateView, TaskDetailView, TicketCommentsView, TicketDetailView, UpdateRoleView,  TaskListCreateView, UpdateUserRoleView, CreateRoleView, UserProjectPermissionsView, UserProjectsListView, ProjectTasksView
+from projects.views import  ListPermissionsView, ProjectDetailView, ProjectListCreateView, ProjectRolesView, ProjectTicketsView, ProjectUserRoleUpdateView, ProjectUsersView, RecordCreateView, TaskDetailView, TicketCommentsView, TicketDetailView, TicketUpdateView, UpdateRoleView,  TaskListCreateView, UpdateUserRoleView, CreateRoleView, UserProjectPermissionsView, UserProjectsListView, ProjectTasksView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -47,5 +47,5 @@ urlpatterns = [
     path('projects/<int:project_id>/tickets/', ProjectTicketsView.as_view(), name='project-tickets'),
     path('projects/<int:project_id>/tickets/<int:id>/', TicketDetailView.as_view(), name='project-tickets'),
     path('projects/<int:project_id>/tickets/<int:ticket_id>/comments/', TicketCommentsView.as_view(), name='ticket-comments'),
-
+    path('projects/<int:project_id>/tickets/<int:id>/update/', TicketUpdateView.as_view(), name='ticket-update'),
 ]

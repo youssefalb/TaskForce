@@ -10,15 +10,16 @@
 - [x] Add project Dialog
 - [x] See Project Info in a nice styled page and be able to edit it
 - [x] User should be able to register using the normal credentials (Only Google auth is available now)
-- [] Check for session in the Side bar menu
 - [x] Add role names to task users data 
+- [] Check for session in the Side bar menu
+- [] Add types to a everthing to separte files
 - [] Add empty component
 - [] Add loading compenent since the fetching stated to be slow
 - [] use cloudinary to save images and files
 - [] reset password functionality for everyone
 - [] Password Security check when signing up
 - [] App icon should be changed form the next.js one
-
+- [] Comments compenent to be shared between tickets and tasks 4
 
 ## Settings
 - [] Change the profile picture of a user and save it somewhere
@@ -49,11 +50,13 @@
 - [X] see tickets list
 - [x] Add ticket page
 - [x] fetch Users data for tickets
-- [] Attach and download files from a ticket
 - [] Update Ticket Status and details
+- [] read comments
+- [] Add comments
+- [] Attach and download files from a ticket
 - [] Add ticket
 - [] Add filter to tickets page that will show by default only the open ones
-
+- [] style buttons
 
 ## Tasks
 - [] Add a comments feature to the task
