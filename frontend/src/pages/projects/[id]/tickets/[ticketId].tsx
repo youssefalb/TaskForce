@@ -16,11 +16,12 @@ import {
     TextField,
 } from '@mui/material';
 import { useRouter } from 'next/router';
-import { getTicketDetail, getTicketComments, updateTicket } from '@/lib/projects';
+import { getTicketDetail, getTicketComments, updateTicket, createComment } from '@/lib/projects';
 import StatusChip from '@/components/chips/StatusChips';
 import PriorityChip from '@/components/chips/PriorityChips';
 import CommentsList from '@/components/CommentsList';
 import { format, set } from 'date-fns';
+import AddComment from '@/components/AddComment';
 
 
 const TicketDetail = () => {
@@ -70,6 +71,20 @@ const TicketDetail = () => {
         }
     };
 
+
+    const handleAddComment = async (commentText: string) => {
+        if (session?.user?.accessToken && ticketId && id) {
+            console.log('Comment Text: ', commentText);
+            try {
+                const res = await createComment(session.user.accessToken, ticketId.toString(), commentText, session?.user?.id);
+                console.log('Comment Response: ', res);
+                fetchTicketDetails(ticketId);
+            } catch (error) {
+                console.error("Failed to add comment:", error);
+            }
+        }
+
+    }
 
     useEffect(() => {
         fetchTicketDetails(ticketId);
@@ -197,7 +212,10 @@ const TicketDetail = () => {
 
             {comments.length > 0 && (
                 <CommentsList comments={comments} />
+
             )}
+            <AddComment handleAddComment={handleAddComment} />
+
             {ticket.created_at && ticket.updated_at && (
                 <Box sx={{ mt: 2 }}>
                     <Typography variant="overline" display="block" gutterBottom>

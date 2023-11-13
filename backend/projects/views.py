@@ -11,7 +11,7 @@ from django.db.models import Q
 
 
 from .models import ProjectUserRole, Record, Role, Task, Project, Ticket, Comment
-from .serializers import CommentSerializer, PermissionSerializer, ProjectUserRoleSerializer, ProjectUserRoleUpdateSerializer, RecordSerializer, RoleSerializer, TaskSerializer, ProjectSerializer, TicketSerializer, TicketUpdateSerializer
+from .serializers import CommentCreateSerializer, CommentSerializer, PermissionSerializer, ProjectUserRoleSerializer, ProjectUserRoleUpdateSerializer, RecordSerializer, RoleSerializer, TaskSerializer, ProjectSerializer, TicketSerializer, TicketUpdateSerializer
 
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -209,6 +209,11 @@ class TicketCommentsView(generics.ListCreateAPIView):
     def get_queryset(self):
         ticket_id = self.kwargs['ticket_id']
         return Comment.objects.filter(ticket_id=ticket_id)
+    
+class CommentCreateView(generics.CreateAPIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CommentCreateSerializer
     
 class ProjectUsersView(generics.ListAPIView):
     serializer_class = ProjectUserRoleSerializer

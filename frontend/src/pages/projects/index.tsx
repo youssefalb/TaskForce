@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 
-const ProjectsPage: React.FC = () => {
+const ProjectsPage = () => {
     const [projects, setProjects] = useState<any[]>([]);
     const { data: session } = useSession();
 

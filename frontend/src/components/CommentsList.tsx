@@ -5,6 +5,8 @@ import { List, ListItem, ListItemAvatar, Avatar, ListItemText, Typography } from
 
 
 const CommentsList = ({ comments }) => {
+
+    console.log('Comments list from comp: ', comments);
   return (
     <List>
       {comments.map((comment) => (

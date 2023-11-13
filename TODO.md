@@ -50,9 +50,10 @@
 - [X] see tickets list
 - [x] Add ticket page
 - [x] fetch Users data for tickets
-- [] Update Ticket Status and details
-- [] read comments
-- [] Add comments
+- [x] Update Ticket Status and details
+- [x] read comments
+- [x] Add comments
+- [] Handle laoding in a better way or optimize it a bit at least
 - [] Attach and download files from a ticket
 - [] Add ticket
 - [] Add filter to tickets page that will show by default only the open ones
