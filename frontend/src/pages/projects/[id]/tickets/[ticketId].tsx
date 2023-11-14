@@ -16,7 +16,7 @@ import {
     TextField,
 } from '@mui/material';
 import { useRouter } from 'next/router';
-import { getTicketDetail, getTicketComments, updateTicket, createComment } from '@/lib/projects';
+import { getTicketDetail, getTicketComments, updateTicket, createTicketComment } from '@/lib/projects';
 import StatusChip from '@/components/chips/StatusChips';
 import PriorityChip from '@/components/chips/PriorityChips';
 import CommentsList from '@/components/CommentsList';
@@ -76,7 +76,7 @@ const TicketDetail = () => {
         if (session?.user?.accessToken && ticketId && id) {
             console.log('Comment Text: ', commentText);
             try {
-                const res = await createComment(session.user.accessToken, ticketId.toString(), commentText, session?.user?.id);
+                const res = await createTicketComment(session.user.accessToken, ticketId.toString(), commentText, session?.user?.id);
                 console.log('Comment Response: ', res);
                 fetchTicketDetails(ticketId);
             } catch (error) {

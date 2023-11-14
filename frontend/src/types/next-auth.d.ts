@@ -22,6 +22,7 @@ interface User {
   accessToken?: string;
   emailVerified?: boolean;
   provider?: string;
+  accesToken?: string;
 }
 
 

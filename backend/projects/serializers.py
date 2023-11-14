@@ -1,5 +1,5 @@
 from user_auth.models import CustomUser
-from .models import Comment, Project, ProjectUserRole, Record, Role, Task, Ticket
+from .models import TaskComment, TicketComment, Project, ProjectUserRole, Record, Role, Task, Ticket
 from rest_framework import serializers
 from django.contrib.auth.models import Permission
 # For now include all fields
@@ -139,17 +139,28 @@ class TaskSerializer(serializers.ModelSerializer):
         return data
 
 
-class CommentSerializer(serializers.ModelSerializer):
+class TicketCommentSerializer(serializers.ModelSerializer):
     author = UserBriefDataSerializer()
     class Meta:
-        model = Comment
+        model = TicketComment
         fields = '__all__'
 
-class CommentCreateSerializer(serializers.ModelSerializer):
+class TicketCommentCreateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Comment
+        model = TicketComment
         fields = '__all__'
 
+
+class TaskCommentSerializer(serializers.ModelSerializer):
+    author = UserBriefDataSerializer()
+    class Meta:
+        model = TaskComment
+        fields = '__all__'
+
+class TaskCommentCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TaskComment
+        fields = '__all__'
 
 class RecordSerializer(serializers.ModelSerializer):
     class Meta:

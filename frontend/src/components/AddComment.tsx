@@ -12,7 +12,6 @@ const AddComment =  ({ handleAddComment }) => {
     e.preventDefault();
     console.log(handleAddComment);
     handleAddComment(comment);
-    console.log('Comment: ', comment);  
     setComment('');
   };
 

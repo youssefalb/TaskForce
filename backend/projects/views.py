@@ -10,8 +10,8 @@ from django.db.models import Q
 
 
 
-from .models import ProjectUserRole, Record, Role, Task, Project, Ticket, Comment
-from .serializers import CommentCreateSerializer, CommentSerializer, PermissionSerializer, ProjectUserRoleSerializer, ProjectUserRoleUpdateSerializer, RecordSerializer, RoleSerializer, TaskSerializer, ProjectSerializer, TicketSerializer, TicketUpdateSerializer
+from .models import ProjectUserRole, Record, Role, Task, Project, TaskComment, Ticket, TicketComment
+from .serializers import TaskCommentCreateSerializer, TaskCommentSerializer, TicketCommentCreateSerializer, TicketCommentSerializer, PermissionSerializer, ProjectUserRoleSerializer, ProjectUserRoleUpdateSerializer, RecordSerializer, RoleSerializer, TaskSerializer, ProjectSerializer, TicketSerializer, TicketUpdateSerializer
 
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -204,16 +204,31 @@ class ProjectTasksView(generics.ListAPIView):
 class TicketCommentsView(generics.ListCreateAPIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
-    serializer_class = CommentSerializer
+    serializer_class = TicketCommentSerializer
 
     def get_queryset(self):
         ticket_id = self.kwargs['ticket_id']
-        return Comment.objects.filter(ticket_id=ticket_id)
+        return TicketComment.objects.filter(ticket_id=ticket_id)
     
-class CommentCreateView(generics.CreateAPIView):
+class TicketCommentCreateView(generics.CreateAPIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
-    serializer_class = CommentCreateSerializer
+    serializer_class = TicketCommentCreateSerializer
+
+
+class TaskCommentsView(generics.ListCreateAPIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = TaskCommentSerializer
+
+    def get_queryset(self):
+        task_id = self.kwargs['task_id']
+        return TaskComment.objects.filter(task_id=task_id)
+    
+class TaskCommentCreateView(generics.CreateAPIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = TaskCommentCreateSerializer
     
 class ProjectUsersView(generics.ListAPIView):
     serializer_class = ProjectUserRoleSerializer

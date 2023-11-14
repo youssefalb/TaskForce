@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Comment, Project, Record, Task, Role, ProjectUserRole, Ticket
+from .models import TicketComment, Project, Record, Task, Role, ProjectUserRole, Ticket
 
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'description', 'start_date', 'end_date', 'status', )
@@ -31,4 +31,4 @@ admin.site.register(Role, RoleAdmin)
 admin.site.register(ProjectUserRole, UserRoleAdmin)
 admin.site.register(Ticket, TicketAdmin)
 admin.site.register(Record, RecordAdmin)
-admin.site.register(Comment, CommentAdmin)
+admin.site.register(TicketComment, CommentAdmin)
