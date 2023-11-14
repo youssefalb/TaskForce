@@ -60,7 +60,7 @@
 - [] style buttons
 
 ## Tasks
-- [] Add a comments feature to the task
+- [x] Add a comments feature to the task
 - [] fix the coloring issue
 - [] redesign the page (optional)
 
