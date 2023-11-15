@@ -51,7 +51,7 @@ const Home = ({ projectId , permissions}: any) => {
   useEffect(() => {
 
     fetchData();
-  }, [session, projectId]);
+  }, [session, selectedTask, projectId]);
 
 
 const addTask = () => {
@@ -72,13 +72,10 @@ const addTask = () => {
       ...draggedTask,
       status: result.destination.droppableId,
     });
-    console.log(updatedTasks);
-    console.log("draggable ID: ", draggedTask.id);
-    console.log("result ID: ", result.destination.droppableId);
-    
+
+    setTasks(updatedTasks);
     await changeTaskStatus(session?.user?.accessToken, draggedTask.id, result.destination.droppableId)
       .then((data) => {
-        setTasks(updatedTasks);
         console.log(updatedTasks);
       })
       .catch((error) => {
@@ -138,7 +135,7 @@ const addTask = () => {
                                   columnId === 'doing' ? 'bg-yellow-100' :
                                     columnId === 'scrapped' ? 'bg-red-100' : 'bg-green-100'
                                   } rounded`}
-                                onClick={() => openTaskModal(task)} // Open edit dialog on click
+                                onClick={() => openTaskModal(task)} 
                               >
                                 <CardContent>
                                   <Typography variant="h6" component="div" className='bold'>

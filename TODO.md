@@ -34,7 +34,8 @@
 - [x] Delete a role?
 - [] A form to add a project
 - [] Attach file to Projects/Tickets
-
+- [] profile pic handle change
+- [] Add loading component
 
 
 ## Role based access

@@ -15,8 +15,31 @@ const UserSettings = () => {
     const [oldPassword, setOldPassword] = useState('');
     const [image, setImage] = useState('');
 
-    const handlePictureChange = (e:any) => {
+    const handlePictureChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('file', file);
+        //add directory here later (profile_images)
+        try {
+            const response = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData,
+            });
+            const data = await response.json();
+            setImage(data.url); 
+            updateData(e);
+        } catch (error) {
+            console.error('Error uploading image:', error);
+        }
     };
+        useEffect(() => {
+            if (image) {
+                console.log("Image uploaded", image);
+                updateData();
+            }
+        }, [image]); 
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
@@ -25,16 +48,19 @@ const UserSettings = () => {
 
     };
 
-    const updateData = async (e: any) => {
-        e.preventDefault();
+    const updateData = async (e?: any) => {
+        e?.preventDefault();
+        console.log("Submitted");
         const userData = {
             first_name: firstName,
             last_name: lastName,
             email: email,
             image: image,
         }
+        console.log(userData);
         try {
             const response = await updateUserData(session?.user?.accessToken as string, userData);
+            console.log(response);
         }
         catch (e) {
             toast.error("An error occurred", {
