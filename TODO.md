@@ -11,18 +11,18 @@
 - [x] See Project Info in a nice styled page and be able to edit it
 - [x] User should be able to register using the normal credentials (Only Google auth is available now)
 - [x] Add role names to task users data 
-- [] Check for session in the Side bar menu
+- [] App icon should be changed form the next.js one [17/NOV]
+- [] Add empty component [17/NOV]
+- [] Add loading compenent since the fetching stated to be slow [17/NOV]
+- [] Check for session in the Side bar menu 
 - [] Add types to a everthing to separte files
-- [] Add empty component
-- [] Add loading compenent since the fetching stated to be slow
 - [] use cloudinary to save images and files
 - [] reset password functionality for everyone
 - [] Password Security check when signing up
-- [] App icon should be changed form the next.js one
 - [] Comments compenent to be shared between tickets and tasks 4
 
 ## Settings
-- [] Change the profile picture of a user and save it somewhere
+- [x] Change the profile picture of a user and save it somewhere
 
 ## projects
 - [x] Display project status in the projects page
@@ -32,7 +32,7 @@
 - [x] Update the permissions of a role and the role name
 - [x] Make projectuserrole entries unique (userId, ProjectId)
 - [x] Delete a role?
-- [] A form to add a project
+- [] A form to add a project [17/NOV]
 - [] Attach file to Projects/Tickets
 - [] profile pic handle change
 - [] Add loading component
@@ -43,9 +43,9 @@
 - [x] Change roles (Includes delete) / See them (Owner is always disabled in roles and in users as well)
 - [x] Add Task, update, delete
 - [x] Update project / delete it (delete_project and change_project)
-- [] for draging and droping tasks (update_task codename)
-- [] view roles with permissions!(can_view_roles)
-- [] Before Deleting any Role you should check if there is a user with that role and warn the user that he should change the first
+- [] for draging and droping tasks (update_task codename) [17/NOV]
+- [] view roles with permissions!(can_view_roles) [17/NOV]
+- [] Before Deleting any Role you should check if there is a user with that role and warn the user that he should change the first 
 
 ## Tickets
 - [X] see tickets list
@@ -54,21 +54,21 @@
 - [x] Update Ticket Status and details
 - [x] read comments
 - [x] Add comments
+- [] Add ticket [17/NOV]
+- [] Attach and download files from a ticket  [17/NOV]
 - [] Handle laoding in a better way or optimize it a bit at least
-- [] Attach and download files from a ticket
-- [] Add ticket
 - [] Add filter to tickets page that will show by default only the open ones
 - [] style buttons
 
 ## Tasks
 - [x] Add a comments feature to the task
-- [] fix the coloring issue
+- [] fix the coloring issue - [] Add ticket [17/NOV]
 - [] redesign the page (optional)
 
 
 ## Toasting:
 - [x] After Login or Register
-- [] Settings, after change saved or not
+- [] Settings, after change saved or not [17/NOV]
 
 ## To fix:
 - [] When a user regiters by email the role is not default (Guest)
