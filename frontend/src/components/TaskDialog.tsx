@@ -176,7 +176,7 @@ const TaskDialog = (props: any) => {
       <DialogContent>
         <TextField
           sx={{ m: 2 }}
-          disabled={!canUpdateTask}
+          disabled={(!canUpdateTask && task?.id) || (!canAddTask && !task?.id)}
           label="Title"
           fullWidth
           value={editedTitle}

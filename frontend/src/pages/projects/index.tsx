@@ -2,21 +2,25 @@ import { getUserProjects } from '@/lib/projects';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-
+import LoadingComponent from '@/components/LoadingComponent';
+import EmptyStateMessage from '@/components/EmptyStateMessage';
 
 const ProjectsPage = () => {
     const [projects, setProjects] = useState<any[]>([]);
     const { data: session } = useSession();
-
+    const [isLoading, setIsLoading] = useState(true); 
 
     const fetchData = async () => {
         console.log('Kurwa sesja', session);
         if (session?.user?.accessToken && session?.user?.id) {
+            setIsLoading(true);
             await getUserProjects(session.user.accessToken, session.user.id)
                 .then((data) => { setProjects(data); console.log(data); })
-                .catch((error) => console.error(error));
+                .catch((error) => console.error(error))
+                .finally(() => setIsLoading(false)); 
         } else {
             console.error("Access token or user ID is undefined.");
+            setIsLoading(false);
         }
     }
 
@@ -24,7 +28,18 @@ const ProjectsPage = () => {
         fetchData();
     }, [session]);
 
-
+    if (isLoading) {
+        return <LoadingComponent />;
+    }
+    
+    if (projects.length === 0) {
+        return (
+            <EmptyStateMessage 
+                title="No Projects Found"
+                description="You do not have any projects yet. Start by adding a new project."
+            />
+        );
+    }
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-2xl font-bold mb-4">Projects</h1>

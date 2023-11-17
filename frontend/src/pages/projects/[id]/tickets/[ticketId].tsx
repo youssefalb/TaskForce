@@ -7,10 +7,6 @@ import {
     Typography,
     CircularProgress,
     Avatar,
-    List,
-    ListItem,
-    ListItemAvatar,
-    ListItemText,
     Divider,
     Button,
     TextField,
@@ -22,6 +18,8 @@ import PriorityChip from '@/components/chips/PriorityChips';
 import CommentsList from '@/components/CommentsList';
 import { format, set } from 'date-fns';
 import AddComment from '@/components/AddComment';
+import LoadingComponent from '@/components/LoadingComponent';
+import EmptyStateMessage from '@/components/EmptyStateMessage';
 
 
 const TicketDetail = () => {
@@ -53,23 +51,26 @@ const TicketDetail = () => {
         setEditMode(false);
     };
 
-    const fetchTicketDetails = async (ticketId) => {
-        if (session?.user?.accessToken && ticketId && id) {
-            console.log('Ticket ID: ', ticketId);
-            setLoading(true);
-            try {
-                const res = await getTicketDetail(session.user.accessToken, id.toString(), ticketId.toString());
-                const ticketComments = await getTicketComments(session.user.accessToken, id.toString(), ticketId.toString());
+const fetchTicketDetails = async (ticketId) => {
+    if (session?.user?.accessToken && ticketId && id) {
+        setLoading(true);
+        try {
+            const res = await getTicketDetail(session.user.accessToken, id.toString(), ticketId.toString());
+
+            if (res && res.id) {
                 setTicket(res);
                 setEditValues(res);
-                console.log('Ticket Details: ', res);
+                const ticketComments = await getTicketComments(session.user.accessToken, id.toString(), ticketId.toString());
                 setComments(ticketComments);
-            } catch (error) {
-                console.error("Failed to fetch ticket details:", error);
+            } else {
+                console.log('Ticket not found or invalid response');
             }
-            setLoading(false);
+        } catch (error) {
+            console.error("Failed to fetch ticket details:", error);
         }
-    };
+        setLoading(false);
+    }
+};
 
 
     const handleAddComment = async (commentText: string) => {
@@ -108,24 +109,17 @@ const TicketDetail = () => {
 
 
     if (loading) {
-        return (
-            <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                minHeight="100vh"
-                flexDirection="column"
-            >
-                <CircularProgress />
-                <Typography variant="h6" mt={2}>
-                    Loading...
-                </Typography>
-            </Box>
-        );
+        return <LoadingComponent />;
     }
 
-    if (!ticket) {
-        return <Typography variant="h6">Ticket not found</Typography>;
+
+    if (ticket == null) {
+        return (
+            <EmptyStateMessage
+                title="No Ticket Found"
+                description="No ticket found with this ID."
+            />
+        );
     }
 
     const editableField = (fieldValue, label, name, multiline = false) => {

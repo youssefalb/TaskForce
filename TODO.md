@@ -12,8 +12,8 @@
 - [x] User should be able to register using the normal credentials (Only Google auth is available now)
 - [x] Add role names to task users data 
 - [] App icon should be changed form the next.js one [17/NOV]
-- [] Add empty component [17/NOV]
-- [] Add loading compenent since the fetching stated to be slow [17/NOV]
+- [x] Add empty component [17/NOV]
+- [x] Add loading compenent [17/NOV]
 - [] Check for session in the Side bar menu 
 - [] Add types to a everthing to separte files
 - [] use cloudinary to save images and files
@@ -56,6 +56,7 @@
 - [x] Add comments
 - [] Add ticket [17/NOV]
 - [] Attach and download files from a ticket  [17/NOV]
+- [] Delete ticket
 - [] Handle laoding in a better way or optimize it a bit at least
 - [] Add filter to tickets page that will show by default only the open ones
 - [] style buttons

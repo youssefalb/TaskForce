@@ -15,6 +15,8 @@ import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import PriorityChip from '../chips/PriorityChips';
 import StatusChip from '../chips/StatusChips';
+import LoadingComponent from '../LoadingComponent';
+import EmptyStateMessage from '../EmptyStateMessage';
 
 const TableCellStyled = styled(TableCell)({
   fontWeight: 'bold',
@@ -30,18 +32,23 @@ const Tickets = ({ projectId }) => {
   const [tickets, setTickets] = useState([]);
   const { data: session } = useSession();
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchData = async () => {
     if (session?.user?.accessToken && projectId) {
       try {
+        setIsLoading(true);
         const data = await getProjectTickets(session.user.accessToken, projectId);
         setTickets(data);
+        setIsLoading(false);
         console.log('Response Data', data);
       } catch (error) {
         console.error(error);
+        setIsLoading(false);
       }
     } else {
       console.error("Access token or projectId is undefined.");
+      setIsLoading(false);
     }
 
   };
@@ -52,7 +59,18 @@ const Tickets = ({ projectId }) => {
     }
   }, [projectId]);
 
+  if (isLoading) {
+    return <LoadingComponent />;
+  }
 
+  if (tickets.length === 0) {
+    return (
+      <EmptyStateMessage
+        title="No Tickets Found"
+        description="No tickets found in this project."
+      />
+    );
+  }
 
 
 

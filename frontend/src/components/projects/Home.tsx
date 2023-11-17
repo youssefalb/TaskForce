@@ -4,7 +4,8 @@ import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd';
 import { useSession } from 'next-auth/react';
 import { changeTaskStatus, getProjectTasks } from '@/lib/projects';
 import TaskDialog from '../TaskDialog';
-
+import LoadingComponent from '../LoadingComponent';
+import EmptyStateMessage from '../EmptyStateMessage';
 const Home = ({ projectId , permissions}: any) => {
   type Task = {
     id: string;
@@ -28,23 +29,28 @@ const Home = ({ projectId , permissions}: any) => {
 
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchData = async () => {
     if (session?.user?.accessToken) {
       try {
+        setIsLoading(true);
         const data = await getProjectTasks(session.user.accessToken, projectId);
 
         const tasksWithStringsIds = data.map((task: Task) => ({
           ...task,
           id: task.id.toString(),
         }));
-
         setTasks(tasksWithStringsIds);
+        setIsLoading(false);
       } catch (error) {
         console.error(error);
+        setIsLoading(false);
       }
     } else {
       console.error('Access token or user ID is undefined.');
+      setIsLoading(false);
+
     }
   };
 
@@ -95,6 +101,12 @@ const addTask = () => {
   };
 
 
+  if (isLoading) {
+    return <LoadingComponent />;
+  }
+
+
+ 
 
   return (
     <div>

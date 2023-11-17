@@ -5,19 +5,19 @@ import { deleteRole, getProjectRoles } from '@/lib/projects';
 import { useSession } from 'next-auth/react';
 import CustomButton from '../CustomButton';
 import { updateRole, createRole } from '@/lib/projects';
+import LoadingComponent from '../LoadingComponent';
+import EmptyStateMessage from '../EmptyStateMessage';
 
 
 const RolesPage = ({ projectId, permissions }: any) => {
     const [roles, setRoles] = useState([]);
-
     const [selectedRole, setSelectedRole] = useState(null);
-
     const [isDialogOpen, setDialogOpen] = useState(false);
-    const canAddRoles = permissions?.includes('can_add_role');
+    const canAddRoles = permissions?.includes('add_role');
     const canEditRoles = permissions?.includes('change_role');
-
+    const [loading, setLoading] = useState(true);
     const { data: session } = useSession();
-
+    console.log('permissions', permissions )
 
     const handleDialogOpen = (role) => {
         setSelectedRole(role);
@@ -61,11 +61,14 @@ const RolesPage = ({ projectId, permissions }: any) => {
 
     const fetchData = async () => {
         if (session?.user?.accessToken && projectId) {
+            setLoading(true);
             await getProjectRoles(session.user.accessToken, projectId.toString())
                 .then((data) => { setRoles(data); console.log('Response Data for roles', data); })
                 .catch((error) => console.error(error));
+            setLoading(false);
         } else {
             console.error("Access token or user ID is undefined.");
+            setLoading(false);
         }
     }
     const handleRoleDelete = async (roleId) => {
@@ -88,6 +91,23 @@ const RolesPage = ({ projectId, permissions }: any) => {
     }, []);
 
 
+    if (loading) {
+        return <LoadingComponent />;
+    }
+
+    if (roles.length === 0) {
+        return (
+                <div className="flex flex-col items-center">
+                    <EmptyStateMessage
+                        title="No Roles Found"
+                        description="No roles found in this project."
+                    />
+                    {canAddRoles && (
+                        <CustomButton onClick={() => handleDialogOpen(null)} buttonText={"Add New Role"} />
+                    )}
+                </div>
+        );
+    }
     return (
         <div>
             <Typography variant="h4" gutterBottom>Project Roles</Typography>

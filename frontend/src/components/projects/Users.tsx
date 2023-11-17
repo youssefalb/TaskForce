@@ -3,14 +3,15 @@ import { useSession } from 'next-auth/react';
 import { changeUserRole, getProjectUsers, removeUserFromProject } from '@/lib/projects';
 import { Grid, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import UserCard from './UserCard';
-
+import EmptyStateMessage from '../EmptyStateMessage';
+import LoadingComponent from '../LoadingComponent';
 const Users = ({ projectId, projectRoles, permissions}: any) => {
   const { data: session } = useSession();
   const [users, setUsers] = useState([]);
   const [usernameSearchValue, setUsernameSearchValue] = useState('');
   const [openBanDialog, setOpenBanDialog] = useState(false);
   const [userToKick, setUserToKick] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(true);
   const canBanUser = permissions?.includes('delete_members');
   const canChangeRole = permissions?.includes('change_role');
   const canAddUser = permissions?.includes('add_members');
@@ -18,12 +19,14 @@ const Users = ({ projectId, projectRoles, permissions}: any) => {
     const fetchData = async () => {
       if (session?.user?.accessToken && projectId) {
         try {
+          setIsLoading(true);
           const data = await getProjectUsers(session.user.accessToken, projectId);
           setUsers(data);
-          console.log('Response Data', data);
-          console.log('Project Roles', projectRoles);
+          setIsLoading(false);
+
         } catch (error) {
           console.error(error);
+            setIsLoading(false);
         }
       } else {
         console.error("Access token or projectId is undefined.");
@@ -34,6 +37,20 @@ const Users = ({ projectId, projectRoles, permissions}: any) => {
     fetchData();
   }, [session?.user?.accessToken, projectId]);
 
+
+  if (isLoading) {
+    return <LoadingComponent />;
+  }
+
+  
+  if (users.length === 0) {
+    return (
+      <EmptyStateMessage
+        title="No Users Found"
+        description="No users found in this project."
+      />
+    );
+  }
 
   const handleOpenBanDialog = (user) => {
     console.log('User to ban', user);
