@@ -11,7 +11,7 @@
 - [x] See Project Info in a nice styled page and be able to edit it
 - [x] User should be able to register using the normal credentials (Only Google auth is available now)
 - [x] Add role names to task users data 
-- [] App icon should be changed form the next.js one [17/NOV]
+- [x] App icon should be changed form the next.js one [17/NOV]
 - [x] Add empty component [17/NOV]
 - [x] Add loading compenent [17/NOV]
 - [] Check for session in the Side bar menu 
