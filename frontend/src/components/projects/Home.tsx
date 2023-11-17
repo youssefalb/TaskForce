@@ -5,7 +5,6 @@ import { useSession } from 'next-auth/react';
 import { changeTaskStatus, getProjectTasks } from '@/lib/projects';
 import TaskDialog from '../TaskDialog';
 import LoadingComponent from '../LoadingComponent';
-import EmptyStateMessage from '../EmptyStateMessage';
 const Home = ({ projectId , permissions}: any) => {
   type Task = {
     id: string;

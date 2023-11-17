@@ -32,10 +32,14 @@
 - [x] Update the permissions of a role and the role name
 - [x] Make projectuserrole entries unique (userId, ProjectId)
 - [x] Delete a role?
-- [] A form to add a project [17/NOV]
+- [x] Add loading component[17/NOV]
+- [x] A form to add a project [17/NOV]
+    [x] Django view
+    [x] F.e Dialog to create the prj
+- [] Add date changing for start and finish
+- [] Project.users was never been used (Projectuserrole was used instead)
 - [] Attach file to Projects/Tickets
 - [] profile pic handle change
-- [] Add loading component
 
 
 ## Role based access
@@ -55,15 +59,15 @@
 - [x] read comments
 - [x] Add comments
 - [] Add ticket [17/NOV]
-- [] Attach and download files from a ticket  [17/NOV]
+- [] Attach and download files from a ticket [17/NOV]
 - [] Delete ticket
 - [] Handle laoding in a better way or optimize it a bit at least
-- [] Add filter to tickets page that will show by default only the open ones
+- [] Add filter to tickets page that will show by default only the open ones (Filter by status only!!)
 - [] style buttons
 
 ## Tasks
 - [x] Add a comments feature to the task
-- [] fix the coloring issue - [] Add ticket [17/NOV]
+- [] fix the coloring issue 
 - [] redesign the page (optional)
 
 
@@ -74,4 +78,5 @@
 ## To fix:
 - [] When a user regiters by email the role is not default (Guest)
 - [] Fix warning of encountered two children with the same key (Home/Tasks)
+- [] In users when there is already an email but no signed with google, an error is thrown when trying ot sign in with google with the same email
 
