@@ -81,7 +81,10 @@ const ProjectInfo = ({ details, fetchData, permissions }: any) => {
     };
 
     const handleCancelClick = () => {
-        setEditedDetails({ ...details });
+        setEditedDetails({ ...details,
+        start_date: details.start_date ? new Date(details.start_date) : new Date(),
+        end_date: details.end_date ? new Date(details.end_date) : new Date(),
+        });
         setSelectedImage(null);
         setIsEditing(false);
     };

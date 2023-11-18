@@ -12,14 +12,15 @@
 - [x] User should be able to register using the normal credentials (Only Google auth is available now)
 - [x] Add role names to task users data 
 - [x] App icon should be changed form the next.js one [17/NOV]
+- [x] use cloudinary to save images and files
 - [x] Add empty component [17/NOV]
 - [x] Add loading compenent [17/NOV]
 - [] Check for session in the Side bar menu 
-- [] Add types to a everthing to separte files
-- [] use cloudinary to save images and files
+- [] Add "You don't have permission to access this page ....." component!!
 - [] reset password functionality for everyone
 - [] Password Security check when signing up
-- [] Comments compenent to be shared between tickets and tasks 4
+- [] Comments component to be shared between tickets and tasks 4
+- [] Add types to a everthing to separte files
 
 ## Settings
 - [x] Change the profile picture of a user and save it somewhere
@@ -36,7 +37,7 @@
 - [x] A form to add a project [17/NOV]
     [x] Django view
     [x] F.e Dialog to create the prj
-- [] Add date changing for start and finish
+- [x] Add date changing for start and finish
 - [] Project.users was never been used (Projectuserrole was used instead)
 - [] Attach file to Projects/Tickets
 - [] profile pic handle change
@@ -47,8 +48,8 @@
 - [x] Change roles (Includes delete) / See them (Owner is always disabled in roles and in users as well)
 - [x] Add Task, update, delete
 - [x] Update project / delete it (delete_project and change_project)
-- [] for draging and droping tasks (update_task codename) [17/NOV]
-- [] view roles with permissions!(can_view_roles) [17/NOV]
+- [x] for draging and droping tasks (update_task codename) [17/NOV]
+- [x] view roles with permissions!(can_view_roles) [17/NOV]
 - [] Before Deleting any Role you should check if there is a user with that role and warn the user that he should change the first 
 
 ## Tickets
@@ -58,8 +59,9 @@
 - [x] Update Ticket Status and details
 - [x] read comments
 - [x] Add comments
-- [] Add ticket [17/NOV]
-- [] Attach and download files from a ticket [17/NOV]
+- [] Add ticket [18/NOV]
+- [] Attach and download files from a ticket [18/NOV]
+- [] Changing status
 - [] Delete ticket
 - [] Handle laoding in a better way or optimize it a bit at least
 - [] Add filter to tickets page that will show by default only the open ones (Filter by status only!!)

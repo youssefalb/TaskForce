@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import { changeTaskStatus, getProjectTasks } from '@/lib/projects';
 import TaskDialog from '../TaskDialog';
 import LoadingComponent from '../LoadingComponent';
-const Home = ({ projectId , permissions}: any) => {
+const Home = ({ projectId, permissions }: any) => {
   type Task = {
     id: string;
     title: string;
@@ -18,9 +18,11 @@ const Home = ({ projectId , permissions}: any) => {
     }[];
     deadline: string;
   };
-  
+
   const checkPermission = (permission: string) => {
+    console.log('Checking permission: ', permissions);
     return permissions?.includes(permission);
+
   };
 
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -59,7 +61,7 @@ const Home = ({ projectId , permissions}: any) => {
   }, [session, selectedTask, projectId]);
 
 
-const addTask = () => {
+  const addTask = () => {
     setSelectedTask(null);
     setIsModalOpen(true);
   };
@@ -104,8 +106,14 @@ const addTask = () => {
     return <LoadingComponent />;
   }
 
+  const truncateText = (text, maxLength) => {
+      if (text.length > maxLength) {
+          return text.substring(0, maxLength) + '...';
+      }
+      return text;
+  };
 
- 
+
 
   return (
     <div>
@@ -124,7 +132,7 @@ const addTask = () => {
                       <Typography variant="h5" >
                         <strong>
                           {columnId.charAt(0).toUpperCase() + columnId.slice(1)}
-                          </strong>
+                        </strong>
                       </Typography>
                       {columnId === 'backlog' && (
                         <button onClick={addTask} className="p-2 m-2 text-black font-bold bg-zinc-300 rounded-2xl">
@@ -135,7 +143,8 @@ const addTask = () => {
                     {tasks.map((task, index) => {
                       if (task.status === columnId) {
                         return (
-                          <Draggable key={task.id} draggableId={task.id} index={index}>
+                          <Draggable key={task.id} draggableId={task.id} index={index} isDragDisabled={!checkPermission('update_task')}
+                          >
                             {(provided) => (
                               <Card
                                 ref={provided.innerRef}
@@ -146,15 +155,15 @@ const addTask = () => {
                                   columnId === 'doing' ? 'bg-yellow-100' :
                                     columnId === 'scrapped' ? 'bg-red-100' : 'bg-green-100'
                                   } rounded`}
-                                onClick={() => openTaskModal(task)} 
+                                onClick={() => openTaskModal(task)}
                               >
                                 <CardContent>
                                   <Typography variant="h6" component="div" className='bold'>
-                                    {task.title}
+                                         {truncateText(task.title, 60)}
                                   </Typography>
                                   <Typography variant="body2" color="text.secondary">
                                     <div className='overflow-hidden text-ellipsis'>
-                                      {task.description}
+                                         {truncateText(task.description, 60)}
                                     </div>
                                   </Typography>
                                   <div className='flex my-2'>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import CustomButton from "../components/CustomButton";
 import { useSession } from "next-auth/react";
-import { getUserData, updateUserData ,sendVerificationEmail} from "@/lib/userData";
+import { getUserData, updateUserData, sendVerificationEmail } from "@/lib/userData";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -28,18 +28,12 @@ const UserSettings = () => {
                 body: formData,
             });
             const data = await response.json();
-            setImage(data.url); 
-            updateData(e);
+            setImage(data.url);
         } catch (error) {
             console.error('Error uploading image:', error);
         }
     };
-        useEffect(() => {
-            if (image) {
-                console.log("Image uploaded", image);
-                updateData();
-            }
-        }, [image]); 
+
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
@@ -51,6 +45,7 @@ const UserSettings = () => {
     const updateData = async (e?: any) => {
         e?.preventDefault();
         console.log("Submitted");
+        console.log(image);
         const userData = {
             first_name: firstName,
             last_name: lastName,
@@ -60,7 +55,26 @@ const UserSettings = () => {
         console.log(userData);
         try {
             const response = await updateUserData(session?.user?.accessToken as string, userData);
-            console.log(response);
+            console.log("After call to django: ", response);
+            if (session?.user) {
+                const updatedUser = { ...session.user };
+                updatedUser.first_name = firstName;
+                updatedUser.last_name = lastName;
+                updatedUser.email = email;
+                updatedUser.image = image;
+
+                const updatedSession = { ...session, user: updatedUser };
+                session.user = updatedSession.user;
+                await update(updatedSession);
+                toast.success("Your data was updated successfully", {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    progress: undefined,
+                });
+
+            }
         }
         catch (e) {
             toast.error("An error occurred", {
@@ -71,25 +85,7 @@ const UserSettings = () => {
                 progress: undefined,
             });
         }
-        if (session?.user) {
-            const updatedUser = { ...session.user };
-            updatedUser.first_name = firstName;
-            updatedUser.last_name = lastName;
-            updatedUser.email = email;
-            updatedUser.image = image;
 
-            const updatedSession = { ...session, user: updatedUser };
-            session.user = updatedSession.user;
-            update(updatedSession);
-            toast.success("Your data was updated successfully", {
-                position: "top-right",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                progress: undefined,
-            });
-
-        }
     }
 
     const fetchData = async () => {
@@ -102,21 +98,28 @@ const UserSettings = () => {
         setEmail(userData?.email);
     }
 
+    useEffect(() => {
+        if (image) {
+            updateData();
+        }
+    }, [image]);
+
 
     useEffect(() => {
+        console.log("Session changed");
         fetchData()
     }, [session])
 
     const sendVerificationEmailClick = async () => {
         try {
             const response = await sendVerificationEmail(session?.user?.accessToken as string, session?.user?.id as string);
-                toast.success("Verification email sent successfully", {
-                    position: "top-right",
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    progress: undefined,
-                });
+            toast.success("Verification email sent successfully", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                progress: undefined,
+            });
 
         }
         catch (e) {
@@ -184,15 +187,15 @@ const UserSettings = () => {
                     </form>
                 </div>
                 <div className="text-center">
-                        <div className="my-10">
-                            <TextField
-                                fullWidth
-                                required
-                                label="Email"
-                                value={email}
-                                type="email"
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
+                    <div className="my-10">
+                        <TextField
+                            fullWidth
+                            required
+                            label="Email"
+                            value={email}
+                            type="email"
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
                         {session?.user?.emailVerified ? (
                             <span className="text-green-500 flex my-2">
                                 Email verified
@@ -202,44 +205,44 @@ const UserSettings = () => {
                                 <span className="text-red-500 flex my-2">
                                     Email not verified
                                 </span>
-                                <CustomButton buttonText={"Verify Email"} color="gray" onClick={() => {sendVerificationEmailClick()}} />
+                                <CustomButton buttonText={"Verify Email"} color="gray" onClick={() => { sendVerificationEmailClick() }} />
                             </>
                         )}
                         <form onSubmit={updateData}>
-                        <CustomButton buttonText={"Save Email"} color="gray" />
+                            <CustomButton buttonText={"Save Email"} color="gray" />
                         </form>
-                        </div>
+                    </div>
                 </div>
 
 
                 {session?.user?.provider == "credentials" ? (
-                               <div className="text-center">
-                    <form onSubmit={handleSubmit}>
-                        <div className="mt-10 mb-4">
-                            <TextField
-                                fullWidth
-                                label="Old Password"
-                                value={oldPassword}
-                                type="password"
-                                onChange={(e) => setOldPassword(e.target.value)}
-                            />
-                        </div>
-                        <div className="mb-4">
-                            <TextField
-                                fullWidth
-                                required
-                                label="New Password"
-                                value={newPassword}
-                                type="password"
-                                onChange={(e) => setNewPassword(e.target.value)}
-                            />
-                        </div>
-                        <CustomButton buttonText={"Save Password"} color="gray" />
-                    </form>
-                </div>
+                    <div className="text-center">
+                        <form onSubmit={handleSubmit}>
+                            <div className="mt-10 mb-4">
+                                <TextField
+                                    fullWidth
+                                    label="Old Password"
+                                    value={oldPassword}
+                                    type="password"
+                                    onChange={(e) => setOldPassword(e.target.value)}
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <TextField
+                                    fullWidth
+                                    required
+                                    label="New Password"
+                                    value={newPassword}
+                                    type="password"
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                />
+                            </div>
+                            <CustomButton buttonText={"Save Password"} color="gray" />
+                        </form>
+                    </div>
 
                 ) : null}
-     
+
             </div>
         </div>
     );

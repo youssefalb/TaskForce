@@ -32,9 +32,26 @@ const AddComment =  ({ handleAddComment }) => {
         sx={{ width: "50%" }}
       />
       <Box>
-      <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}  disabled={!comment.trim()}>
+    <Button 
+        type="submit" 
+        variant="contained"
+        style={{
+            color: 'black', 
+            padding: '10px 20px', 
+            borderRadius: '5px', 
+            boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)', 
+            fontWeight: 'bold', 
+            fontSize: '16px', 
+        }}
+
+        sx={{ 
+            mt: 3, 
+            mb: 2,
+        }}  
+        disabled={!comment.trim()}
+    >
         Post
-      </Button>
+    </Button>
       </Box>
     </Box>
   );

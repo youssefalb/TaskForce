@@ -19,6 +19,10 @@ export default function ProjectPage() {
   const { data: session } = useSession()
   const [permissions, setPermissions] = useState([])
 
+
+  const checkPermission = (permission: string) => {
+    return permissions?.includes(permission);
+  }
   const fetchData = async () => {
     if (session?.user?.accessToken && id) {
       await getProjectDetails(session.user.accessToken, id.toString())
@@ -71,14 +75,14 @@ export default function ProjectPage() {
         <Tab label="Info" />
         <Tab label="Users" />
         <Tab label="Tickets" />
-        <Tab label="Roles" />
+        <Tab label="Roles" disabled={!checkPermission("view_role")} />
       </Tabs>
       <Box p={3}>
         {activeTab === 0 && <div><Home projectId={id} permissions={permissions} /> </div>}
         {activeTab === 1 && <div><ProjectInfo details={project} fetchData={fetchData} permissions={permissions}/></div>}
         {activeTab === 2 && <div><Users projectId={id} projectRoles={project?.roles} permissions={permissions}/></div>}
         {activeTab === 3 && <div><Tickets projectId={id} /></div>}
-        {activeTab === 4 && <div><ProjectRoles projectId={id} permissions={permissions} /></div>}
+        {activeTab === 4 && checkPermission("view_role") && <div><ProjectRoles projectId={id} permissions={permissions} /></div>}
       </Box>
     </div>
   );

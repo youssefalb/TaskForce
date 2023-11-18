@@ -65,12 +65,16 @@ class UserBriefDataSerializer(serializers.ModelSerializer):
         fields = ('first_name', 'last_name',  'username', 'image') 
 
 class TicketSerializer(serializers.ModelSerializer):
-    assigned_to = UserBriefDataSerializer()
-    created_by = UserBriefDataSerializer()
+    assigned_to = UserBriefDataSerializer(read_only=True)
+    created_by = UserBriefDataSerializer(read_only=True)
 
     class Meta:
         model = Ticket
         fields = '__all__'
+        extra_kwargs = {
+            'project': {'read_only': True},
+            'created_by': {'read_only': True},
+        }
 
 class TicketUpdateSerializer(serializers.ModelSerializer):
 

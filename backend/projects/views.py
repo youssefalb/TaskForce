@@ -182,6 +182,18 @@ class TicketUpdateView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TicketUpdateSerializer
     lookup_field = 'id'
 
+class TicketCreateView(generics.CreateAPIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    queryset = Ticket.objects.all()
+    serializer_class = TicketSerializer
+
+    def perform_create(self, serializer):
+        project_id = self.kwargs.get('project_id')
+        print(project_id)
+        project = Project.objects.get(id=project_id)
+        serializer.save(project=project, created_by=self.request.user)
+
 class ProjectTicketsView(generics.ListAPIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
