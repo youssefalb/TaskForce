@@ -17,6 +17,8 @@ import PriorityChip from '../chips/PriorityChips';
 import StatusChip from '../chips/StatusChips';
 import LoadingComponent from '../LoadingComponent';
 import EmptyStateMessage from '../EmptyStateMessage';
+import AddTicketDialog from '../AddTicketDialog';
+import { createTicket } from '@/lib/projects';
 
 const TableCellStyled = styled(TableCell)({
   fontWeight: 'bold',
@@ -33,6 +35,26 @@ const Tickets = ({ projectId }) => {
   const { data: session } = useSession();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleDialogOpen = () => {
+    setOpenDialog(true);
+  };
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+  };
+
+  const handleAddTicket = (ticketToAdd) => {
+    if (session?.user?.accessToken && projectId) {
+      createTicket(session.user.accessToken, projectId, ticketToAdd).then((data) => {
+        console.log('New Ticket', data);
+        setTickets((prevTickets) => [...prevTickets, data]);
+      });
+    }
+
+  };
+
 
   const fetchData = async () => {
     if (session?.user?.accessToken && projectId) {
@@ -79,7 +101,7 @@ const Tickets = ({ projectId }) => {
       <TableCellStyled>{ticket.title}</TableCellStyled>
       <TableCellStyled>
         <PriorityChip priority={ticket.priority} />
-        </TableCellStyled>
+      </TableCellStyled>
 
       <TableCellStyled >
         <StatusChip status={ticket.status} />
@@ -98,7 +120,13 @@ const Tickets = ({ projectId }) => {
   ));
 
   return (
-    <div className="container mx-auto mt-8">
+    <div className="container mx-auto">
+      <div className="flex items-center mb-2">
+        <div className="flex-grow"></div>
+        <button onClick={handleDialogOpen} className="p-2 m-2 text-black font-bold bg-zinc-300 rounded-2xl">
+          + Add Ticket
+        </button>
+      </div>
       <TableContainer component={Paper} sx={{ maxWidth: '100%' }}>
         <Table sx={{ minWidth: 650 }} aria-label="customized table">
           <TableHead>
@@ -121,6 +149,11 @@ const Tickets = ({ projectId }) => {
           </TableBody>
         </Table>
       </TableContainer>
+      <AddTicketDialog
+        open={openDialog}
+        onClose={handleDialogClose}
+        onAdd={handleAddTicket}
+      />
     </div>
   );
 };

@@ -5,11 +5,12 @@ import {
     Card,
     CardContent,
     Typography,
-    CircularProgress,
     Avatar,
     Divider,
     Button,
     TextField,
+    MenuItem,
+    Select,
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import { getTicketDetail, getTicketComments, updateTicket, createTicketComment } from '@/lib/projects';
@@ -20,6 +21,8 @@ import { format, set } from 'date-fns';
 import AddComment from '@/components/AddComment';
 import LoadingComponent from '@/components/LoadingComponent';
 import EmptyStateMessage from '@/components/EmptyStateMessage';
+import { priorityMap } from '@/components/chips/PriorityChips';
+import { statusMap } from '@/components/chips/StatusChips';
 
 
 const TicketDetail = () => {
@@ -51,26 +54,26 @@ const TicketDetail = () => {
         setEditMode(false);
     };
 
-const fetchTicketDetails = async (ticketId) => {
-    if (session?.user?.accessToken && ticketId && id) {
-        setLoading(true);
-        try {
-            const res = await getTicketDetail(session.user.accessToken, id.toString(), ticketId.toString());
+    const fetchTicketDetails = async (ticketId) => {
+        if (session?.user?.accessToken && ticketId && id) {
+            setLoading(true);
+            try {
+                const res = await getTicketDetail(session.user.accessToken, id.toString(), ticketId.toString());
 
-            if (res && res.id) {
-                setTicket(res);
-                setEditValues(res);
-                const ticketComments = await getTicketComments(session.user.accessToken, id.toString(), ticketId.toString());
-                setComments(ticketComments);
-            } else {
-                console.log('Ticket not found or invalid response');
+                if (res && res.id) {
+                    setTicket(res);
+                    setEditValues(res);
+                    const ticketComments = await getTicketComments(session.user.accessToken, id.toString(), ticketId.toString());
+                    setComments(ticketComments);
+                } else {
+                    console.log('Ticket not found or invalid response');
+                }
+            } catch (error) {
+                console.error("Failed to fetch ticket details:", error);
             }
-        } catch (error) {
-            console.error("Failed to fetch ticket details:", error);
+            setLoading(false);
         }
-        setLoading(false);
-    }
-};
+    };
 
 
     const handleAddComment = async (commentText: string) => {
@@ -123,21 +126,49 @@ const fetchTicketDetails = async (ticketId) => {
     }
 
     const editableField = (fieldValue, label, name, multiline = false) => {
-        return editMode ? (
-            <TextField
-                fullWidth
-                variant="outlined"
-                name={name}
-                label={label}
-                defaultValue={fieldValue}
-                multiline={multiline}
-                onChange={handleInputChange}
-            />
-        ) : (
-            <Typography variant={multiline ? "body1" : "h5"} component="div" gutterBottom sx={{ fontFamily: '"Segoe UI"' }} mb={2}>
-                {fieldValue || `No ${label}`}
-            </Typography>
-        );
+        if (editMode) {
+            console.log('priorityMap: ', priorityMap);
+            console.log('statusMap: ', statusMap);
+            if (name === 'priority' || name === 'status') {
+                const options = name === 'priority' ? priorityMap : statusMap;
+                return (
+                    <Select
+                        name={name}
+                        value={editValues[name]}
+                        onChange={handleInputChange}
+                        fullWidth
+                    >
+                        {Object.keys(options).map((key) => (
+                            <MenuItem key={key} value={key}>{options[key]}</MenuItem>
+                        ))}
+                    </Select>
+                );
+            } else {
+                return (
+                    <TextField
+                        fullWidth
+                        variant="outlined"
+                        name={name}
+                        label={label}
+                        defaultValue={fieldValue}
+                        multiline={multiline}
+                        onChange={handleInputChange}
+                    />
+                );
+            }
+        } else {
+            if (name === 'priority') {
+                return <PriorityChip priority={fieldValue} />;
+            } else if (name === 'status') {
+                return <StatusChip status={fieldValue} />;
+            } else {
+                return (
+                    <Typography variant={multiline ? "body1" : "h5"} component="div" gutterBottom sx={{ fontFamily: '"Segoe UI"' }} mb={2}>
+                        {fieldValue || `No ${label}`}
+                    </Typography>
+                );
+            }
+        }
     };
 
     return (
@@ -194,10 +225,10 @@ const fetchTicketDetails = async (ticketId) => {
                 )}
             </Box>
             <Typography gutterBottom sx={{ fontFamily: '"Segoe UI"' }} mb={2}>
-                Priority:   <PriorityChip priority={ticket.priority} />
+                Priority: {editableField(ticket.priority, 'Priority', 'priority')}
             </Typography>
             <Typography gutterBottom sx={{ fontFamily: '"Segoe UI"' }} mb={2}>
-                Status:  <StatusChip status={ticket.status} />
+                Status: {editableField(ticket.status, 'Status', 'status')}
             </Typography>
 
             <Divider light />

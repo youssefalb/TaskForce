@@ -59,9 +59,9 @@
 - [x] Update Ticket Status and details
 - [x] read comments
 - [x] Add comments
-- [] Add ticket [18/NOV]
-- [] Attach and download files from a ticket [18/NOV]
-- [] Changing status
+- [x] Add ticket [18/NOV]
+- [] Attach and download files from a ticket [19/NOV]
+- [x] Changing status and prio [18/NOV]
 - [] Delete ticket
 - [] Handle laoding in a better way or optimize it a bit at least
 - [] Add filter to tickets page that will show by default only the open ones (Filter by status only!!)
@@ -69,7 +69,7 @@
 
 ## Tasks
 - [x] Add a comments feature to the task
-- [] fix the coloring issue 
+- [] fix the coloring issue [19/NOV]
 - [] redesign the page (optional)
 
 

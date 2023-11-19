@@ -9,7 +9,7 @@ const statusColors = {
   'closed': 'grey',
 };
 
-const statusMap = {
+export const statusMap = {
   open: 'Open',
   in_progress: 'In Progress',
   resolved: 'Resolved',

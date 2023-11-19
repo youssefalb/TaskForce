@@ -9,7 +9,7 @@ const priorityColors = {
   'low': 'green',
 };
 
-const priorityMap = {
+export const priorityMap = {
   low: 'Low',
   medium: 'Medium',
   high: 'High',
