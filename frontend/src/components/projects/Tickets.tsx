@@ -28,6 +28,7 @@ const TableCellStyled = styled(TableCell)({
   maxWidth: '200px',
 });
 
+const statusOptions = ['open', 'in_progress', 'resolved', 'closed'];
 
 
 const Tickets = ({ projectId }) => {
@@ -36,6 +37,25 @@ const Tickets = ({ projectId }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [openDialog, setOpenDialog] = useState(false);
+  const [statusFilter, setStatusFilter] = useState(['open']);
+
+
+  const handleStatusChange = (status) => {
+    setStatusFilter(prevStatuses => {
+      if (prevStatuses.includes(status)) {
+        return prevStatuses.filter(s => s !== status);
+      } else {
+        return [...prevStatuses, status];
+      }
+    });
+  };
+
+
+  const filteredTickets = tickets.filter(ticket => {
+    return statusFilter.includes(ticket.status) || statusFilter.length === 0;
+  });
+
+  const isStatusSelected = (status) => statusFilter.includes(status);
 
   const handleDialogOpen = () => {
     setOpenDialog(true);
@@ -96,7 +116,7 @@ const Tickets = ({ projectId }) => {
 
 
 
-  const ticketRows = tickets.map((ticket) => (
+  const ticketRows = filteredTickets.map((ticket) => (
     <TableRow key={ticket.id} hover className="hover:bg-gray-100">
       <TableCellStyled>{ticket.title}</TableCellStyled>
       <TableCellStyled>
@@ -122,7 +142,17 @@ const Tickets = ({ projectId }) => {
   return (
     <div className="container mx-auto">
       <div className="flex items-center mb-2">
-        <div className="flex-grow"></div>
+        <div className="flex-grow">
+          {statusOptions.map(status => (
+            <button
+              key={status}
+              onClick={() => handleStatusChange(status)}
+              className={`p-2 m-2 ${isStatusSelected(status) ? 'bg-green-500 text-white' : 'bg-red-300 text-black'} font-bold rounded-2xl`}
+            >
+              {status.charAt(0).toUpperCase() + status.slice(1)}
+            </button>
+          ))}
+        </div>
         <button onClick={handleDialogOpen} className="p-2 m-2 text-black font-bold bg-zinc-300 rounded-2xl">
           + Add Ticket
         </button>
