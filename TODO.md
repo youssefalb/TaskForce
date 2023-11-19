@@ -63,11 +63,11 @@
 - [x] Changing status and prio [18/NOV]
 - [x] Assign ticket to me!
 - [x] Assign to someone else!
-- [] Delete ticket (Should tickets be deleted actually???)
 - [] Add filter to tickets page that will show by default only the open ones (Filter by status only!!)
 - [] Attach and download files from a ticket [19/NOV]
 - [x] Handle laoding in a better way or optimize it a bit at least
 - [] style buttons
+- [] Delete ticket (Should tickets be deleted actually???)
 
 ## Tasks
 - [x] Add a comments feature to the task
