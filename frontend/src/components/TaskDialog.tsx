@@ -59,7 +59,7 @@ const TaskDialog = (props: any) => {
     });
   }
 
-  const getProjectUsersData = async () => {
+const getProjectUsersData = async () => {
     if (session?.user?.accessToken) {
       try {
         const data = await getProjectUsers(session.user.accessToken, projectId);

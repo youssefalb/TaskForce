@@ -13,7 +13,7 @@ import {
     Select,
 } from '@mui/material';
 import { useRouter } from 'next/router';
-import { getTicketDetail, getTicketComments, updateTicket, createTicketComment } from '@/lib/projects';
+import { getTicketDetail, getTicketComments, updateTicket, createTicketComment, getProjectUsers } from '@/lib/projects';
 import StatusChip from '@/components/chips/StatusChips';
 import PriorityChip from '@/components/chips/PriorityChips';
 import CommentsList from '@/components/CommentsList';
@@ -23,7 +23,7 @@ import LoadingComponent from '@/components/LoadingComponent';
 import EmptyStateMessage from '@/components/EmptyStateMessage';
 import { priorityMap } from '@/components/chips/PriorityChips';
 import { statusMap } from '@/components/chips/StatusChips';
-
+import AssignToUserDialog from '@/components/AssignToUserDialog';
 
 const TicketDetail = () => {
     const [ticket, setTicket] = useState(null);
@@ -40,6 +40,22 @@ const TicketDetail = () => {
         status: '',
     });
 
+    const [usersList, setUsersList] = useState([]);
+
+    const [showUsersDialog, setShowUsersDialog] = useState(false);
+
+    const fetchProjectUsers = async () => {
+        if (session?.user?.accessToken && id) {
+            try {
+                const users = await getProjectUsers(session.user.accessToken, id.toString());
+                setUsersList(users);
+            } catch (error) {
+                console.error("Error fetching project users:", error);
+            }
+        }
+    };
+
+
     const handleDetailsSave = async () => {
         console.log('Saving...');
         console.log('Edit Values: ', editValues);
@@ -53,6 +69,7 @@ const TicketDetail = () => {
         setTicket(details);
         setEditMode(false);
     };
+
 
     const fetchTicketDetails = async (ticketId) => {
         if (session?.user?.accessToken && ticketId && id) {
@@ -92,6 +109,7 @@ const TicketDetail = () => {
 
     useEffect(() => {
         fetchTicketDetails(ticketId);
+        fetchProjectUsers();
     }, [ticketId, session]);
 
     const handleInputChange = async (e) => {
@@ -103,6 +121,34 @@ const TicketDetail = () => {
             console.log('Edit Values: ', editValues);
         }
     };
+
+    const handleAssignToMe = async () => {
+        if (session?.user?.accessToken && ticketId && id) {
+            console.log('Assigning to me...');
+            const details = {
+                assigned_to: session?.user?.id,
+            };
+            console.log('Details: ', details);
+            const res = await updateTicket(session.user.accessToken, id.toString(), ticketId.toString(), details);
+            console.log('Response: ', res);
+            fetchTicketDetails(ticketId);
+            console.log('Updated Ticket: ', ticket);
+            setEditMode(false);
+        }
+    }
+
+    const handleAssignToUser = async (selectedUser) => {
+        if (session?.user?.accessToken && ticketId && id) {
+            const details = {
+                assigned_to: selectedUser,
+            };
+            const res = await updateTicket(session.user.accessToken, id.toString(), ticketId.toString(), details);
+            await fetchTicketDetails(ticketId);
+            console.log('Updated Ticket: ', ticket);
+            setEditMode(false);
+        }
+    };
+
 
     const cancelEdit = () => {
         setEditMode(false);
@@ -174,14 +220,11 @@ const TicketDetail = () => {
     return (
         <CardContent>
             {editableField(ticket.title, 'Title', 'title')}
-            <Button color="primary">
-                Comment
-            </Button>
 
-            <Button color="primary">
+            <Button onClick={handleAssignToMe} color="primary">
                 Assign to me
             </Button>
-            <Button color="primary">
+            <Button onClick={() => setShowUsersDialog(true)} color="primary">
                 Assign
             </Button>
 
@@ -199,13 +242,14 @@ const TicketDetail = () => {
                         Cancel
                     </Button>
                 </>
+
             )}
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', flexDirection: 'column', width: '100%' }} mb={2}>
                 {ticket.created_by && (
                     <Box display="flex" sx={{ alignItems: 'center' }} m={1}>
                         <Avatar src={ticket.created_by.image} />
                         <Typography variant="subtitle1" ml={1}>
-                            Assigned to {ticket.created_by.first_name || "xxxx"} {ticket.created_by.last_name || "xxxx"}
+                            Created By {ticket.created_by.first_name || "xxxx"} {ticket.created_by.last_name || "xxxx"}
                         </Typography>
                         <Typography variant="body2" color="textSecondary" ml={1}>
                             @{ticket.created_by.username || "unknown"}
@@ -216,7 +260,7 @@ const TicketDetail = () => {
                     <Box display="flex" sx={{ alignItems: 'center' }} m={1}>
                         <Avatar src={ticket.assigned_to.image} />
                         <Typography variant="subtitle1" ml={1}>
-                            Created by {ticket.assigned_to.first_name || "xxxx"} {ticket.assigned_to.last_name || "xxxx"}
+                            Assigned to {ticket.assigned_to.first_name || "xxxx"} {ticket.assigned_to.last_name || "xxxx"}
                         </Typography>
                         <Typography variant="body2" color="textSecondary" ml={1}>
                             @{ticket.assigned_to.username || "unknown"}
@@ -253,7 +297,12 @@ const TicketDetail = () => {
 
             )}
 
-
+            <AssignToUserDialog
+                open={showUsersDialog}
+                onClose={() => setShowUsersDialog(false)}
+                onAssign={handleAssignToUser}
+                usersList={usersList}
+            />
         </CardContent>
 
     );
