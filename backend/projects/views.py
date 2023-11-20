@@ -356,3 +356,17 @@ def delete_ticket_file(request, file_id):
     ticket_file = TicketFile.objects.get(id=file_id)
     ticket_file.delete()
     return Response(TicketFileSerializer(ticket_file).data ,status=status.HTTP_204_NO_CONTENT)
+
+
+class TicketTasksView(APIView):
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
+    
+    def get(self, request, ticket_id):
+        try:
+            ticket = Ticket.objects.get(pk=ticket_id)
+            tasks = ticket.related_tasks.all()
+            serializer = TaskSerializer(tasks, many=True)
+            return Response(serializer.data)
+        except Ticket.DoesNotExist:
+            return Response({"error": "Ticket not found"}, status=status.HTTP_404_NOT_FOUND)

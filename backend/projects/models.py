@@ -105,6 +105,7 @@ class Task(models.Model):
     users = models.ManyToManyField(CustomUser, blank=True, related_name='assigned_tasks')
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+
     
     def __str__(self):
         return self.title
@@ -145,6 +146,7 @@ class Ticket(models.Model):
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default='open')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    related_tasks = models.ManyToManyField('Task', blank=True, related_name='related_tickets')
 
     def __str__(self):
         return self.title

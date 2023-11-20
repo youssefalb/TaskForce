@@ -1,6 +1,9 @@
 from django.contrib import admin
 from .models import TicketComment, Project, Record, Task, Role, ProjectUserRole, Ticket, TicketFile
 
+# class TaskInline(admin.TabularInline):
+#     model = Ticket.related_tasks.through
+#     extra = 1 
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'description', 'start_date', 'end_date', 'status', )
 
@@ -8,6 +11,7 @@ class TaskAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'description', 'deadline', 'status')
 
 class TicketAdmin(admin.ModelAdmin):
+    # model = [TaskInline, ]
     list_display = ('id', 'title', 'description', 'status')
 
 class RoleAdmin(admin.ModelAdmin):
@@ -23,6 +27,7 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = ('id', 'ticket', 'author', 'text', 'created_at')
 
 class TicketFileAdmin(admin.ModelAdmin):
+
     list_display = ('id', 'ticket',  'name', 'file_url', 'uploaded_at')
 
 

@@ -64,11 +64,12 @@
 - [x] Assign ticket to me!
 - [x] Assign to someone else!
 - [x] Add filter to tickets page that will show by default only the open ones (Filter by status only!!)
-- [] Attach and download files from a ticket [19/NOV]
-    [] backend (add a list of links that will be saved)
-    [] Manage Cloudinary Upload
-    [] Frontend box to display the files
+- [x] Attach and download files from a ticket [19/NOV]
+    [x] backend (add a list of links that will be saved)
+    [x] Manage Cloudinary Upload
+    [x] Frontend box to display the files
 - [x] Handle laoding in a better way or optimize it a bit at least
+- [] Attach tasks to tickets
 - [] style buttons
 - [] Delete ticket (Should tickets be deleted actually???)
 

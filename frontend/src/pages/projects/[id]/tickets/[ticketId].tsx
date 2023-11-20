@@ -26,6 +26,7 @@ import { statusMap } from '@/components/chips/StatusChips';
 import AssignToUserDialog from '@/components/AssignToUserDialog';
 import TicketFileUpload from '@/components/TicketFileUpload';
 import { addFileToTicket } from '@/lib/projects';
+import { getTicketTasks } from '@/lib/projects';
 
 const TicketDetail = () => {
     const [ticket, setTicket] = useState(null);
@@ -43,7 +44,6 @@ const TicketDetail = () => {
     });
     const [ticketFiles, setTicketFiles] = useState([]);
     const [usersList, setUsersList] = useState([]);
-
     const [showUsersDialog, setShowUsersDialog] = useState(false);
 
     const fetchProjectUsers = async () => {
@@ -75,6 +75,7 @@ const TicketDetail = () => {
 
 
     };
+
 
     const handleDetailsSave = async () => {
         console.log('Saving...');
@@ -111,7 +112,17 @@ const TicketDetail = () => {
             setLoading(false);
         }
     };
-
+    const fetchTicketTasks = async () => {
+        if (session?.user?.accessToken && ticketId && id) {
+            try {
+                const res = await getTicketTasks(session.user.accessToken, ticketId.toString());
+                console.log('Ticket Tasks: ', res);
+            }
+            catch (error) {
+                console.error("Failed to fetch ticket tasks:", error);
+            }
+        }
+    }
     const fetchTicketFiles = async (ticketId) => {
         if (session?.user?.accessToken && ticketId && id) {
             setLoading(true);
@@ -147,6 +158,7 @@ const TicketDetail = () => {
         fetchTicketDetails(ticketId);
         fetchProjectUsers();
         fetchTicketFiles(ticketId);
+        fetchTicketTasks();
     }, [ticketId, session]);
 
     const handleInputChange = async (e) => {
