@@ -13,7 +13,7 @@ import {
     Select,
 } from '@mui/material';
 import { useRouter } from 'next/router';
-import { getTicketDetail, getTicketComments, updateTicket, createTicketComment, getProjectUsers } from '@/lib/projects';
+import { getTicketDetail, getTicketComments, updateTicket, createTicketComment, getProjectUsers, getTicketFiles, deleteFileFromTicket } from '@/lib/projects';
 import StatusChip from '@/components/chips/StatusChips';
 import PriorityChip from '@/components/chips/PriorityChips';
 import CommentsList from '@/components/CommentsList';
@@ -24,6 +24,8 @@ import EmptyStateMessage from '@/components/EmptyStateMessage';
 import { priorityMap } from '@/components/chips/PriorityChips';
 import { statusMap } from '@/components/chips/StatusChips';
 import AssignToUserDialog from '@/components/AssignToUserDialog';
+import TicketFileUpload from '@/components/TicketFileUpload';
+import { addFileToTicket } from '@/lib/projects';
 
 const TicketDetail = () => {
     const [ticket, setTicket] = useState(null);
@@ -39,7 +41,7 @@ const TicketDetail = () => {
         priority: '',
         status: '',
     });
-
+    const [ticketFiles, setTicketFiles] = useState([]);
     const [usersList, setUsersList] = useState([]);
 
     const [showUsersDialog, setShowUsersDialog] = useState(false);
@@ -55,6 +57,24 @@ const TicketDetail = () => {
         }
     };
 
+    const handleFilesUpload = async (fileUrl, fileName) => {
+        if (session?.user?.accessToken && ticketId && id) {
+            console.log('Uploaded file:', fileUrl);
+            console.log('Ticket ID:', ticketId);
+            console.log('session.user.accessToken:', session.user.accessToken)
+            const res = await addFileToTicket(session.user.accessToken, ticketId.toString(), fileUrl, fileName);
+            fetchTicketFiles(ticketId);
+        }
+
+    };
+    const handleFilesDelete = async (file) => {
+        if (session?.user?.accessToken && file?.id) {
+            const res = await deleteFileFromTicket(session.user.accessToken, file.id);
+            fetchTicketFiles(ticketId);
+        }
+
+
+    };
 
     const handleDetailsSave = async () => {
         console.log('Saving...');
@@ -92,6 +112,22 @@ const TicketDetail = () => {
         }
     };
 
+    const fetchTicketFiles = async (ticketId) => {
+        if (session?.user?.accessToken && ticketId && id) {
+            setLoading(true);
+            try {
+                const res = await getTicketFiles(session.user.accessToken, ticketId.toString());
+                console.log('Ticket Files: ', res);
+                console.log('Ticket Files: ', res);
+                setTicketFiles(res);
+                setLoading(false);
+            } catch (error) {
+                console.error("Failed to fetch ticket files:", error);
+                setLoading(false);
+            }
+        }
+    }
+
 
     const handleAddComment = async (commentText: string) => {
         if (session?.user?.accessToken && ticketId && id) {
@@ -110,6 +146,7 @@ const TicketDetail = () => {
     useEffect(() => {
         fetchTicketDetails(ticketId);
         fetchProjectUsers();
+        fetchTicketFiles(ticketId);
     }, [ticketId, session]);
 
     const handleInputChange = async (e) => {
@@ -276,9 +313,19 @@ const TicketDetail = () => {
             </Typography>
 
             <Divider light />
-            {editableField(ticket.description, 'Description', 'description', true)}
-            <Divider light />
 
+            {editableField(ticket.description, 'Description', 'description', true)}
+
+            <Divider light />
+            <Box m={5}>
+                <TicketFileUpload
+                    files={ticketFiles}
+                    onFileUpload={handleFilesUpload}
+                    onFileDelete={handleFilesDelete}
+                    ticketId={ticketId}
+                />
+            </Box>
+            <Divider light />
             {comments.length > 0 && (
                 <CommentsList comments={comments} />
 

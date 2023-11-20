@@ -8,10 +8,11 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from django.db.models import Q
 
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.permissions import IsAuthenticated
 
-
-from .models import ProjectUserRole, Record, Role, Task, Project, TaskComment, Ticket, TicketComment
-from .serializers import TaskCommentCreateSerializer, TaskCommentSerializer, TicketCommentCreateSerializer, TicketCommentSerializer, PermissionSerializer, ProjectUserRoleSerializer, ProjectUserRoleUpdateSerializer, RecordSerializer, RoleSerializer, TaskSerializer, ProjectSerializer, TicketSerializer, TicketUpdateSerializer
+from .models import ProjectUserRole, Record, Role, Task, Project, TaskComment, Ticket, TicketComment, TicketFile
+from .serializers import TaskCommentCreateSerializer, TaskCommentSerializer, TicketCommentCreateSerializer, TicketCommentSerializer, PermissionSerializer, ProjectUserRoleSerializer, ProjectUserRoleUpdateSerializer, RecordSerializer, RoleSerializer, TaskSerializer, ProjectSerializer, TicketFileSerializer, TicketSerializer, TicketUpdateSerializer
 
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -312,10 +313,46 @@ class ListPermissionsView(APIView):
         return Response(data=permission_data, status=status.HTTP_200_OK)
 
 
-    
+class TicketFilesView(generics.ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
+    serializer_class = TicketFileSerializer
+
+    def get_queryset(self):
+        ticket_id = self.kwargs['ticket_id']
+        return TicketFile.objects.filter(ticket_id=ticket_id)    
 
 class RecordCreateView(generics.CreateAPIView):
     permission_classes = (IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
     queryset = Record.objects.all()
     serializer_class = RecordSerializer
+
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication])
+def add_ticket_file(request, ticket_id):
+    print("Request: ", request.data )
+    file_url = request.data.get('file_url')
+    name = request.data.get('name')
+    if not file_url:
+        return Response({'error': 'File URL is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Find the ticket and add the file
+    ticket = Ticket.objects.get(id=ticket_id)
+    ticket_file = TicketFile.objects.create(ticket=ticket, file_url=file_url , name=name)
+    return Response(TicketFileSerializer(ticket_file).data, status=status.HTTP_201_CREATED)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+@authentication_classes([TokenAuthentication])
+def delete_ticket_file(request, file_id):
+    if not file_id:
+        return Response({'error': 'File ID is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    ticket_file = TicketFile.objects.get(id=file_id)
+    ticket_file.delete()
+    return Response(TicketFileSerializer(ticket_file).data ,status=status.HTTP_204_NO_CONTENT)

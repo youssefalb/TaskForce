@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import TicketComment, Project, Record, Task, Role, ProjectUserRole, Ticket
+from .models import TicketComment, Project, Record, Task, Role, ProjectUserRole, Ticket, TicketFile
 
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'description', 'start_date', 'end_date', 'status', )
@@ -22,9 +22,11 @@ class RecordAdmin(admin.ModelAdmin):
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('id', 'ticket', 'author', 'text', 'created_at')
 
+class TicketFileAdmin(admin.ModelAdmin):
+    list_display = ('id', 'ticket',  'name', 'file_url', 'uploaded_at')
 
 
-
+admin.site.register(TicketFile, TicketFileAdmin)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(Task, TaskAdmin)
 admin.site.register(Role, RoleAdmin)

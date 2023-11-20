@@ -21,7 +21,6 @@ const UserSettings = () => {
 
         const formData = new FormData();
         formData.append('file', file);
-        //add directory here later (profile_images)
         try {
             const response = await fetch('/api/upload', {
                 method: 'POST',
