@@ -1,5 +1,5 @@
 from user_auth.models import CustomUser
-from .models import TaskComment, TicketComment, Project, ProjectUserRole, Record, Role, Task, Ticket
+from .models import TaskComment, TicketComment, Project, ProjectUserRole, Record, Role, Task, Ticket, TicketFile
 from rest_framework import serializers
 from django.contrib.auth.models import Permission
 # For now include all fields
@@ -64,10 +64,17 @@ class UserBriefDataSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = ('first_name', 'last_name',  'username', 'image') 
 
+
+
+class TicketFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TicketFile
+        fields = ['id', 'file_url', 'uploaded_at', 'name']
+
 class TicketSerializer(serializers.ModelSerializer):
     assigned_to = UserBriefDataSerializer(read_only=True)
     created_by = UserBriefDataSerializer(read_only=True)
-
+    files = TicketFileSerializer(many=True, read_only=True)
     class Meta:
         model = Ticket
         fields = '__all__'

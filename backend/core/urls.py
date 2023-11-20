@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 from user_auth.views import UpdateUserDataView, GetUserDataView, LoginView, UserRegistrationView, GoogleLoginView, activate_account,  send_verification_email_view
-from projects.views import  TaskCommentCreateView, TaskCommentsView, TicketCommentCreateView, ListPermissionsView, ProjectDetailView, ProjectListCreateView, ProjectRolesView, ProjectTicketsView, ProjectUserRoleUpdateView, ProjectUsersView, RecordCreateView, TaskDetailView, TicketCommentsView, TicketDetailView, TicketUpdateView, UpdateRoleView,  TaskListCreateView, UpdateUserRoleView, CreateRoleView, UserProjectPermissionsView, UserProjectsListView, ProjectTasksView, TicketCreateView
+from projects.views import  TicketFilesView, add_ticket_file,delete_ticket_file, TaskCommentCreateView, TaskCommentsView, TicketCommentCreateView, ListPermissionsView, ProjectDetailView, ProjectListCreateView, ProjectRolesView, ProjectTicketsView, ProjectUserRoleUpdateView, ProjectUsersView, RecordCreateView, TaskDetailView, TicketCommentsView, TicketDetailView, TicketUpdateView, UpdateRoleView,  TaskListCreateView, UpdateUserRoleView, CreateRoleView, UserProjectPermissionsView, UserProjectsListView, ProjectTasksView, TicketCreateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -52,4 +52,8 @@ urlpatterns = [
     path('tasks/<int:task_id>/comments/', TaskCommentCreateView.as_view(), name='task-comment-create'),
     path('projects/<int:project_id>/tasks/<int:task_id>/comments/', TaskCommentsView.as_view(), name='task-comments'),
     path('projects/<int:project_id>/tickets/create/', TicketCreateView.as_view(), name='ticket-create'),
+    path('tickets/<int:ticket_id>/add-file/', add_ticket_file, name='add_ticket_file'),
+    path('tickets/<int:ticket_id>/files/', TicketFilesView.as_view(), name='get-files'),
+    path('tickets/files/<int:file_id>/delete/', delete_ticket_file, name='delete_ticket_file'),
+
 ]

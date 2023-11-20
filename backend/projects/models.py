@@ -117,7 +117,6 @@ class Task(models.Model):
         return can_delete_task
 
 
-
 class Ticket(models.Model):
 
     STATUS_CHOICES = [
@@ -126,6 +125,7 @@ class Ticket(models.Model):
         ('resolved', 'Resolved'),
         ('closed', 'Closed'),
     ]
+
 
 
     PRIORITY_CHOICES = [
@@ -149,6 +149,16 @@ class Ticket(models.Model):
     def __str__(self):
         return self.title
     
+
+
+class TicketFile(models.Model):
+    ticket = models.ForeignKey(Ticket, related_name='files', on_delete=models.CASCADE)
+    file_url = models.URLField(max_length=2000)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=255, default='unknown')
+
+    def __str__(self):
+        return f"File for {self.ticket.title} uploaded at {self.uploaded_at}"
 class TicketComment(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='comments')
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)

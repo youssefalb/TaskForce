@@ -63,8 +63,11 @@
 - [x] Changing status and prio [18/NOV]
 - [x] Assign ticket to me!
 - [x] Assign to someone else!
-- [] Add filter to tickets page that will show by default only the open ones (Filter by status only!!)
+- [x] Add filter to tickets page that will show by default only the open ones (Filter by status only!!)
 - [] Attach and download files from a ticket [19/NOV]
+    [] backend (add a list of links that will be saved)
+    [] Manage Cloudinary Upload
+    [] Frontend box to display the files
 - [x] Handle laoding in a better way or optimize it a bit at least
 - [] style buttons
 - [] Delete ticket (Should tickets be deleted actually???)
