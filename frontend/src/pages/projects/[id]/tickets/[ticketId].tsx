@@ -365,6 +365,18 @@ const TicketDetail = () => {
                 <Typography variant="body1">No related tasks.</Typography>
             )}
 
+            <Button variant="contained" type="submit"
+                style={{
+                    color: 'black',
+                    padding: '10px 20px',
+                    borderRadius: '5px',
+                    boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)',
+                    fontWeight: 'bold',
+                    fontSize: '16px',
+                }} sx={{ mb: 2 }}>
+                Add Task
+            </Button>
+
 
             <Divider light />
 

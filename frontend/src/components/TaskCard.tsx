@@ -3,7 +3,21 @@ import { Card, CardContent, Typography, Avatar } from '@mui/material';
 
 const TaskCard = ({ task, openTaskModal, checkPermission }) => {
 
-    
+    const getBackgroundColor = () => {
+        switch (task.status) {
+            case 'todo':
+                return 'bg-blue-100';
+            case 'doing':
+                return 'bg-yellow-100';
+            case 'scrapped':
+                return 'bg-red-100';
+            case 'done':
+                return 'bg-green-100';
+            default:
+                return 'bg-gray-100';
+        }
+    };
+
     const truncateText = (text, maxLength) => {
         if (text.length > maxLength) {
             return text.substring(0, maxLength) + '...';
@@ -24,10 +38,7 @@ const TaskCard = ({ task, openTaskModal, checkPermission }) => {
     return (
         <Card
             elevation={3}
-            className={`p-2 mb-2 ${task.status === 'todo' ? 'bg-blue-100' :
-                task.status === 'doing' ? 'bg-yellow-100' :
-                    task.status === 'scrapped' ? 'bg-red-100' : 'bg-green-100'
-                } rounded`}
+            className={`p-2 mb-2 ${getBackgroundColor()} rounded`}
             onClick={handleCardClick}
             draggable={isDraggable()}
         >

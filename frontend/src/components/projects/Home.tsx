@@ -21,7 +21,6 @@ const Home = ({ projectId, permissions }: any) => {
   };
 
   const checkPermission = (permission: string) => {
-    console.log('Checking permission: ', permissions);
     return permissions?.includes(permission);
 
   };
