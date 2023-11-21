@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 import { changeTaskStatus, getProjectTasks } from '@/lib/projects';
 import TaskDialog from '../TaskDialog';
 import LoadingComponent from '../LoadingComponent';
+import TaskCard from '../TaskCard';
 const Home = ({ projectId, permissions }: any) => {
   type Task = {
     id: string;
@@ -107,10 +108,10 @@ const Home = ({ projectId, permissions }: any) => {
   }
 
   const truncateText = (text, maxLength) => {
-      if (text.length > maxLength) {
-          return text.substring(0, maxLength) + '...';
-      }
-      return text;
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + '...';
+    }
+    return text;
   };
 
 
@@ -143,42 +144,19 @@ const Home = ({ projectId, permissions }: any) => {
                     {tasks.map((task, index) => {
                       if (task.status === columnId) {
                         return (
-                          <Draggable key={task.id} draggableId={task.id} index={index} isDragDisabled={!checkPermission('update_task')}
-                          >
+                          <Draggable key={task.id} draggableId={task.id} index={index} isDragDisabled={!checkPermission('update_task')}>
                             {(provided) => (
-                              <Card
+                              <div
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
-                                elevation={3}
-                                className={`p-2 mb-2 ${columnId === 'todo' ? 'bg-blue-100' :
-                                  columnId === 'doing' ? 'bg-yellow-100' :
-                                    columnId === 'scrapped' ? 'bg-red-100' : 'bg-green-100'
-                                  } rounded`}
-                                onClick={() => openTaskModal(task)}
                               >
-                                <CardContent>
-                                  <Typography variant="h6" component="div" className='bold'>
-                                         {truncateText(task.title, 60)}
-                                  </Typography>
-                                  <Typography variant="body2" color="text.secondary">
-                                    <div className='overflow-hidden text-ellipsis'>
-                                         {truncateText(task.description, 60)}
-                                    </div>
-                                  </Typography>
-                                  <div className='flex my-2'>
-                                    {task.users.map((user) => (
-                                      <div key={user.id}>
-                                        <Avatar src={user.image} alt={user.username} title={user.username} />
-
-                                      </div>
-                                    ))}
-                                  </div>
-                                  <Typography variant="body2" align="right" color="text.secondary">
-                                    Due {task.deadline}
-                                  </Typography>
-                                </CardContent>
-                              </Card>
+                                <TaskCard
+                                  task={task}
+                                  openTaskModal={openTaskModal}
+                                  checkPermission={checkPermission}
+                                />
+                              </div>
                             )}
                           </Draggable>
                         );

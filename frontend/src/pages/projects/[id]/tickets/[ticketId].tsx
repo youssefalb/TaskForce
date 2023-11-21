@@ -11,6 +11,7 @@ import {
     TextField,
     MenuItem,
     Select,
+    Grid,
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import { getTicketDetail, getTicketComments, updateTicket, createTicketComment, getProjectUsers, getTicketFiles, deleteFileFromTicket } from '@/lib/projects';
@@ -27,6 +28,7 @@ import AssignToUserDialog from '@/components/AssignToUserDialog';
 import TicketFileUpload from '@/components/TicketFileUpload';
 import { addFileToTicket } from '@/lib/projects';
 import { getTicketTasks } from '@/lib/projects';
+import TaskCard from '@/components/TaskCard';
 
 const TicketDetail = () => {
     const [ticket, setTicket] = useState(null);
@@ -45,6 +47,7 @@ const TicketDetail = () => {
     const [ticketFiles, setTicketFiles] = useState([]);
     const [usersList, setUsersList] = useState([]);
     const [showUsersDialog, setShowUsersDialog] = useState(false);
+    const [ticketTasks, setTicketTasks] = useState([]);
 
     const fetchProjectUsers = async () => {
         if (session?.user?.accessToken && id) {
@@ -113,10 +116,12 @@ const TicketDetail = () => {
         }
     };
     const fetchTicketTasks = async () => {
+        console.log('Fetching ticket tasks...');
         if (session?.user?.accessToken && ticketId && id) {
             try {
+                console.log('Fetching ticket tasks...');
                 const res = await getTicketTasks(session.user.accessToken, ticketId.toString());
-                console.log('Ticket Tasks: ', res);
+                setTicketTasks(res);
             }
             catch (error) {
                 console.error("Failed to fetch ticket tasks:", error);
@@ -128,8 +133,6 @@ const TicketDetail = () => {
             setLoading(true);
             try {
                 const res = await getTicketFiles(session.user.accessToken, ticketId.toString());
-                console.log('Ticket Files: ', res);
-                console.log('Ticket Files: ', res);
                 setTicketFiles(res);
                 setLoading(false);
             } catch (error) {
@@ -343,6 +346,27 @@ const TicketDetail = () => {
 
             )}
             <AddComment handleAddComment={handleAddComment} />
+
+
+
+            <Divider light />
+            <Typography variant="h5" sx={{ marginTop: 2 }}>
+                Related Tasks
+            </Typography>
+            {ticketTasks.length > 0 ? (
+                <Grid container spacing={2} my={1}>
+                    {ticketTasks.map((task) => (
+                        <Grid item xs={12} sm={6} md={4} lg={3} key={task.id}>
+                            <TaskCard task={task} openTaskModal={null} checkPermission={null} />
+                        </Grid>
+                    ))}
+                </Grid>
+            ) : (
+                <Typography variant="body1">No related tasks.</Typography>
+            )}
+
+
+            <Divider light />
 
             {ticket.created_at && ticket.updated_at && (
                 <Box sx={{ mt: 2 }}>

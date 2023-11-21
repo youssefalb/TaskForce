@@ -38,8 +38,8 @@
     [x] Django view
     [x] F.e Dialog to create the prj
 - [x] Add date changing for start and finish
+- [x] Attach file to Tickets
 - [] Project.users was never been used (Projectuserrole was used instead)
-- [] Attach file to Projects/Tickets
 - [] profile pic handle change
 
 
@@ -69,7 +69,7 @@
     [x] Manage Cloudinary Upload
     [x] Frontend box to display the files
 - [x] Handle laoding in a better way or optimize it a bit at least
-- [] Attach tasks to tickets
+- [x] Attach tasks to tickets
 - [] style buttons
 - [] Delete ticket (Should tickets be deleted actually???)
 
@@ -84,7 +84,7 @@
 - [] Settings, after change saved or not [17/NOV]
 
 ## To fix:
-- [] When a user regiters by email the role is not default (Guest)
+- [] When a user register by email the role is not default (Guest)
 - [] Fix warning of encountered two children with the same key (Home/Tasks)
 - [] In users when there is already an email but no signed with google, an error is thrown when trying ot sign in with google with the same email
 
