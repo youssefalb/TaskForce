@@ -370,3 +370,20 @@ class TicketTasksView(APIView):
             return Response(serializer.data)
         except Ticket.DoesNotExist:
             return Response({"error": "Ticket not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+class UpdateTicketRelatedTasks(APIView):
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
+    
+    def post(self, request, ticket_id):
+        try:
+            ticket = Ticket.objects.get(pk=ticket_id)
+            task_ids = request.data.get('task_ids', [])  
+            tasks = Task.objects.filter(pk__in=task_ids)
+            
+            ticket.related_tasks.clear()
+            ticket.related_tasks.add(*tasks)
+            
+            return Response({"message": "Related tasks updated successfully"}, status=status.HTTP_200_OK)
+        except Ticket.DoesNotExist:
+            return Response({"error": "Ticket not found"}, status=status.HTTP_404_NOT_FOUND)

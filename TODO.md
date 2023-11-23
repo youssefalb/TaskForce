@@ -75,7 +75,7 @@
 
 ## Tasks
 - [x] Add a comments feature to the task
-- [] fix the coloring issue [19/NOV]
+- [x] fix the coloring issue [19/NOV]
 - [] redesign the page (optional)
 
 

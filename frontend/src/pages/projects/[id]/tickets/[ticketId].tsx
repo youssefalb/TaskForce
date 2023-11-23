@@ -29,7 +29,9 @@ import TicketFileUpload from '@/components/TicketFileUpload';
 import { addFileToTicket } from '@/lib/projects';
 import { getTicketTasks } from '@/lib/projects';
 import TaskCard from '@/components/TaskCard';
-
+import TaskSelectionDialog from '@/components/TaskSelectDialog';
+import { getProjectTasks } from '@/lib/projects';
+import { updateTicketTasks } from '@/lib/projects';
 const TicketDetail = () => {
     const [ticket, setTicket] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -38,6 +40,9 @@ const TicketDetail = () => {
     const router = useRouter()
     const { id, ticketId } = router.query
     const [editMode, setEditMode] = useState(false);
+    const [showTaskDialog, setShowTaskDialog] = useState(false);
+    const [projectTasks, setProjectTasks] = useState([]);
+
     const [editValues, setEditValues] = useState({
         title: '',
         description: '',
@@ -58,6 +63,16 @@ const TicketDetail = () => {
                 console.error("Error fetching project users:", error);
             }
         }
+    };
+
+    const handleUpdateTasks = async (updatedTasks) => {
+        console.log('tasks: ', updatedTasks);
+        setShowTaskDialog(false);
+        setLoading(true);
+        const res = await updateTicketTasks(session.user.accessToken, ticketId.toString(), updatedTasks);
+        await fetchTicketTasks();
+        setLoading(false);
+
     };
 
     const handleFilesUpload = async (fileUrl, fileName) => {
@@ -121,6 +136,7 @@ const TicketDetail = () => {
             try {
                 console.log('Fetching ticket tasks...');
                 const res = await getTicketTasks(session.user.accessToken, ticketId.toString());
+                console.log('Ticket tasks: ', res);
                 setTicketTasks(res);
             }
             catch (error) {
@@ -156,10 +172,22 @@ const TicketDetail = () => {
         }
 
     }
+    const fetchProjectTasks = async () => {
+        if (session?.user?.accessToken && id) {
+            try {
+                const data = await getProjectTasks(session.user.accessToken, id.toString());
+                const tasksWithStringsIds = data;
+                setProjectTasks(tasksWithStringsIds);
+            } catch (error) {
+                console.error("Failed to fetch project tasks:", error);
+            }
+        }
+    }
 
     useEffect(() => {
         fetchTicketDetails(ticketId);
         fetchProjectUsers();
+        fetchProjectTasks();
         fetchTicketFiles(ticketId);
         fetchTicketTasks();
     }, [ticketId, session]);
@@ -365,7 +393,7 @@ const TicketDetail = () => {
                 <Typography variant="body1">No related tasks.</Typography>
             )}
 
-            <Button variant="contained" type="submit"
+            <Button variant="contained" type="submit" onClick={() => setShowTaskDialog(true)}
                 style={{
                     color: 'black',
                     padding: '10px 20px',
@@ -373,7 +401,7 @@ const TicketDetail = () => {
                     boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)',
                     fontWeight: 'bold',
                     fontSize: '16px',
-                }} sx={{ mb: 2 }}>
+                }} sx={{ mb: 2 }} >
                 Add Task
             </Button>
 
@@ -391,7 +419,14 @@ const TicketDetail = () => {
                 </Box>
 
             )}
+            <TaskSelectionDialog
+                open={showTaskDialog}
+                onClose={() => setShowTaskDialog(false)}
+                onUpdateTasks={handleUpdateTasks}
+                tasks={projectTasks}
+                ticketTasks={ticketTasks}
 
+            />
             <AssignToUserDialog
                 open={showUsersDialog}
                 onClose={() => setShowUsersDialog(false)}
