@@ -21,7 +21,7 @@ class UserRoleAdmin(admin.ModelAdmin):
     list_display = ('id','user', 'role', 'project')
 
 class RecordAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'start_date', 'end_date', 'hours_worked', 'content_type', 'object_id', 'content_object')
+    list_display = ('id', 'user', 'start_date', 'end_date', 'hours_worked', 'ticket')
 
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('id', 'ticket', 'author', 'text', 'created_at')

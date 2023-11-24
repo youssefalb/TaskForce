@@ -147,7 +147,7 @@ class Ticket(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     related_tasks = models.ManyToManyField('Task', blank=True, related_name='related_tickets')
-
+    
     def __str__(self):
         return self.title
     
@@ -185,12 +185,9 @@ class Record(models.Model):
     end_date = models.DateTimeField()
     hours_worked = models.DurationField(null=True, default=None)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-
+    ticket = models.ForeignKey('Ticket', on_delete=models.SET_NULL, null=True, blank=True)
+    notes = models.TextField(null=True, blank=True) 
     
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey('content_type', 'object_id')
-
     def save(self, *args, **kwargs):
         time_diff = self.end_date - self.start_date
 

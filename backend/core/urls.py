@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 from user_auth.views import UpdateUserDataView, GetUserDataView, LoginView, UserRegistrationView, GoogleLoginView, activate_account,  send_verification_email_view
-from projects.views import  TicketFilesView, UpdateTicketRelatedTasks, add_ticket_file,delete_ticket_file, TicketTasksView, TaskCommentCreateView, TaskCommentsView, TicketCommentCreateView, ListPermissionsView, ProjectDetailView, ProjectListCreateView, ProjectRolesView, ProjectTicketsView, ProjectUserRoleUpdateView, ProjectUsersView, RecordCreateView, TaskDetailView, TicketCommentsView, TicketDetailView, TicketUpdateView, UpdateRoleView,  TaskListCreateView, UpdateUserRoleView, CreateRoleView, UserProjectPermissionsView, UserProjectsListView, ProjectTasksView, TicketCreateView
+from projects.views import  RecordCreateOrUpdateView, TicketFilesView, UpdateTicketRelatedTasks, add_ticket_file,delete_ticket_file, TicketTasksView, TaskCommentCreateView, TaskCommentsView, TicketCommentCreateView, ListPermissionsView, ProjectDetailView, ProjectListCreateView, ProjectRolesView, ProjectTicketsView, ProjectUserRoleUpdateView, ProjectUsersView,  TaskDetailView, TicketCommentsView, TicketDetailView, TicketUpdateView, UpdateRoleView,  TaskListCreateView, UpdateUserRoleView, CreateRoleView, UserProjectPermissionsView, UserProjectsListView, ProjectTasksView, TicketCreateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,7 +35,6 @@ urlpatterns = [
     path('api/project/<project_id>/user/<user_id>/', UpdateUserRoleView.as_view(), name='update-user-role'),
     path('api/projects/<project_id>/create_role/', CreateRoleView.as_view(), name='create-role'),
     path('list_permissions/', ListPermissionsView.as_view(), name='list_permissions'),
-    path('api/records/create/', RecordCreateView.as_view(), name='create-record'),
     path('api/user/<str:user_id>/projects/', UserProjectsListView.as_view(), name='user-projects-list'),
     path('api/project/<int:project_id>/tasks/', ProjectTasksView.as_view(), name='project-tasks-list'),
     path('api/project/<int:project_id>/roles/', ProjectRolesView.as_view(), name='project-roles'),
@@ -57,5 +56,7 @@ urlpatterns = [
     path('tickets/files/<int:file_id>/delete/', delete_ticket_file, name='delete_ticket_file'),
     path('tickets/<int:ticket_id>/tasks/', TicketTasksView.as_view(), name='ticket-tasks'),
     path('tickets/<int:ticket_id>/update-related-tasks/', UpdateTicketRelatedTasks.as_view(), name='update_ticket_related_tasks'),
+    path('records/', RecordCreateOrUpdateView.as_view(), name='record-create-or-update'),
+
 
 ]

@@ -322,11 +322,6 @@ class TicketFilesView(generics.ListAPIView):
         ticket_id = self.kwargs['ticket_id']
         return TicketFile.objects.filter(ticket_id=ticket_id)    
 
-class RecordCreateView(generics.CreateAPIView):
-    permission_classes = (IsAuthenticated,)
-    authentication_classes = (TokenAuthentication,)
-    queryset = Record.objects.all()
-    serializer_class = RecordSerializer
 
 
 
@@ -387,3 +382,45 @@ class UpdateTicketRelatedTasks(APIView):
             return Response({"message": "Related tasks updated successfully"}, status=status.HTTP_200_OK)
         except Ticket.DoesNotExist:
             return Response({"error": "Ticket not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+
+
+class RecordCreateOrUpdateView(generics.CreateAPIView):
+    serializer_class = RecordSerializer
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
+
+    def create(self, request, *args, **kwargs):
+        start_date = request.data.get('start_date')
+        end_date = request.data.get('end_date')
+        ticket_id = request.data.get('ticket_id')
+
+        request.data['user'] = request.user.id
+        record, created = Record.objects.get_or_create(
+            user=request.user,
+            start_date=start_date,
+            end_date=end_date,
+        )
+
+        if not created:
+            serializer = self.get_serializer(record, data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        else:
+            # Create a new record
+            serializer = self.get_serializer(record)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+class RecordDeleteView(generics.DestroyAPIView):
+    queryset = Record.objects.all()
+    serializer_class = RecordSerializer
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
+
+class UserRecordsListView(generics.ListAPIView):
+    serializer_class = RecordSerializer
+
+    def get_queryset(self):
+        user_id = self.kwargs['user_id'] 
+        return Record.objects.filter(user_id=user_id)
