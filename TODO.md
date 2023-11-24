@@ -73,6 +73,12 @@
 - [] style buttons
 - [] Delete ticket (Should tickets be deleted actually???)
 
+
+## Records
+- [] Add a record form 
+- [] See record for users
+- [] See records [Admin, Owner] in tickets and projects
+
 ## Tasks
 - [x] Add a comments feature to the task
 - [x] fix the coloring issue [19/NOV]
