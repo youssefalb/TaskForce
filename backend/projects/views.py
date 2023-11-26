@@ -420,7 +420,8 @@ class RecordDeleteView(generics.DestroyAPIView):
 
 class UserRecordsListView(generics.ListAPIView):
     serializer_class = RecordSerializer
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
 
     def get_queryset(self):
-        user_id = self.kwargs['user_id'] 
-        return Record.objects.filter(user_id=user_id)
+        return Record.objects.filter(user_id=self.request.user)

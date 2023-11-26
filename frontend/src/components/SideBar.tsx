@@ -24,6 +24,10 @@ export default function sideBar() {
         {
             href: "/projects",
             title: "Projects",
+        },
+        {
+            href: "/records",
+            title: "Records",
         }
     ]
 
@@ -31,10 +35,10 @@ export default function sideBar() {
         const Updatedsession = await getSession()
         session = Updatedsession;
         if (session?.user.image) {
-        setProfileImage(session.user.image);
-        setName(session.user.first_name + " " + session.user.last_name);
-        console.log("Fetching data from side bar");
-        console.log(session);
+            setProfileImage(session.user.image);
+            setName(session.user.first_name + " " + session.user.last_name);
+            console.log("Fetching data from side bar");
+            console.log(session);
         }
     }
 
@@ -42,7 +46,7 @@ export default function sideBar() {
         fetchData()
     }, [session])
 
-    
+
     return (
         <aside className="bg-gray-100 w-full md:w-60">
             {session ? (

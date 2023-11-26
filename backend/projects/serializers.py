@@ -174,7 +174,20 @@ class TaskCommentCreateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class RecordSerializer(serializers.ModelSerializer):
+    project_name = serializers.SerializerMethodField()
+    project_id = serializers.SerializerMethodField()
+    ticket_title = serializers.SerializerMethodField()
+
     class Meta:
         model = Record
         fields = '__all__'
+        read_only_fields = ('project_name', 'project_id',)
+
+    def get_project_name(self, obj):
+        return obj.ticket.project.title if obj.ticket and obj.ticket.project else None
+
+    def get_project_id(self, obj):
+        return obj.ticket.project.id if obj.ticket and obj.ticket.project else None
+    def get_ticket_title(self, obj):
+        return obj.ticket.title if obj.ticket else None
 
