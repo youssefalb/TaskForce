@@ -141,7 +141,6 @@ class TaskSerializer(serializers.ModelSerializer):
         data = super(TaskSerializer, self).to_representation(instance)
         context = self.context
         context['project'] = instance.project
-        print("Called here in the representation")
         users = instance.users.all() 
 
         user_serializer = TaskUserSerializer(users, many=True, context=context)
@@ -185,7 +184,6 @@ class RecordSerializer(serializers.ModelSerializer):
 
     def get_project_name(self, obj):
         return obj.ticket.project.title if obj.ticket and obj.ticket.project else None
-
     def get_project_id(self, obj):
         return obj.ticket.project.id if obj.ticket and obj.ticket.project else None
     def get_ticket_title(self, obj):

@@ -62,7 +62,6 @@ const Users = ({ projectId, projectRoles, permissions}: any) => {
     if (userToKick && session?.user?.accessToken && projectId) {
       try {
         await removeUserFromProject(session.user.accessToken, projectId, [userToKick.user]);
-        // Remove the banned user from the state as well
         setUsers(users.filter(u => u.id !== userToKick.id));
         console.log(`${userToKick.username} has been banned`);
       } catch (error) {

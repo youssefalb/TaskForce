@@ -43,6 +43,7 @@ const TicketFileUpload = ({ files, onFileUpload, onFileDelete, ticketId }) => {
                     body: formData,
                 });
                 const data = await response.json();
+                
                 console.log('File uploaded:', data);
                 onFileUpload(data.url, file.name);
             } catch (error) {

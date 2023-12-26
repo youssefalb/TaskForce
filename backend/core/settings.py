@@ -73,7 +73,12 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'django_extensions'
     ]
+
+GRAPH_MODELS ={
+'graph_models': True,
+}
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {

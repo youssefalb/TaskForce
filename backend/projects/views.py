@@ -93,8 +93,7 @@ class ProjectDetailView(generics.RetrieveUpdateDestroyAPIView):
         user_ids_to_remove = request.data.get('users_to_remove', [])
         role_name = request.data.get('role_name', 'Guest')
         print(user_ids_to_add)
-        if user_ids_to_add:
-            if  user_role and user_role.role.permissions.filter(codename="add_members").first():
+        if user_ids_to_add and user_role and user_role.role.permissions.filter(codename="add_members").first():
                 for user_id in user_ids_to_add:
                     print("user Id: ",user_id)
                     user = CustomUser.objects.get(id=user_id)
@@ -393,13 +392,24 @@ class RecordCreateOrUpdateView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         start_date = request.data.get('start_date')
         end_date = request.data.get('end_date')
-        ticket_id = request.data.get('ticket_id')
+        ticket_id = request.data.get('ticket')
+        notes = request.data.get('notes')
+        # print the valuse above
+        ticket_instance = None
+        if ticket_id:
+            try:
+                ticket_instance = Ticket.objects.get(id=ticket_id)
+            except Ticket.DoesNotExist:
+                return Response({'error': 'Ticket not found'}, status=status.HTTP_404_NOT_FOUND)
 
         request.data['user'] = request.user.id
         record, created = Record.objects.get_or_create(
             user=request.user,
             start_date=start_date,
             end_date=end_date,
+            ticket=ticket_instance ,
+            notes=notes
+
         )
 
         if not created:

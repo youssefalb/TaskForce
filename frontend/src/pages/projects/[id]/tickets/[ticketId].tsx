@@ -32,6 +32,8 @@ import TaskCard from '@/components/TaskCard';
 import TaskSelectionDialog from '@/components/TaskSelectDialog';
 import { getProjectTasks } from '@/lib/projects';
 import { updateTicketTasks } from '@/lib/projects';
+import AddRecordDialog from '@/components/AddRecordDialog';
+import { addRecord } from '@/lib/projects';
 const TicketDetail = () => {
     const [ticket, setTicket] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -52,7 +54,16 @@ const TicketDetail = () => {
     const [ticketFiles, setTicketFiles] = useState([]);
     const [usersList, setUsersList] = useState([]);
     const [showUsersDialog, setShowUsersDialog] = useState(false);
+    const [showAddRecordDialog, setShowAddRecordDialog] = useState(false);
     const [ticketTasks, setTicketTasks] = useState([]);
+
+    const handleAddRecord = async (recordData) => {
+        console.log('Record Data: ', recordData);
+        console.log('Ticket ID: ', ticketId);
+        const res = await addRecord(session.user.accessToken, Number(ticketId), recordData);
+        console.log('Response: ', res);
+        setShowAddRecordDialog(false);
+    };
 
     const fetchProjectUsers = async () => {
         if (session?.user?.accessToken && id) {
@@ -307,6 +318,9 @@ const TicketDetail = () => {
             <Button onClick={() => setShowUsersDialog(true)} color="primary">
                 Assign
             </Button>
+            <Button onClick={() => setShowAddRecordDialog(true)} color="primary">
+                Add record
+            </Button>
 
             {!editMode && (
                 <Button onClick={() => setEditMode(true)} color="primary">
@@ -432,6 +446,12 @@ const TicketDetail = () => {
                 onClose={() => setShowUsersDialog(false)}
                 onAssign={handleAssignToUser}
                 usersList={usersList}
+            />
+
+            <AddRecordDialog
+                open={showAddRecordDialog}
+                onClose={() => setShowAddRecordDialog(false)}
+                onAdd={handleAddRecord}
             />
         </CardContent>
 

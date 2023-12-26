@@ -1,4 +1,5 @@
 
+from datetime import datetime
 from django.dispatch import receiver
 from user_auth.models import CustomUser
 from django.db import models
@@ -189,7 +190,20 @@ class Record(models.Model):
     notes = models.TextField(null=True, blank=True) 
     
     def save(self, *args, **kwargs):
-        time_diff = self.end_date - self.start_date
+        print(self.start_date)
+        print(self.end_date)
+        iso_format = "%Y-%m-%dT%H:%M:%SZ"
 
-        self.hours_worked = time_diff
+        if isinstance(self.start_date, str):
+            self.start_date = datetime.strptime(self.start_date, iso_format)
+        if isinstance(self.end_date, str):
+            self.end_date = datetime.strptime(self.end_date, iso_format)
+
         super().save(*args, **kwargs)
+
+        if self.start_date and self.end_date:
+            time_diff = self.end_date - self.start_date
+            self.hours_worked = time_diff
+            super().save(update_fields=['hours_worked'])
+
+ 

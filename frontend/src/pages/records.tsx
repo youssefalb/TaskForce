@@ -21,6 +21,11 @@ const UserRecordsList = () => {
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         maxWidth: '200px',
+        '&.clickable': {
+            cursor: 'pointer',
+            color: 'blue',
+            textDecoration: 'underline',
+        }
     });
 
     const getProjectPath = (projectId) => {
@@ -36,6 +41,7 @@ const UserRecordsList = () => {
             try {
                 const data = await getUserRecords(session.user.accessToken);
                 setRecords(data);
+                console.log('Records: ', data);
             } catch (error) {
                 console.error(error);
             }
@@ -69,11 +75,11 @@ const UserRecordsList = () => {
                                 <TableCellStyled>{formatDate(record.end_date)}</TableCellStyled>
                                 <TableCellStyled>{record.hours_worked}</TableCellStyled>
                                 <TableCellStyled>{record.notes}</TableCellStyled>
-                                <TableCellStyled style={{ cursor: 'pointer' }} onClick={() => getProjectPath(record.project_id)}>
+                                <TableCellStyled className="clickable" style={{ cursor: 'pointer' }} onClick={() => getProjectPath(record.project_id)}>
                                     {record.project_name}
                                 </TableCellStyled>
-                                <TableCellStyled style={{ cursor: 'pointer' }} onClick={() => getTicketPath(record.project_id, record.ticket)}>
-                                    {record.ticket.title}
+                                <TableCellStyled className="clickable" style={{ cursor: 'pointer' }} onClick={() => getTicketPath(record.project_id, record.ticket)}>
+                                    {record.ticket_title}
                                 </TableCellStyled>
                             </TableRow>
                         ))}

@@ -24,6 +24,7 @@ export default async function handler(req, res) {
     }
 
     try {
+        console.log('req', req);
         const data = await new Promise((resolve, reject) => {
             const form = new IncomingForm();
             form.parse(req, (err, fields, files) => {
