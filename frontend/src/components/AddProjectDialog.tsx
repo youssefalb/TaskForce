@@ -48,8 +48,8 @@ const AddProjectDialog = ({ open, handleClose, handleSubmit }) => {
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Add New Project</DialogTitle>
             <DialogContent>
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
+                <Grid container spacing={2} >
+                    <Grid item xs={12} mt={2}>
                         <TextField
                             fullWidth
                             label="Title"

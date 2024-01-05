@@ -6,15 +6,15 @@ const TaskCard = ({ task, openTaskModal, checkPermission }) => {
     const getBackgroundColor = () => {
         switch (task.status) {
             case 'todo':
-                return 'bg-blue-100';
+                return '#dbeafe';
             case 'doing':
-                return 'bg-yellow-100';
+                return '#fef08a';
             case 'scrapped':
-                return 'bg-red-100';
+                return '#fecaca';
             case 'done':
-                return 'bg-green-100';
+                return '#bbf7d0';
             default:
-                return 'bg-gray-100';
+                return '#e5e7eb';
         }
     };
 
@@ -38,7 +38,7 @@ const TaskCard = ({ task, openTaskModal, checkPermission }) => {
     return (
         <Card
             elevation={3}
-            className={`p-2 mb-2 ${getBackgroundColor()} rounded`}
+            style={{ backgroundColor: getBackgroundColor(), padding: '0.5rem', marginBottom: '0.5rem', borderRadius: '0.25rem' }}
             onClick={handleCardClick}
             draggable={isDraggable()}
         >

@@ -18,7 +18,6 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import Permission
-
 class TaskListCreateView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,) 
     authentication_classes = (TokenAuthentication,) 
@@ -57,12 +56,13 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
-        user_ids = request.data.get('users', []) 
+        user_ids = request.data.get('users', instance.users.all()) 
         instance.users.set(user_ids)  
         instance.title = request.data.get('title', instance.title)
         instance.description = request.data.get('description', instance.description)
         instance.deadline = request.data.get('deadline', instance.deadline)
-        
+        print("Instance Data: ", instance.users)
+
         if 'status' in request.data:
             instance.status = request.data.get('status', instance.status)
         
@@ -155,7 +155,7 @@ class UserProjectPermissionsView(APIView):
 
         role_permissions = project_user_role.role.permissions.all()
         permissions_serializer = PermissionSerializer(role_permissions, many=True)
-        print(permissions_serializer.data)
+        # print(permissions_serializer.data)
         return Response(permissions_serializer.data)
 
 class ProjectRolesView(generics.ListAPIView):

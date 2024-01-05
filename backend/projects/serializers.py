@@ -25,7 +25,7 @@ class RoleSerializer(serializers.ModelSerializer):
     
 
     def update(self, instance, validated_data):
-        print(validated_data)
+        # print(validated_data)
         instance.name = validated_data.get('name', instance.name)
         if 'permissions' in validated_data:
             permissions = validated_data.pop('permissions')

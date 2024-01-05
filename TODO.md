@@ -90,6 +90,10 @@
 - [] Settings, after change saved or not [17/NOV]
 
 ## To fix:
+- [] Fix the coloring issue 04/01
+- [] Fix the No found issue {tickets, projects}
+- [] Owner can not be kicked and his role can not be changed (Only by owner) (OK: maybe it's better to have only one Owner??)
+- [] Can not downlad PDF
 - [] When a user register by email the role is not default (Guest)
 - [] Fix warning of encountered two children with the same key (Home/Tasks)
 - [] In users when there is already an email but no signed with google, an error is thrown when trying ot sign in with google with the same email
