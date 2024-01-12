@@ -14,6 +14,8 @@ const UserCard = ({ user, canBanUser, onBanUserClick, onChangeUserRole, availabl
   const open = Boolean(anchorEl);
   console.log('availableRoles', availableRoles)
 
+  const isOwner = user.role_name === 'Owner';
+
   const handleBanUserClick = () => {
     if (canBanUser && onBanUserClick) {
       onBanUserClick(user.id);
@@ -48,7 +50,7 @@ const UserCard = ({ user, canBanUser, onBanUserClick, onChangeUserRole, availabl
         </Grid>
       </CardContent>
       <CardActions disableSpacing sx={{ justifyContent: 'flex-end', paddingRight: '16px' }}>
-        {canBanUser && (
+        {!isOwner && canBanUser && (
           <IconButton
             aria-label="ban user"
             onClick={handleBanUserClick}
@@ -61,7 +63,7 @@ const UserCard = ({ user, canBanUser, onBanUserClick, onChangeUserRole, availabl
           </IconButton>
         )}
 
-        {canChangeRole && (
+        {!isOwner && canChangeRole && (
           <IconButton
             aria-label="more"
             id="long-button"

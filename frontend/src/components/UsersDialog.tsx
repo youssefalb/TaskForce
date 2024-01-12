@@ -1,35 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Select, MenuItem } from '@mui/material';
 
-const AssignToUserDialog = ({ open, onClose, onAssign, usersList }) => {
+const UsersDialog = ({ open, onAdd, onClose, usersList }) => {
     const [selectedUser, setSelectedUser] = useState('');
 
-    useEffect(() => {
-        console.log(usersList);
-        if (open && usersList.length === 0) {
-
-        }
-    }, [open, usersList.length]);
-
-    const handleAssign = () => {
-        onAssign(selectedUser);
-
+    console.log(usersList);
+    const handleAdd = () => {
+        console.log(selectedUser);
+        onAdd(selectedUser);
+        setSelectedUser('');
         onClose();
     };
 
     return (
         <Dialog open={open} onClose={onClose}>
-            <DialogTitle>Assign Ticket</DialogTitle>
+            <DialogTitle>Add User</DialogTitle>
             <DialogContent>
-                {/* Adjust width here */}
                 <Select
                     value={selectedUser}
                     onChange={(e) => setSelectedUser(e.target.value)}
                     fullWidth
-                    style={{ width: '250px' }} 
+                    style={{ width: '250px' }}
                 >
                     {usersList.map((user) => (
-                        <MenuItem key={user.user} value={user.user}>
+                        <MenuItem key={user.id} value={user.id}>
                             @{user.username}
                         </MenuItem>
                     ))}
@@ -37,10 +31,10 @@ const AssignToUserDialog = ({ open, onClose, onAssign, usersList }) => {
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}>Cancel</Button>
-                <Button onClick={handleAssign} disabled={!selectedUser}>Assign</Button>
+                <Button onClick={handleAdd} disabled={!selectedUser}>Add</Button>
             </DialogActions>
         </Dialog>
     );
 };
 
-export default AssignToUserDialog;
+export default UsersDialog;

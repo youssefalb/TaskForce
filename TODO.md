@@ -15,7 +15,6 @@
 - [x] use cloudinary to save images and files
 - [x] Add empty component [17/NOV]
 - [x] Add loading compenent [17/NOV]
-- [] Check for session in the Side bar menu 
 - [] Add "You don't have permission to access this page ....." component!!
 - [] reset password functionality for everyone
 - [] Password Security check when signing up
@@ -39,8 +38,9 @@
     [x] F.e Dialog to create the prj
 - [x] Add date changing for start and finish
 - [x] Attach file to Tickets
-- [] Project.users was never been used (Projectuserrole was used instead)
-- [] profile pic handle change
+- [] Project.users was never been used (Projectuserrole was used instead) (Opt)
+- [x] profile pic handle change
+- [x] Add a member to a project functionality
 
 
 ## Role based access
@@ -87,14 +87,15 @@
 
 ## Toasting:
 - [x] After Login or Register
-- [] Settings, after change saved or not [17/NOV]
+- [x] Settings, after change saved or not [17/NOV]
 
 ## To fix:
-- [] Fix the coloring issue 04/01
-- [] Fix the No found issue {tickets, projects}
-- [] Owner can not be kicked and his role can not be changed (Only by owner) (OK: maybe it's better to have only one Owner??)
-- [] Can not downlad PDF
+- [x] Fix the coloring issue
+- [x] Fix the No found issue {tickets, projects}
+- [x] Owner can not be kicked and his role can not be changed (Only by owner) (OK: maybe it's better to have only one Owner??)
+- [x] Can not download PDF
+- [x] Fix warning of encountered two children with the same key (Home/Tasks)
+- [x] Check for session in the Side bar menu 
 - [] When a user register by email the role is not default (Guest)
-- [] Fix warning of encountered two children with the same key (Home/Tasks)
 - [] In users when there is already an email but no signed with google, an error is thrown when trying ot sign in with google with the same email
 

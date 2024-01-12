@@ -4,7 +4,6 @@ import Link from "next/link";
 import ProfilePicture from "./ProfilePicture";
 import { useEffect, useState } from "react";
 
-
 export default function sideBar() {
     let { data: session } = useSession();
     const [profileImage, setProfileImage] = useState('');
@@ -20,16 +19,19 @@ export default function sideBar() {
         {
             href: "/contact",
             title: "Contact",
-        },
-        {
+        }
+    ]
+
+    if (session) {
+        menuItems.push({
             href: "/projects",
             title: "Projects",
         },
         {
             href: "/records",
             title: "Records",
-        }
-    ]
+        },)
+    }
 
     const fetchData = async () => {
         const Updatedsession = await getSession()

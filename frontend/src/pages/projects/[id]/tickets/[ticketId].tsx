@@ -58,10 +58,10 @@ const TicketDetail = () => {
     const [ticketTasks, setTicketTasks] = useState([]);
 
     const handleAddRecord = async (recordData) => {
-        console.log('Record Data: ', recordData);
-        console.log('Ticket ID: ', ticketId);
+        // console.log('Record Data: ', recordData);
+        //         console.log('Ticket ID: ', ticketId);
         const res = await addRecord(session.user.accessToken, Number(ticketId), recordData);
-        console.log('Response: ', res);
+        // console.log('Response: ', res);
         setShowAddRecordDialog(false);
     };
 
@@ -88,9 +88,9 @@ const TicketDetail = () => {
 
     const handleFilesUpload = async (fileUrl, fileName) => {
         if (session?.user?.accessToken && ticketId && id) {
-            console.log('Uploaded file:', fileUrl);
-            console.log('Ticket ID:', ticketId);
-            console.log('session.user.accessToken:', session.user.accessToken)
+            // console.log('Uploaded file:', fileUrl);
+            // console.log('Ticket ID:', ticketId);
+            // console.log('session.user.accessToken:', session.user.accessToken)
             const res = await addFileToTicket(session.user.accessToken, ticketId.toString(), fileUrl, fileName);
             fetchTicketFiles(ticketId);
         }
@@ -102,13 +102,12 @@ const TicketDetail = () => {
             fetchTicketFiles(ticketId);
         }
 
-
     };
 
 
     const handleDetailsSave = async () => {
-        console.log('Saving...');
-        console.log('Edit Values: ', editValues);
+        // console.log('Saving...');
+        // console.log('Edit Values: ', editValues);
         const details = {
             title: editValues.title,
             description: editValues.description,
@@ -123,7 +122,6 @@ const TicketDetail = () => {
 
     const fetchTicketDetails = async (ticketId) => {
         if (session?.user?.accessToken && ticketId && id) {
-            setLoading(true);
             try {
                 const res = await getTicketDetail(session.user.accessToken, id.toString(), ticketId.toString());
 
@@ -138,16 +136,15 @@ const TicketDetail = () => {
             } catch (error) {
                 console.error("Failed to fetch ticket details:", error);
             }
-            setLoading(false);
         }
     };
     const fetchTicketTasks = async () => {
         console.log('Fetching ticket tasks...');
         if (session?.user?.accessToken && ticketId && id) {
             try {
-                console.log('Fetching ticket tasks...');
+                // console.log('Fetching ticket tasks...');
                 const res = await getTicketTasks(session.user.accessToken, ticketId.toString());
-                console.log('Ticket tasks: ', res);
+                // console.log('Ticket tasks: ', res);
                 setTicketTasks(res);
             }
             catch (error) {
@@ -157,14 +154,11 @@ const TicketDetail = () => {
     }
     const fetchTicketFiles = async (ticketId) => {
         if (session?.user?.accessToken && ticketId && id) {
-            setLoading(true);
             try {
                 const res = await getTicketFiles(session.user.accessToken, ticketId.toString());
                 setTicketFiles(res);
-                setLoading(false);
             } catch (error) {
                 console.error("Failed to fetch ticket files:", error);
-                setLoading(false);
             }
         }
     }
@@ -196,13 +190,31 @@ const TicketDetail = () => {
     }
 
     useEffect(() => {
-        fetchTicketDetails(ticketId);
-        fetchProjectUsers();
-        fetchProjectTasks();
-        fetchTicketFiles(ticketId);
-        fetchTicketTasks();
+        // fetchTicketDetails(ticketId);
+        // fetchProjectUsers();
+        // fetchProjectTasks();
+        // fetchTicketFiles(ticketId);
+        // fetchTicketTasks();
+        fetchData();
     }, [ticketId, session]);
 
+
+    const fetchData = async () => {
+        try {
+            setLoading(true);
+            await Promise.all([
+                fetchTicketDetails(ticketId),
+                fetchProjectUsers(),
+                fetchProjectTasks(),
+                fetchTicketFiles(ticketId),
+                fetchTicketTasks()
+            ]);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
     const handleInputChange = async (e) => {
         if (session?.user?.accessToken && ticketId && id) {
             const { name, value } = e.target;
@@ -248,19 +260,10 @@ const TicketDetail = () => {
     };
 
 
-    if (loading) {
-        return <LoadingComponent />;
-    }
 
 
-    if (ticket == null) {
-        return (
-            <EmptyStateMessage
-                title="No Ticket Found"
-                description="No ticket found with this ID."
-            />
-        );
-    }
+
+
 
     const editableField = (fieldValue, label, name, multiline = false) => {
         if (editMode) {
@@ -308,6 +311,21 @@ const TicketDetail = () => {
         }
     };
 
+    if (loading) {
+        return <LoadingComponent />;
+    }
+
+
+    if (!ticket) {
+        console.log('Ticket not found');
+        console.log('loading: ', loading);
+        return (
+            <EmptyStateMessage
+                title="No Ticket Found"
+                description="No ticket found with this ID."
+            />
+        );
+    }
     return (
         <CardContent>
             {editableField(ticket.title, 'Title', 'title')}

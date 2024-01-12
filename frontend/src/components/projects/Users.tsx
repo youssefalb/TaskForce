@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { changeUserRole, getProjectUsers, removeUserFromProject } from '@/lib/projects';
+import { changeUserRole, getProjectUsers, removeUserFromProject, getUsers, addUserToProject } from '@/lib/projects';
 import { Grid, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import UserCard from './UserCard';
 import EmptyStateMessage from '../EmptyStateMessage';
 import LoadingComponent from '../LoadingComponent';
-const Users = ({ projectId, projectRoles, permissions}: any) => {
+import UsersDialog from '../UsersDialog';
+
+const Users = ({ projectId, projectRoles, permissions }: any) => {
   const { data: session } = useSession();
   const [users, setUsers] = useState([]);
   const [usernameSearchValue, setUsernameSearchValue] = useState('');
@@ -15,25 +17,29 @@ const Users = ({ projectId, projectRoles, permissions}: any) => {
   const canBanUser = permissions?.includes('delete_members');
   const canChangeRole = permissions?.includes('change_role');
   const canAddUser = permissions?.includes('add_members');
+  const [showUsersDialog, setShowUsersDialog] = useState(false);
+  const [usersList, setUsersList] = useState([]);
 
-    const fetchData = async () => {
-      if (session?.user?.accessToken && projectId) {
-        try {
-          setIsLoading(true);
-          const data = await getProjectUsers(session.user.accessToken, projectId);
-          setUsers(data);
-          setIsLoading(false);
+  const fetchData = async () => {
+    if (session?.user?.accessToken && projectId) {
+      try {
+        setIsLoading(true);
+        const data = await getProjectUsers(session.user.accessToken, projectId);
+        const allUsersData = await getUsers(session.user.accessToken);
+        setUsersList(allUsersData);
+        setUsers(data);
+        setIsLoading(false);
 
-        } catch (error) {
-          console.error(error);
-            setIsLoading(false);
-        }
-      } else {
-        console.error("Access token or projectId is undefined.");
+      } catch (error) {
+        console.error(error);
+        setIsLoading(false);
       }
-    };
-    
-    useEffect(() => {
+    } else {
+      console.error("Access token or projectId is undefined.");
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, [session?.user?.accessToken, projectId]);
 
@@ -42,7 +48,7 @@ const Users = ({ projectId, projectRoles, permissions}: any) => {
     return <LoadingComponent />;
   }
 
-  
+
   if (users.length === 0) {
     return (
       <EmptyStateMessage
@@ -58,6 +64,7 @@ const Users = ({ projectId, projectRoles, permissions}: any) => {
     setOpenBanDialog(true);
   };
 
+
   const handleBanConfirmation = async () => {
     if (userToKick && session?.user?.accessToken && projectId) {
       try {
@@ -71,6 +78,18 @@ const Users = ({ projectId, projectRoles, permissions}: any) => {
     setOpenBanDialog(false);
   };
 
+  const handleAddUser = async (userId) => {
+    console.log("user id to add: ", userId);
+    if (session?.user?.accessToken && projectId) {
+      try {
+        await addUserToProject(session.user.accessToken, projectId, [userId]);
+        fetchData();
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
   const filteredUsers = users.filter((user) =>
     user.username.toLowerCase().includes(usernameSearchValue.toLowerCase())
   );
@@ -80,22 +99,22 @@ const Users = ({ projectId, projectRoles, permissions}: any) => {
   const handleRoleChange = async (roleId, newRoleId) => {
     try {
       if (session?.user?.accessToken && projectId) {
-        await changeUserRole(session.user.accessToken, roleId ,newRoleId);
-        setUsers((prevUsers) => 
-        prevUsers.map((user) => {
-          if (user.id === roleId) { 
-            return { ...user, role: projectRoles.find((role) => role.id === newRoleId) }; 
-          }
-          return user;
-        })
-      );
-      fetchData();
+        await changeUserRole(session.user.accessToken, roleId, newRoleId);
+        setUsers((prevUsers) =>
+          prevUsers.map((user) => {
+            if (user.id === roleId) {
+              return { ...user, role: projectRoles.find((role) => role.id === newRoleId) };
+            }
+            return user;
+          })
+        );
+        fetchData();
       }
     }
     catch (error) {
       console.error(error);
     }
-};
+  };
 
   return (
     <div>
@@ -108,10 +127,10 @@ const Users = ({ projectId, projectRoles, permissions}: any) => {
         />
       </div>
 
-      {canAddUser && (   <button className="p-2 m-2 text-black font-bold bg-zinc-300 rounded-2xl">
+      {canAddUser && (<button onClick={() => setShowUsersDialog(true)} className="p-2 m-2 text-black font-bold bg-zinc-300 rounded-2xl">
         + Add Project Member
       </button>)}
-   
+
       <Grid container spacing={2}>
         {filteredUsers.map((user) => (
           <Grid item key={user.id} xs={12} sm={6} md={4} lg={3}>
@@ -119,7 +138,7 @@ const Users = ({ projectId, projectRoles, permissions}: any) => {
               user={user}
               canBanUser={canBanUser}
               onChangeUserRole={handleRoleChange}
-              availableRoles = {projectRoles}
+              availableRoles={projectRoles}
               onBanUserClick={() => handleOpenBanDialog(user)}
               canChangeRole={canChangeRole}
             />
@@ -127,6 +146,12 @@ const Users = ({ projectId, projectRoles, permissions}: any) => {
         ))}
       </Grid>
 
+      <UsersDialog
+        open={showUsersDialog}
+        onClose={() => setShowUsersDialog(false)}
+        onAdd={handleAddUser}
+        usersList={usersList}
+      />
 
       <Dialog open={openBanDialog} onClose={() => setOpenBanDialog(false)}>
         <DialogTitle>{"Confirm Ban"}</DialogTitle>

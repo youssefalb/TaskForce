@@ -18,6 +18,8 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import Permission
+from user_auth.serializers import CustomUserSerializer
+
 class TaskListCreateView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,) 
     authentication_classes = (TokenAuthentication,) 
@@ -435,3 +437,11 @@ class UserRecordsListView(generics.ListAPIView):
 
     def get_queryset(self):
         return Record.objects.filter(user_id=self.request.user)
+    
+class AllUsersListView(generics.ListAPIView):
+    serializer_class = CustomUserSerializer
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
+
+    def get_queryset(self):
+        return CustomUser.objects.all()

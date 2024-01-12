@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 from user_auth.views import UpdateUserDataView, GetUserDataView, LoginView, UserRegistrationView, GoogleLoginView, activate_account,  send_verification_email_view
-from projects.views import  RecordCreateOrUpdateView, TicketFilesView, UpdateTicketRelatedTasks, UserRecordsListView, add_ticket_file,delete_ticket_file, TicketTasksView, TaskCommentCreateView, TaskCommentsView, TicketCommentCreateView, ListPermissionsView, ProjectDetailView, ProjectListCreateView, ProjectRolesView, ProjectTicketsView, ProjectUserRoleUpdateView, ProjectUsersView,  TaskDetailView, TicketCommentsView, TicketDetailView, TicketUpdateView, UpdateRoleView,  TaskListCreateView, UpdateUserRoleView, CreateRoleView, UserProjectPermissionsView, UserProjectsListView, ProjectTasksView, TicketCreateView
+from projects.views import  RecordCreateOrUpdateView, TicketFilesView, UpdateTicketRelatedTasks, UserRecordsListView, AllUsersListView, add_ticket_file,delete_ticket_file, TicketTasksView, TaskCommentCreateView, TaskCommentsView, TicketCommentCreateView, ListPermissionsView, ProjectDetailView, ProjectListCreateView, ProjectRolesView, ProjectTicketsView, ProjectUserRoleUpdateView, ProjectUsersView,  TaskDetailView, TicketCommentsView, TicketDetailView, TicketUpdateView, UpdateRoleView,  TaskListCreateView, UpdateUserRoleView, CreateRoleView, UserProjectPermissionsView, UserProjectsListView, ProjectTasksView, TicketCreateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -58,5 +58,6 @@ urlpatterns = [
     path('tickets/<int:ticket_id>/update-related-tasks/', UpdateTicketRelatedTasks.as_view(), name='update_ticket_related_tasks'),
     path('records/', RecordCreateOrUpdateView.as_view(), name='record-create-or-update'),
     path('my-records/', UserRecordsListView.as_view(), name='user-records'),
-
+    path('users/', AllUsersListView.as_view(), name='all-users'),
+    
 ]
