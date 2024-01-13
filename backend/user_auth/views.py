@@ -93,7 +93,7 @@ def send_verification_email(request, user):
 
     Thanks for signing up for our site! Please complete the verification process by clicking the link below:
 
-    http://http://127.0.0.1:8000{reverse('activate-account')}?token={default_token_generator.make_token(user)}&uidb64={urlsafe_base64_encode(force_bytes(user.pk))}
+    http://127.0.0.1:8000{reverse('activate-account')}?token={default_token_generator.make_token(user)}&uidb64={urlsafe_base64_encode(force_bytes(user.pk))}
 
     Thanks,
     TaskForce Team

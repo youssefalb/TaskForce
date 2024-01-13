@@ -22,7 +22,6 @@ const ProjectsPage = () => {
 
 
     const fetchData = async () => {
-        console.log('Kurwa sesja', session);
         if (session?.user?.accessToken && session?.user?.id) {
             setIsLoading(true);
             await getUserProjects(session.user.accessToken, session.user.id)
@@ -49,7 +48,7 @@ const ProjectsPage = () => {
                 .then((data) => { console.log(data); fetchData(); })
                 .catch((error) => console.error(error));
         }
-    
+
     };
 
     if (isLoading) {
